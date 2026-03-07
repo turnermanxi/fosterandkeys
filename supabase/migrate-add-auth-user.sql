@@ -1,0 +1,24 @@
+-- ============================================================
+-- Foster & Keys — Create Lorenzo's Auth User
+-- ============================================================
+--
+-- OPTION 1 (Recommended): Use the Supabase Dashboard
+--   1. Go to your Supabase project → Authentication → Users
+--   2. Click "Add user" → "Create new user"
+--   3. Enter:
+--        Email:    lorenzo@fosterandkeys.com   (or his real email)
+--        Password: (choose a strong password)
+--   4. Check "Auto Confirm User" so he can log in immediately
+--   5. Click "Create user"
+--
+-- OPTION 2: Use the Supabase SQL Editor (run this query)
+--   Replace the email and password below with Lorenzo's real credentials.
+--   The password will be hashed automatically by Supabase.
+--
+-- NOTE: You MUST enable Email auth provider in Supabase:
+--   Dashboard → Authentication → Providers → Email → Enable
+--   Turn OFF "Confirm email" (so login works immediately)
+-- ============================================================
+
+-- Check if email auth is working (run this to verify after creating user):
+-- SELECT id, email, created_at FROM auth.users;
