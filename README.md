@@ -1,16 +1,154 @@
-# Foster & Keys — Apartment Matching System
+# Foster & Keys — Apartment Matching Automation System
 
-Real estate lead scoring and apartment/unit matching automation powered by **OpenAI**.  
-**Gmail (IMAP) → AI Email Parsing → Supabase → Scoring → Agent Dashboard → Client Results Page**
+Real estate lead processing and apartment/unit matching automation powered by **OpenAI**.
+
+This system automatically processes incoming client inquiries, extracts housing requirements using AI, scores available apartments against client needs, and generates a personalized results page for agents to share with clients.
+
+Pipeline
+
+Gmail (IMAP)
+↓
+AI Email Parsing
+↓
+Supabase Database
+↓
+Apartment Match Scoring
+↓
+Agent Dashboard Review
+↓
+Client Results Page
 
 ---
 
-## How It Works
+# Overview
 
-```
+The **Foster & Keys Apartment Matching System** was built to automate the manual workflow real estate agents typically perform when matching clients with available apartments.
+
+Instead of manually reading intake emails and searching listings, this system:
+
+- parses client emails using **AI**
+- extracts housing requirements
+- scores all available units against client needs
+- generates a **ranked list of best matches**
+- creates a **shareable client results page**
+
+Agents can review results through a dashboard before sending matches to the client.
+
+---
+
+# Problem
+
+Real estate agents often receive client inquiries via email that contain unstructured information about housing needs.
+
+Typical workflow:
+
+1. Agent reads email
+2. Extracts client requirements manually
+3. Searches available apartment units
+4. Determines best matches
+5. Sends recommendations to client
+
+This process is **slow, repetitive, and difficult to scale**.
+
+---
+
+# Solution
+
+This system automates the entire lead intake and matching workflow using AI and a structured database pipeline.
+
+When a new client inquiry email arrives:
+
+1. The system polls Gmail via **IMAP**
+2. **OpenAI parses the email** and extracts structured lead information
+3. Lead data is stored in **Supabase**
+4. Available apartment units are **scored against client requirements**
+5. OpenAI generates a **human-readable match summary**
+6. Results appear in the **agent dashboard**
+7. Agent can send a **unique client results page**
+
+The system drastically reduces manual lead processing time.
+
+---
+
+# Features
+
+## AI Email Parsing
+
+OpenAI automatically extracts structured lead information from raw email bodies.
+
+Extracted fields include:
+
+- Client name
+- Email
+- Budget
+- Preferred location
+- Bedrooms
+- Bathrooms
+- Move-in timeline
+- Additional preferences
+
+This removes the need for rigid intake forms.
+
+---
+
+## Apartment Matching Engine
+
+Each apartment/unit is scored against the client profile based on:
+
+- price compatibility
+- location preferences
+- bedroom/bath requirements
+- availability
+
+The system generates a **ranked list of best matching units**.
+
+---
+
+## AI Match Summary
+
+OpenAI generates a **3–5 sentence summary** explaining why the selected apartments match the client’s needs.
+
+This appears on:
+
+- Agent dashboard
+- Client results page
+
+---
+
+## Agent Dashboard
+
+Agents can review leads and matches before sending results to clients.
+
+Dashboard capabilities include:
+
+- View parsed client information
+- Review AI-generated summaries
+- Review ranked apartment matches
+- Send results to client
+
+---
+
+## Client Results Page
+
+Each lead generates a **secure results page** with a unique token.
+
+Example:
+
+/results/[token]
+
+Clients can view:
+
+- AI summary of their housing needs
+- Recommended apartments
+- unit details and pricing
+
+---
+
+# Architecture
+
 ┌──────────────┐    IMAP poll   ┌───────────────────┐   OpenAI     ┌──────────┐
 │    Gmail     │ ◀─────────────│  /api/cron/       │ ──parses──▶ │ Supabase │
-│   Inbox     │   fetch unread │   check-email     │  lead + scores│  DB      │
+│   Inbox      │   fetch unread │   check-email     │  lead + scores│  DB     │
 └──────────────┘                └───────────────────┘              └──────────┘
                                         │                              │
                                         │  1. OpenAI extracts fields   │
@@ -26,281 +164,113 @@ Real estate lead scoring and apartment/unit matching automation powered by **Ope
                                         ▼
                                ┌───────────────────┐
                                │  Client Results   │
-                               │  /results/[token] │  ← unique link per lead
+                               │  /results/[token] │
                                └───────────────────┘
-```
-
-### OpenAI Integration
-
-1. **Email Parsing** — When unread emails are pulled from Gmail, `gpt-4o-mini` extracts structured lead data (name, email, budget, location, beds, baths, etc.) from the raw email body. No rigid field mapping needed.
-2. **Match Summary** — After scoring, `gpt-4o-mini` writes a 3-5 sentence personalized summary explaining why the top matches suit the client. This summary appears on both the agent dashboard and the client results page.
 
 ---
 
-## Quick Start
+# Tech Stack
 
-### 1. Clone & Install
+## Backend
+- Node.js
+- Express
 
-```bash
-cd fosterandkeys
-npm install
-```
+## Database
+- Supabase (PostgreSQL)
 
-### 2. Set Up Supabase
+## AI Integration
+- OpenAI API
+- GPT-4o-mini
 
-1. Create a project at [supabase.com](https://supabase.com)
-2. Go to **SQL Editor** and run the contents of `supabase/schema.sql`
-3. Then run `supabase/seed.sql` to add 35 apartments + their units (Houston & DFW metros)
-4. Go to **Settings → API** and grab:
-   - Project URL
-   - `anon` public key
-   - `service_role` secret key
+## Email Processing
+- Gmail IMAP
 
-### 3. Get an OpenAI API Key
-
-1. Go to [platform.openai.com](https://platform.openai.com)
-2. Create an API key with access to `gpt-4o-mini`
-3. Copy the key — you'll add it to `.env.local` below
-
-### 4. Set Up Gmail App Password
-
-1. Enable **2-Step Verification** on your Google Account
-2. Go to [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-3. Generate a password for **Mail** → **Other (Foster & Keys)**
-4. Copy the 16-character password
-
-> **Important:** This is a special app password, NOT your regular Gmail password. Google requires 2FA to be enabled first.
-
-### 5. Configure Environment
-
-```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local`:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-OPENAI_API_KEY=sk-...
-GMAIL_USER=youremail@gmail.com
-GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
-WEBHOOK_SECRET=pick-a-random-string
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-```
-
-### 6. Enable IMAP in Gmail
-
-1. Open Gmail → Settings (gear icon) → **See all settings**
-2. Go to **Forwarding and POP/IMAP** tab
-3. Under IMAP access, select **Enable IMAP**
-4. Save changes
-
-### 7. Run Locally
-
-```bash
-npm run dev
-```
-
-- **Dashboard:** http://localhost:3000/dashboard
-- **Home:** http://localhost:3000
+## Frontend
+- Agent dashboard
+- Client results page
 
 ---
 
-## Gmail Email Intake
+# Workflow
 
-Form submissions (WPForms, Contact Form 7, Jotform, etc.) email into your Gmail inbox. The system connects via IMAP to pull unread emails and parse them with OpenAI.
+## 1. Email Intake
 
-### Manual Check (Dashboard Button)
+The system polls Gmail for unread emails containing client housing inquiries.
 
-Click **"📬 Check Gmail"** on the dashboard to immediately pull and process unread emails. New leads appear in the table automatically.
+## 2. AI Parsing
 
-### Automatic Polling (Cron Job)
+OpenAI extracts structured data from the email body.
 
-Set up a cron job to poll every 5 minutes:
+Example fields extracted:
 
-```bash
-# crontab -e
-*/5 * * * * curl -s -X POST https://your-domain.com/api/cron/check-email?secret=your-webhook-secret
-```
+name  
+email  
+budget  
+location  
+beds  
+baths  
+move-in date  
+notes  
 
-Or use a service like [cron-job.org](https://cron-job.org) to hit the endpoint on a schedule.
+## 3. Lead Storage
 
-### Endpoint Details
+Parsed data is stored in **Supabase**.
 
-- **URL:** `POST /api/cron/check-email`
-- **Auth:** `x-webhook-secret` header or `?secret=` query param (both check `WEBHOOK_SECRET`)
-- **Optional body params:**
-  - `folder` — IMAP folder to check (default: `"INBOX"`)
-  - `filter` — only process emails whose subject contains this string
-- **Response:** `{ success, message, processed, total, results[] }`
+## 4. Apartment Matching
 
-### How It Works Under the Hood
+All apartment units are scored against the client profile.
 
-1. Connects to Gmail via IMAP (TLS, port 993)
-2. Fetches all **UNSEEN** (unread) emails from the inbox
-3. For each email: OpenAI parses → scores against all units → generates AI summary → saves to Supabase
-4. Marks processed emails as **SEEN** (read) so they aren't re-processed
+## 5. AI Summary
 
----
+OpenAI generates a personalized explanation of the recommended matches.
 
-## Testing with curl
+## 6. Agent Review
 
-### Test Gmail Check (manual trigger)
+The agent dashboard allows reviewing the matches before sending them to the client.
 
-```bash
-curl -X POST http://localhost:3000/api/cron/check-email \
-  -H "Content-Type: application/json" \
-  -H "x-webhook-secret: your-secret-here"
-```
+## 7. Client Results Page
 
-### Test with subject filter
-
-```bash
-curl -X POST http://localhost:3000/api/cron/check-email \
-  -H "Content-Type: application/json" \
-  -H "x-webhook-secret: your-secret-here" \
-  -d '{ "filter": "New Lead" }'
-```
-
-### Test Direct JSON Webhook (structured data)
-
-The WPForms endpoint still works for pre-structured JSON:
-
-```bash
-curl -X POST http://localhost:3000/api/webhook/wpform \
-  -H "Content-Type: application/json" \
-  -H "x-webhook-secret: your-secret-here" \
-  -d '{
-    "full_name": "Jane Smith",
-    "email": "jane@example.com",
-    "phone": "555-1234",
-    "budget_min": 800,
-    "budget_max": 1400,
-    "desired_location": "Houston",
-    "bedrooms": 1,
-    "bathrooms": 1,
-    "move_in_timeline": "3 months",
-    "notes": "Looking for washer/dryer in unit"
-  }'
-```
+A secure link is generated with recommended apartments.
 
 ---
 
-## Scoring Logic
+# Screenshots
 
-Each lead is scored 0-100 against every **unit** based on:
+(Add screenshots here once available)
 
-| Criterion     | Weight | Logic                                                          |
-|---------------|--------|----------------------------------------------------------------|
-| Rent Budget   | 35%    | Full points if rent is within budget min-max; partial credit   |
-| Location      | 25%    | Metro area match (Houston / DFW) or city name match            |
-| Bedrooms      | 20%    | Full if exact, 60% if off by 1, 20% if off by 2               |
-| Bathrooms     | 20%    | Full if exact, 80% if off by 0.5, descending for larger diffs |
+### Agent Dashboard
+[screenshot here]
 
-Scoring logic lives in `src/lib/scoring.js` and is easy to tweak.
+### AI Parsed Lead Data
+[screenshot here]
 
----
+### Apartment Match Results
+[screenshot here]
 
-## Deployment (Self-Hosted)
-
-```bash
-npm run build
-npm start          # runs on port 3000
-```
-
-Use **nginx** or **Caddy** as a reverse proxy with SSL. Alternatively use PM2:
-
-```bash
-npm install -g pm2
-pm2 start npm --name fosterandkeys -- start
-pm2 save
-```
-
-### Deploy to Netlify
-
-1. Push your code to a GitHub repo
-2. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import from Git**
-3. Select your repo — Netlify auto-detects Next.js and uses the `netlify.toml` config
-4. Add your environment variables in **Site settings → Environment variables**:
-   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-   - `OPENAI_API_KEY`
-   - `GMAIL_USER`, `GMAIL_APP_PASSWORD`
-   - `WEBHOOK_SECRET`
-   - `NEXT_PUBLIC_BASE_URL` → set to your Netlify domain (e.g. `https://fosterandkeys.netlify.app`)
-5. Deploy — Netlify handles build + serverless functions automatically
-
-### Deploy to AWS (Amplify)
-
-1. Push code to GitHub
-2. Go to [AWS Amplify Console](https://console.aws.amazon.com/amplify)
-3. **Host web app → Connect repo**
-4. Add environment variables in build settings
-5. Amplify auto-detects Next.js and deploys with SSR support
-
-### Gmail Cron Job (Production)
-
-Set up external cron to auto-check Gmail every 5 minutes:
-
-```bash
-# crontab on your server, or use cron-job.org / Netlify scheduled functions
-*/5 * * * * curl -s -X POST https://your-domain.com/api/cron/check-email -H "x-webhook-secret: your-secret"
-```
+### Client Results Page
+[screenshot here]
 
 ---
 
-## Project Structure
+# Future Improvements
 
-```
-fosterandkeys/
-├── src/
-│   ├── app/
-│   │   ├── layout.js              # Root layout with header
-│   │   ├── page.js                # Landing page
-│   │   ├── globals.css            # All styles (vanilla CSS)
-│   │   ├── dashboard/
-│   │   │   └── page.js            # Agent dashboard (Check Gmail button)
-│   │   ├── results/
-│   │   │   └── [token]/
-│   │   │       └── page.js        # Client results page (with AI summary)
-│   │   └── api/
-│   │       ├── cron/
-│   │       │   └── check-email/
-│   │       │       └── route.js   # Gmail IMAP poller (OpenAI parsing)
-│   │       ├── webhook/
-│   │       │   └── wpform/
-│   │       │       └── route.js   # WPForm JSON webhook (fallback)
-│   │       ├── leads/
-│   │       │   └── route.js       # GET all leads
-│   │       ├── leads/[id]/send/
-│   │       │   └── route.js       # POST mark lead as sent
-│   │       └── properties/
-│   │           └── route.js       # GET all apartments + units
-│   ├── lib/
-│   │   ├── supabase.js            # Supabase client helpers
-│   │   ├── scoring.js             # Scoring engine (0-100 per unit)
-│   │   ├── openai.js              # OpenAI: email parsing + match summaries
-│   │   └── gmail.js               # Gmail IMAP: fetch & mark unread emails
-│   └── components/
-│       ├── LeadTable.js           # Dashboard leads table
-│       ├── LeadDetail.js          # Lead detail modal (AI summary + raw email)
-│       └── UnitCard.js            # Unit card for client results
-├── supabase/
-│   ├── schema.sql                 # Database schema (apartments, units, leads, lead_matches)
-│   └── seed.sql                   # 35 real apartments + units (Houston & DFW)
-├── .env.local.example             # Environment template
-├── next.config.mjs
-├── jsconfig.json
-└── package.json
-```
+Potential enhancements include:
+
+- MLS / apartment listing API integrations
+- advanced scoring algorithms
+- automated follow-up email sequences
+- analytics for lead conversion
+- CRM integration
 
 ---
 
-## Next Steps
+# Author
 
-- **More apartments:** Add new properties directly to the `apartments` + `units` tables in Supabase
-- **Email integration:** Add SendGrid/Resend in `/api/leads/[id]/send` to email the results link automatically
-- **Auth:** Add password protection to `/dashboard` if needed
-- **Analytics:** Track when clients open their results link
-- **Fine-tune OpenAI prompts:** Adjust the system prompts in `src/lib/openai.js` to match your brand voice
+Developed by **Christopher Turner**  
+Kinexis Automation Systems
+
+---
+
+# License
+
+Private project — internal client automation system.
