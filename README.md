@@ -236,19 +236,24 @@ A secure link is generated with recommended apartments.
 
 # Screenshots
 
-(Add screenshots here once available)
+<img width="1918" height="961" alt="image" src="https://github.com/user-attachments/assets/1d463b9b-6147-464c-b6aa-2c85cc0f295a" />
+
 
 ### Agent Dashboard
-[screenshot here]
+<img width="1918" height="961" alt="image" src="https://github.com/user-attachments/assets/031b2f65-a290-404a-92d5-ede796e804ae" />
+
 
 ### AI Parsed Lead Data
-[screenshot here]
+<img width="1918" height="961" alt="image" src="https://github.com/user-attachments/assets/7d0851fc-49af-495e-bc11-bcdfa8cfb2bf" />
+
 
 ### Apartment Match Results
-[screenshot here]
+<img width="1621" height="955" alt="image" src="https://github.com/user-attachments/assets/116353a8-ec70-4197-ab02-dbe2faf77d3d" />
+
 
 ### Client Results Page
-[screenshot here]
+<img width="1621" height="955" alt="image" src="https://github.com/user-attachments/assets/5e3d753b-aa5d-4d05-a715-92ab3ee94a45" />
+
 
 ---
 
