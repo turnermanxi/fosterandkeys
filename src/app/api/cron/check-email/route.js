@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { fetchUnreadEmails } from "@/lib/gmail";
 import { parseEmailToLead, generateMatchSummary } from "@/lib/openai";
-import { scoreLeadAgainstAll } from "@/lib/scoring";
+import { scoreLeadAgainstAll, validateUnitMatch } from "@/lib/scoring";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -121,6 +121,13 @@ export async function POST(request) {
           notes:            parsed.notes             || null,
           raw_email:        emailContent.substring(0, 10000),
           results_token:    uuidv4(),
+          current_status:   "created",
+          timeline: [{
+            stage: "created",
+            timestamp: new Date().toISOString(),
+            notes: "Lead created from email submission",
+            visibility: "both",
+          }],
         };
 
         // 2. Insert lead
@@ -135,8 +142,34 @@ export async function POST(request) {
         // 3. Score
         const scored = scoreLeadAgainstAll(newLead, units ?? [], apartmentMap);
 
-        // 4. Persist matches
-        const matches = scored.map((s) => ({
+        // 4. Validate and filter matches
+        const validationIssues = {};
+        const filteredScored = scored
+          .map((s) => {
+            const validation = validateUnitMatch(newLead, s.unit, s.apartment);
+            if (!validation.isValid) {
+              if (!validationIssues[s.unit.id]) {
+                validationIssues[s.unit.id] = validation;
+              }
+            }
+            return { ...s, validation };
+          })
+          .filter((s) => {
+            // Keep matches with score > 30, or if no location was specified keep all
+            if (!newLead.desired_location) return s.score > 30;
+            // If location was specified, exclude matches with major location mismatches
+            const hasLocationMismatch = s.validation.issues.some(i => i.includes("Location"));
+            return !hasLocationMismatch && s.score > 25;
+          });
+
+        // Log validation issues for debugging
+        if (Object.keys(validationIssues).length > 0) {
+          console.log(`Lead ${newLead.id} - Validation issues:`, validationIssues);
+        }
+
+        // 5. Persist matches (limit to top 5-7)
+        const topScored = filteredScored.slice(0, 7); // Take top 7 valid matches
+        const matches = topScored.map((s) => ({
           lead_id: newLead.id,
           unit_id: s.unit.id,
           apartment_id: s.unit.apartment_id,
@@ -144,16 +177,25 @@ export async function POST(request) {
         }));
 
         if (matches.length) {
+          // First delete any existing matches for these units
+          const unitIds = matches.map(m => m.unit_id);
+          await supabase
+            .from("lead_matches")
+            .delete()
+            .eq("lead_id", newLead.id)
+            .in("unit_id", unitIds);
+
+          // Then insert the new matches
           const { error: matchErr } = await supabase
             .from("lead_matches")
-            .upsert(matches, { onConflict: "lead_id,unit_id" });
+            .insert(matches);
           if (matchErr) throw matchErr;
         }
 
-        // 5. Generate AI summary
+        // 6. Generate AI summary
         let aiSummary = "";
         try {
-          const topMatches = scored.slice(0, 5);
+          const topMatches = filteredScored.slice(0, 5);
           aiSummary = await generateMatchSummary(newLead, topMatches);
 
           await supabase

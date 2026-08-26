@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
  *   /dashboard  — admin UI
  *   /api/leads  — lead data
  *   /api/properties — property data
+ *   /api/email-templates — email templates
+ *   /api/reports — property email reports
  *   /api/cron   — cron triggers
  *
  * Public routes (no auth needed):
@@ -22,7 +24,9 @@ export async function middleware(request) {
     pathname === "/" ||
     pathname === "/login" ||
     pathname.startsWith("/results") ||
+    pathname.startsWith("/tour-confirmation") ||
     pathname.startsWith("/api/webhook") ||
+    pathname.startsWith("/api/tour-confirmation") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon")
   ) {

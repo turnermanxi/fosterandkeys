@@ -69,16 +69,18 @@ export async function parseEmailToLead(emailBody) {
 
 const SUMMARY_SYSTEM_PROMPT = `You are a helpful real estate assistant writing on behalf of Lorenzo Foster at Foster & Keys.
 
-Given a client's search criteria and a list of matched apartment units with scores, write a short, warm, professional summary (3–5 sentences) explaining:
+Given a client's search criteria and a list of matched apartment units with scores, write a short, warm, professional summary (4–6 sentences) explaining:
 - What the client is looking for
 - Why the top matches are a good fit
 - Any trade-offs or things to be aware of (e.g. slightly over budget, fewer bedrooms)
+- **IMPORTANT: Remind the client to visit the links for each property to verify current pricing, as rental rates and availability can change frequently.**
 - Encourage them to reach out to Lorenzo with questions
 
 Keep it concise, friendly, and avoid jargon. Use the client's first name. Sign off naturally referencing Lorenzo / Foster & Keys.`;
 
 /**
  * Generate a friendly AI summary of the match results.
+ * Includes a reminder to check property links for updated pricing.
  *
  * @param {object}   lead       – the lead record
  * @param {object[]} topMatches – top 5 scored matches [{unit, apartment, score}]
@@ -107,7 +109,7 @@ ${matchDescriptions.join("\n")}`;
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     temperature: 0.7,
-    max_tokens: 300,
+    max_tokens: 400,
     messages: [
       { role: "system", content: SUMMARY_SYSTEM_PROMPT },
       { role: "user", content: userMsg },

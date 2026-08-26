@@ -9,7 +9,20 @@ function formatRent(unit) {
   const lo = Number(unit?.rent_min);
   const hi = Number(unit?.rent_max);
   if (!lo && !hi) return "Contact for pricing";
-  if (lo === hi || !hi) return `$${lo.toLocaleString()}/mo`;
+  
+  // If no range, create one with ±$100 buffer
+  if (lo && !hi) {
+    const min = Math.max(0, lo - 100);
+    const max = lo + 100;
+    return `$${min.toLocaleString()} – $${max.toLocaleString()}/mo`;
+  }
+  
+  if (lo === hi) {
+    const min = Math.max(0, lo - 100);
+    const max = lo + 100;
+    return `$${min.toLocaleString()} – $${max.toLocaleString()}/mo`;
+  }
+  
   return `$${lo.toLocaleString()} – $${hi.toLocaleString()}/mo`;
 }
 

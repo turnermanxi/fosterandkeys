@@ -9,6 +9,18 @@
   NODE_VERSION = "20"
   NPM_FLAGS    = "--production=false"
 
+# Scheduled functions
+[functions]
+  directory = "netlify/functions"
+
+[[scheduled_functions]]
+  path = "sync-properties"
+  cron = "0 2 * * *"  # Daily at 2 AM UTC
+
+[[scheduled_functions]]
+  path = "auto-sync-properties"
+  cron = "0 3 * * *"  # Daily at 3 AM UTC (runs after explicit sync)
+
 # Redirect all non-file requests to Next.js (handled by the plugin,
 # but explicit headers help with security)
 [[headers]]
