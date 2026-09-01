@@ -37,6 +37,7 @@ export async function POST(request) {
       notes:            body.notes             ?? body.additional_notes ?? "",
       results_token:    uuidv4(),
       current_status:   "created",
+      account_id:       process.env.DEFAULT_ACCOUNT_ID || null,
       timeline: [{
         stage: "created",
         timestamp: new Date().toISOString(),
