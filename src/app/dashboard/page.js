@@ -54,7 +54,7 @@ export default function DashboardPage() {
         setCheckResult({ type: "error", message: data.error });
       } else {
         setCheckResult({ type: "success", message: data.message });
-        if (data.processed > 0) fetchLeads();
+        fetchLeads();
       }
     } catch (err) {
       setCheckResult({ type: "error", message: err.message });
