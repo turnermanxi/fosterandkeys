@@ -18,17 +18,89 @@ const WEIGHTS = {
   bathrooms: 20,
 };
 
+const HOUSTON_METRO = "HOUSTON_METRO";
+const DFW_METRO = "DFW_METRO";
+
+const HOUSTON_TOKENS = [
+  "houston", "montrose", "midtown", "highland village", "upper kirby",
+  "med center", "medical center", "braes", "heights", "washington ave",
+  "galleria", "woodlake", "westheimer", "energy corridor", "citycentre",
+  "city centre", "westchase", "alief", "sugar land", "sienna", "stafford",
+  "richmond", "rosenberg", "memorial", "spring branch", "cypress",
+  "jersey village", "katy", "cinco ranch", "tomball", "woodlands", "conroe",
+  "kingwood", "greenspoint", "aldine", "northline", "crosby", "pearland",
+  "clear lake", "league city", "pasadena", "deer park", "baytown",
+  "galveston", "humble", "champions", "briar forest", "oak forest",
+  "willowbrook", "eado", "museum district", "fourth ward",
+];
+
+const DFW_TOKENS = [
+  "dallas", "dfw", "fort worth", "ft worth", "deep ellum", "west end",
+  "oaklawn", "oak lawn", "highland park", "lower greenville",
+  "upper greenville", "white rock", "tenison", "skillman", "garland",
+  "addison", "collin", "plano", "richardson", "frisco", "lewisville",
+  "allen", "mckinney", "irving", "las colinas", "valley ranch", "coppell",
+  "bachman", "carrollton", "farmers branch", "flower mound", "denton",
+  "mesquite", "oak cliff", "duncanville", "desoto", "cedar hill",
+  "waxahachie", "trinity groves", "grand prairie", "tcu", "arlington",
+  "woodhaven", "haltom", "richland hills", "fossil creek", "hurst",
+  "euless", "bedford", "grapevine", "roanoke", "keller", "saginaw",
+  "eagle mountain", "benbrook", "western hills", "ridgmar", "ridglea",
+];
+
 /**
- * Normalise metro area strings for comparison.
- * "houston" → "HOUSTON_METRO", "dfw" / "dallas" / "fort worth" → "DFW_METRO"
+ * Normalise a location string to a metro token.
+ * "houston" → "HOUSTON_METRO", "dfw" / "dallas" ... → "DFW_METRO".
+ * Neighborhoods/suburbs resolve via token maps (mirrors the intake form's
+ * location lists). Unresolvable strings return "" (never a raw string) so
+ * validation treats them as "no location constraint" instead of wiping out
+ * every match.
  */
-function normaliseMetro(raw) {
+export function normaliseMetro(raw) {
   if (!raw) return "";
-  const s = raw.toLowerCase().trim();
-  if (s.includes("houston")) return "HOUSTON_METRO";
-  if (s.includes("dallas") || s.includes("dfw") || s.includes("fort worth"))
-    return "DFW_METRO";
-  return s;
+  const s = ` ${String(raw).toLowerCase().trim()} `;
+  if (s.includes("houston")) return HOUSTON_METRO;
+  if (
+    s.includes("dallas") ||
+    s.includes("dfw") ||
+    s.includes("fort worth") ||
+    s.includes("ft worth")
+  )
+    return DFW_METRO;
+  for (const t of HOUSTON_TOKENS) if (s.includes(t)) return HOUSTON_METRO;
+  for (const t of DFW_TOKENS) if (s.includes(t)) return DFW_METRO;
+  return "";
+}
+
+/**
+ * Resolve a location string that may name multiple areas ("A; B, C")
+ * into a deduped list of metro tokens.
+ */
+export function normaliseMetroMulti(raw) {
+  if (!raw) return [];
+  const metros = new Set();
+  for (const part of String(raw).split(/[;,]/)) {
+    const m = normaliseMetro(part);
+    if (m) metros.add(m);
+  }
+  return [...metros];
+}
+
+/**
+ * The set of metros a lead is open to:
+ * explicit arrays > single metro token > free-text location resolution.
+ */
+export function effectiveMetros(lead) {
+  if (!lead) return [];
+  const arr = Array.isArray(lead.metro_areas)
+    ? lead.metro_areas.filter(Boolean).map((m) => String(m).toUpperCase())
+    : [];
+  if (arr.length) return arr;
+  if (lead.metro_area) return [String(lead.metro_area).toUpperCase()];
+  if (Array.isArray(lead.desired_locations) && lead.desired_locations.length)
+    return normaliseMetroMulti(lead.desired_locations.join("; "));
+  if (lead.desired_location) return normaliseMetroMulti(lead.desired_location);
+  return [];
 }
 
 /**
@@ -71,14 +143,18 @@ export function scoreUnit(lead, unit, apartment) {
   }
 
   // --- Location (metro area / city) ---
-  if (lead.desired_location) {
+  if (
+    lead &&
+    (lead.desired_location ||
+      (Array.isArray(lead.desired_locations) && lead.desired_locations.length))
+  ) {
     possible += WEIGHTS.location;
-    const leadMetro = normaliseMetro(lead.desired_location);
+    const leadMetros = effectiveMetros(lead);
     const aptMetro = (apartment.metro_area ?? "").toUpperCase();
     const aptCity = (apartment.city ?? "").toLowerCase().trim();
-    const leadLoc = lead.desired_location.toLowerCase().trim();
+    const leadLoc = String(lead.desired_location ?? "").toLowerCase().trim();
 
-    if (leadMetro === aptMetro) {
+    if (leadMetros.length && aptMetro && leadMetros.includes(aptMetro)) {
       earned += WEIGHTS.location;
     } else if (aptCity && aptCity.includes(leadLoc)) {
       earned += WEIGHTS.location;
@@ -178,10 +254,13 @@ export function validateUnitMatch(lead, unit, apartment) {
   const mismatches = {};
 
   // Check location
-  if (lead.desired_location) {
-    const leadMetro = normaliseMetro(lead.desired_location);
+  if (
+    lead.desired_location ||
+    (Array.isArray(lead.desired_locations) && lead.desired_locations.length)
+  ) {
+    const leadMetros = effectiveMetros(lead);
     const aptMetro = (apartment.metro_area ?? "").toUpperCase();
-    if (leadMetro && aptMetro && leadMetro !== aptMetro) {
+    if (leadMetros.length && aptMetro && !leadMetros.includes(aptMetro)) {
       mismatches.location = `Requested: ${lead.desired_location}, Apartment: ${apartment.metro_area || "Unknown"}`;
       issues.push(`Location mismatch: ${lead.desired_location} vs ${apartment.metro_area || "Unknown"}`);
     }

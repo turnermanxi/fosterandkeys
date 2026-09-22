@@ -79,6 +79,13 @@ Given a client's search criteria and a list of matched apartment units with scor
 Keep it concise, friendly, and avoid jargon. Use the client's first name. Sign off naturally referencing Lorenzo / Foster & Keys.`;
 
 /**
+ * Honest fallback used when a search yields no qualifying matches.
+ * Prevents the AI from hallucinating "great options" for an empty result set.
+ */
+export const NO_MATCH_SUMMARY_TEXT =
+  "I'm currently reviewing available options in your preferred area(s) and will follow up as soon as we have qualified matches for you. In the meantime, please don't hesitate to reach out if you'd like to adjust your search criteria or share more about what you're looking for.";
+
+/**
  * Generate a friendly AI summary of the match results.
  * Includes a reminder to check property links for updated pricing.
  *
@@ -87,6 +94,7 @@ Keep it concise, friendly, and avoid jargon. Use the client's first name. Sign o
  * @returns {string} human-friendly summary
  */
 export async function generateMatchSummary(lead, topMatches) {
+  if (!topMatches || topMatches.length === 0) return NO_MATCH_SUMMARY_TEXT;
   const openai = getOpenAI();
 
   const matchDescriptions = topMatches.map((m, i) => {
@@ -96,9 +104,13 @@ export async function generateMatchSummary(lead, topMatches) {
     return `${i + 1}. ${apt.name ?? "Unknown"} — ${u.bedrooms ?? "?"} bed / ${u.bathrooms ?? "?"} bath, ${rent}/mo, ${apt.metro_area === "HOUSTON_METRO" ? "Houston" : "DFW"} area — Score: ${m.score}/100`;
   });
 
+  const areaList = (lead.desired_locations && lead.desired_locations.length
+    ? lead.desired_locations.join("; ")
+    : lead.desired_location) || "Any";
+
   const userMsg = `Client: ${lead.full_name}
 Budget: $${lead.budget_min ?? "?"} – $${lead.budget_max ?? "?"}/mo
-Location preference: ${lead.desired_location ?? "Any"}
+Location preference: ${areaList}
 Bedrooms: ${lead.bedrooms ?? "Any"} | Bathrooms: ${lead.bathrooms ?? "Any"}
 Move-in: ${lead.move_in_timeline ?? "Not specified"}
 Notes: ${lead.notes ?? "None"}

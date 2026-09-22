@@ -13,9 +13,11 @@
       "dependencies": [
         "npm:@supabase/ssr@0.9",
         "npm:@supabase/supabase-js@^2.98.0",
+        "npm:dotenv@^17.4.2",
         "npm:imapflow@^1.2.12",
         "npm:mailparser@^3.9.3",
         "npm:next@^16.1.6",
+        "npm:node-cron@^4.6.0",
         "npm:nodemailer@^8.0.1",
         "npm:openai@^6.27.0",
         "npm:playwright@^1.48.0",

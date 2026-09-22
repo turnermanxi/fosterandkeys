@@ -1,6 +1,6 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { scoreLeadAgainstAll, validateUnitMatch } from "@/lib/scoring";
-import { generateMatchSummary } from "@/lib/openai";
+import { scoreLeadAgainstAll, validateUnitMatch, effectiveMetros } from "@/lib/scoring";
+import { generateMatchSummary, NO_MATCH_SUMMARY_TEXT } from "@/lib/openai";
 
 const TOP_MATCH_LIMIT = 7;
 const SUMMARY_MATCH_LIMIT = 5;
@@ -69,7 +69,11 @@ export async function persistLeadMatches(
       return { ...s, validation };
     })
     .filter((s) => {
-      if (!lead.desired_location) return s.score > 30;
+      if (!lead.desired_location && !(lead.desired_locations?.length))
+        return s.score > 30;
+      // If the location text can't be resolved to a metro, don't let it
+      // nuke the entire result set to zero.
+      if (effectiveMetros(lead).length === 0) return s.score > 30;
       const hasLocationMismatch = s.validation.issues.some((i) =>
         i.includes("Location")
       );
@@ -105,12 +109,13 @@ export async function persistLeadMatches(
 
   let aiSummary = "";
   try {
-    const topMatches = filteredScored.slice(0, SUMMARY_MATCH_LIMIT);
-    aiSummary = await generateMatchSummary(lead, topMatches);
-    await supabase
-      .from("leads")
-      .update({ ai_summary: aiSummary })
-      .eq("id", lead.id);
+    if (filteredScored.length === 0) {
+      aiSummary = NO_MATCH_SUMMARY_TEXT;
+    } else {
+      const topMatches = filteredScored.slice(0, SUMMARY_MATCH_LIMIT);
+      aiSummary = await generateMatchSummary(lead, topMatches);
+    }
+    await supabase.from("leads").update({ ai_summary: aiSummary }).eq("id", lead.id);
   } catch (aiErr) {
     console.error("AI summary generation failed (non-fatal):", aiErr);
   }
@@ -119,6 +124,7 @@ export async function persistLeadMatches(
     aiSummary,
     validMatchCount: filteredScored.length,
     scoredCount: scored.length,
+    matchedCount: topScored.length,
     filteredScored,
   };
 }
@@ -154,7 +160,7 @@ export async function processNewLead(leadInput, opts = {}) {
     apartmentMapData = fetched.apartmentMap;
   }
 
-  const { aiSummary } = await persistLeadMatches(
+  const persistResult = await persistLeadMatches(
     newLead,
     {
       units: unitsData,
@@ -165,7 +171,8 @@ export async function processNewLead(leadInput, opts = {}) {
   return {
     lead: newLead,
     resultsUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${newLead.results_token}`,
-    aiSummary,
-    matchCount: (unitsData ?? []).length,
+    aiSummary: persistResult.aiSummary,
+    matchCount: persistResult.matchedCount,
+    unitsEvaluated: (unitsData ?? []).length,
   };
 }

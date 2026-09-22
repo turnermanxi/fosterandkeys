@@ -75,13 +75,19 @@ export async function POST(request) {
       }
     }
 
+    const desiredLocations = Array.isArray(body.desired_locations)
+      ? body.desired_locations.map((s) => String(s).trim()).filter(Boolean)
+      : [];
+
     const lead = {
       full_name:        body.full_name        ?? body.name      ?? "",
       email:            body.email             ?? "",
       phone:            body.phone             ?? "",
       budget_min:       parseNum(body.budget_min),
       budget_max:       parseNum(body.budget_max),
-      desired_location: body.desired_location  ?? body.location  ?? "",
+      desired_location: desiredLocations.length
+        ? desiredLocations.join("; ")
+        : (body.desired_location ?? body.location ?? ""),
       bedrooms:         parseNum(body.bedrooms),
       bathrooms:        parseNum(body.bathrooms),
       move_in_timeline: body.move_in_timeline  ?? body.timeline  ?? "",
@@ -124,6 +130,7 @@ export async function POST(request) {
       lead_id: result.lead.id,
       results_url: result.resultsUrl,
       matches: result.matchCount,
+      units_evaluated: result.unitsEvaluated,
       ai_summary: result.aiSummary,
     });
   } catch (err) {
