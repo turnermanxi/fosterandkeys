@@ -84,7 +84,8 @@ export async function POST(request) {
       const { data: aptsData, error: aptErr } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", apartment_ids);
+        .in("id", apartment_ids)
+        .eq("account_id", accountId);
 
       if (aptErr) {
         console.error("Error fetching apartments:", aptErr);

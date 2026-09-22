@@ -13,14 +13,15 @@ export async function POST(request, { params }) {
   try {
     const { id } = await params;
 
-    // Verify lead ownership first
-    const authCheck = await verifyLeadOwnership(id);
-    if (authCheck.error) return authCheck.response;
-
     const supabase = getSupabaseAdmin();
     const body = await request.json();
 
-    const { preferences = [], notes = "" } = body;
+    const { preferences = [], notes = "", token = null } = body;
+
+    // Verify lead ownership: either the agent's account OR the client's
+    // results_token capability URL.
+    const authCheck = await verifyLeadOwnership(id, token);
+    if (authCheck.error) return authCheck.response;
 
     console.log(`[preferences] Received preferences for lead ${id}:`, {
       preferencesCount: preferences.length,

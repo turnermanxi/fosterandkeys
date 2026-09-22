@@ -1,21 +1,27 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { fetchUnreadEmails } from "@/lib/gmail";
-import { parseEmailToLead, generateMatchSummary } from "@/lib/openai";
-import { scoreLeadAgainstAll, validateUnitMatch } from "@/lib/scoring";
+import { parseEmailToLead } from "@/lib/openai";
+import { processNewLead, fetchAccountUnits } from "@/lib/lead-processing";
+import { LEAD_NOTIFICATION_SUBJECT_PREFIX } from "@/lib/mailer";
 import { v4 as uuidv4 } from "uuid";
 
 /**
  * POST /api/cron/check-email
  *
  * Connects to Gmail via IMAP, pulls all unread emails, parses each
- * one with OpenAI, scores against units, and creates lead records.
+ * one with OpenAI, scores against the account's units, and creates
+ * lead records.
  *
  * Can be triggered by:
  *   - A cron job (e.g. every 5 minutes)
  *   - The "Check for New Leads" button on the dashboard
  *
  * Auth: x-webhook-secret header or CRON_SECRET query param
+ *
+ * Account scoping (SaaS): pass `accountId` (query or body) to poll that
+ * account's own Gmail config (gmail_configs table). When omitted, falls
+ * back to the shared GMAIL_* env mailbox and DEFAULT_ACCOUNT_ID (admin legacy).
  *
  * Optional query params:
  *   - folder: IMAP folder to check (default: INBOX)
@@ -40,14 +46,6 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // --- Check that Gmail env vars are configured ---
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      return NextResponse.json(
-        { error: "GMAIL_USER and GMAIL_APP_PASSWORD must be set in .env.local" },
-        { status: 500 }
-      );
-    }
-
     // --- Options from request body or query params ---
     let opts = {};
     try {
@@ -56,11 +54,52 @@ export async function POST(request) {
       // no body, that's fine
     }
 
-    const folder = opts.folder || url.searchParams.get("folder") || "INBOX";
-    const filter = opts.filter || url.searchParams.get("filter") || "";
+    const accountId =
+      opts.accountId || url.searchParams.get("accountId") || null;
+
+    const supabase = getSupabaseAdmin();
+
+    // --- Resolve per-account Gmail config, falling back to shared env ---
+    let gmailUser = process.env.GMAIL_USER;
+    let gmailPass = process.env.GMAIL_APP_PASSWORD;
+    let folder = opts.folder || url.searchParams.get("folder") || "INBOX";
+    let filter = opts.filter || url.searchParams.get("filter") || "";
+    let leadAccountId = process.env.DEFAULT_ACCOUNT_ID || null;
+
+    if (accountId) {
+      const { data: config } = await supabase
+        .from("gmail_configs")
+        .select("*")
+        .eq("account_id", accountId)
+        .single();
+
+      if (!config?.gmail_user || !config?.app_password) {
+        return NextResponse.json(
+          { error: "No Gmail config for this account" },
+          { status: 400 }
+        );
+      }
+      gmailUser = config.gmail_user;
+      gmailPass = config.app_password;
+      folder = config.folder || folder;
+      filter = config.subject_filter || filter;
+      leadAccountId = accountId;
+    }
+
+    if (!gmailUser || !gmailPass) {
+      return NextResponse.json(
+        { error: "GMAIL_USER and GMAIL_APP_PASSWORD must be set in .env.local" },
+        { status: 500 }
+      );
+    }
 
     // --- Fetch unread emails from Gmail ---
-    const emails = await fetchUnreadEmails({ folder, filter: filter || undefined });
+    const emails = await fetchUnreadEmails({
+      folder,
+      filter: filter || undefined,
+      user: gmailUser,
+      pass: gmailPass,
+    });
 
     if (emails.length === 0) {
       return NextResponse.json({
@@ -70,27 +109,35 @@ export async function POST(request) {
       });
     }
 
-    const supabase = getSupabaseAdmin();
-
-    // Pre-fetch apartments & units once (shared across all emails)
-    const { data: apartments, error: aptErr } = await supabase
-      .from("apartments")
-      .select("*");
-    if (aptErr) throw aptErr;
-
-    const apartmentMap = {};
-    (apartments ?? []).forEach((a) => (apartmentMap[a.id] = a));
-
-    const { data: units, error: unitErr } = await supabase
-      .from("units")
-      .select("*");
-    if (unitErr) throw unitErr;
+    // Pre-fetch the account's apartments & units once (shared across all emails)
+    let sharedUnits = null;
+    let sharedApartmentMap = null;
+    async function ensureUnits() {
+      if (sharedUnits !== null) return;
+      const fetched = await fetchAccountUnits(leadAccountId);
+      sharedUnits = fetched.units;
+      sharedApartmentMap = fetched.apartmentMap;
+    }
 
     // --- Process each email ---
     const results = [];
 
     for (const email of emails) {
       try {
+        const fromAddr = (email.from || "").toLowerCase();
+        const mailboxAddr = (gmailUser || "").toLowerCase();
+        const subject = email.subject || "";
+
+        if (fromAddr === mailboxAddr || subject.startsWith(LEAD_NOTIFICATION_SUBJECT_PREFIX)) {
+          results.push({
+            uid: email.uid,
+            subject: email.subject,
+            status: "skipped",
+            reason: "Self-sent lead notification",
+          });
+          continue;
+        }
+
         // Prefer text body, fall back to HTML
         const emailContent = email.textBody || email.htmlBody || "";
 
@@ -122,7 +169,7 @@ export async function POST(request) {
           raw_email:        emailContent.substring(0, 10000),
           results_token:    uuidv4(),
           current_status:   "created",
-          account_id:       process.env.DEFAULT_ACCOUNT_ID || null,
+          account_id:       leadAccountId,
           timeline: [{
             stage: "created",
             timestamp: new Date().toISOString(),
@@ -131,89 +178,22 @@ export async function POST(request) {
           }],
         };
 
-        // 2. Insert lead
-        const { data: newLead, error: leadErr } = await supabase
-          .from("leads")
-          .insert(lead)
-          .select()
-          .single();
+        await ensureUnits();
 
-        if (leadErr) throw leadErr;
-
-        // 3. Score
-        const scored = scoreLeadAgainstAll(newLead, units ?? [], apartmentMap);
-
-        // 4. Validate and filter matches
-        const validationIssues = {};
-        const filteredScored = scored
-          .map((s) => {
-            const validation = validateUnitMatch(newLead, s.unit, s.apartment);
-            if (!validation.isValid) {
-              if (!validationIssues[s.unit.id]) {
-                validationIssues[s.unit.id] = validation;
-              }
-            }
-            return { ...s, validation };
-          })
-          .filter((s) => {
-            // Keep matches with score > 30, or if no location was specified keep all
-            if (!newLead.desired_location) return s.score > 30;
-            // If location was specified, exclude matches with major location mismatches
-            const hasLocationMismatch = s.validation.issues.some(i => i.includes("Location"));
-            return !hasLocationMismatch && s.score > 25;
-          });
-
-        // Log validation issues for debugging
-        if (Object.keys(validationIssues).length > 0) {
-          console.log(`Lead ${newLead.id} - Validation issues:`, validationIssues);
-        }
-
-        // 5. Persist matches (limit to top 5-7)
-        const topScored = filteredScored.slice(0, 7); // Take top 7 valid matches
-        const matches = topScored.map((s) => ({
-          lead_id: newLead.id,
-          unit_id: s.unit.id,
-          apartment_id: s.unit.apartment_id,
-          score: s.score,
-        }));
-
-        if (matches.length) {
-          // First delete any existing matches for these units
-          const unitIds = matches.map(m => m.unit_id);
-          await supabase
-            .from("lead_matches")
-            .delete()
-            .eq("lead_id", newLead.id)
-            .in("unit_id", unitIds);
-
-          // Then insert the new matches
-          const { error: matchErr } = await supabase
-            .from("lead_matches")
-            .insert(matches);
-          if (matchErr) throw matchErr;
-        }
-
-        // 6. Generate AI summary
-        let aiSummary = "";
-        try {
-          const topMatches = filteredScored.slice(0, 5);
-          aiSummary = await generateMatchSummary(newLead, topMatches);
-
-          await supabase
-            .from("leads")
-            .update({ ai_summary: aiSummary })
-            .eq("id", newLead.id);
-        } catch (aiErr) {
-          console.error("AI summary failed (non-fatal):", aiErr);
-        }
+        // 2. Insert, score, persist matches, generate summary
+        const result = await processNewLead(lead, {
+          accountId: leadAccountId,
+          units: sharedUnits,
+          apartmentMap: sharedApartmentMap,
+        });
 
         results.push({
           uid: email.uid,
           subject: email.subject,
           status: "processed",
-          lead_id: newLead.id,
-          matches: scored.length,
-          results_url: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${newLead.results_token}`,
+          lead_id: result.lead.id,
+          matches: result.matchCount,
+          results_url: result.resultsUrl,
         });
       } catch (emailErr) {
         console.error(`Failed to process email UID ${email.uid}:`, emailErr);

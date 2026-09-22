@@ -1,14 +1,82 @@
-import { createClient } from "@supabase/supabase-js";
-import { 
-  extractPropertyDataFromHTML,
-  extractPropertyDataFromScreenshot 
-} from "@/lib/propertyExtractor";
-import { comparePropertyData } from "@/lib/propertyComparator";
+import { generateSyncPreview } from "@/lib/single-sync";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import { createSupabaseServer } from "@/lib/supabase-server";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+/**
+ * Resolve the authenticated user's account, throwing a Response-compatible
+ * object { status, body } when unauthorized.
+ */
+async function requireAccount() {
+  const supabaseServer = await createSupabaseServer();
+  const {
+    data: { user },
+  } = await supabaseServer.auth.getUser();
+  if (!user) {
+    return { error: { message: "Unauthorized", status: 401 } };
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { data: account } = await supabase
+    .from("accounts")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
+  if (!account) {
+    return { error: { message: "Account not found", status: 404 } };
+  }
+  return { account };
+}
+
+async function resolveOwnedEntity(supabase, propertyId, accountId) {
+  const isApartment = propertyId.startsWith("apt_");
+  const actualId = isApartment ? propertyId.replace("apt_", "") : propertyId;
+
+  let entity;
+  let dbError;
+
+  if (isApartment) {
+    const { data, error } = await supabase
+      .from("apartments")
+      .select("id, name, city, url, property_type, units(bedrooms, bathrooms, rent_min, rent_max)")
+      .eq("id", actualId)
+      .eq("account_id", accountId)
+      .single();
+    entity = data;
+    dbError = error;
+    if (entity && !error) {
+      const units = entity.units || [];
+      const rentValues = units.map((u) => u.rent_min).filter((v) => v);
+      const rentMaxValues = units.map((u) => u.rent_max).filter((v) => v);
+      entity = {
+        id: `apt_${entity.id}`,
+        property_name: entity.name,
+        city: entity.city,
+        price_min: rentValues.length > 0 ? Math.min(...rentValues) : null,
+        price_max: rentMaxValues.length > 0 ? Math.max(...rentMaxValues) : null,
+        bedrooms: units[0]?.bedrooms || null,
+        bathrooms: units[0]?.bathrooms || null,
+        source_url: entity.url,
+        property_type: entity.property_type || "apartment",
+        _type: "apartment",
+      };
+    }
+  } else {
+    const { data, error } = await supabase
+      .from("properties")
+      .select("*")
+      .eq("id", propertyId)
+      .eq("account_id", accountId)
+      .single();
+    entity = data;
+    dbError = error;
+    if (entity && !error) entity._type = "property";
+  }
+
+  if (dbError || !entity) {
+    return { error: { message: "Property not found", status: 404 } };
+  }
+  return { entity, isApartment };
+}
 
 /**
  * POST /api/properties/sync-preview
@@ -18,6 +86,13 @@ const supabase = createClient(
  */
 export async function POST(req) {
   try {
+    const { account, error: accountErr } = await requireAccount();
+    if (accountErr) {
+      return Response.json({ error: accountErr.message }, { status: accountErr.status });
+    }
+
+    const supabase = getSupabaseAdmin();
+
     const { propertyId, mode = 'simple' } = await req.json();
 
     if (!propertyId) {
@@ -28,185 +103,43 @@ export async function POST(req) {
       return Response.json({ error: "mode must be 'simple' or 'advanced'" }, { status: 400 });
     }
 
-    // Check if this is an apartment (prefixed with apt_)
-    const isApartment = propertyId.startsWith("apt_");
-    const actualId = isApartment ? propertyId.replace("apt_", "") : propertyId;
-
-    // Fetch property/apartment from database
-    let property, dbError;
-
-    if (isApartment) {
-      const { data, error } = await supabase
-        .from("apartments")
-        .select("id, name, city, url, property_type, units(bedrooms, bathrooms, rent_min, rent_max)")
-        .eq("id", actualId)
-        .single();
-      
-      property = data;
-      dbError = error;
-
-      // Convert apartment to property format
-      if (property) {
-        const units = property.units || [];
-        const rentValues = units.map(u => u.rent_min).filter(v => v);
-        const rentMaxValues = units.map(u => u.rent_max).filter(v => v);
-        
-        property = {
-          id: `apt_${property.id}`,
-          property_name: property.name,
-          city: property.city,
-          price_min: rentValues.length > 0 ? Math.min(...rentValues) : null,
-          price_max: rentMaxValues.length > 0 ? Math.max(...rentMaxValues) : null,
-          bedrooms: units[0]?.bedrooms || null,
-          bathrooms: units[0]?.bathrooms || null,
-          source_url: property.url,
-          property_type: property.property_type || "apartment",
-        };
-      }
-    } else {
-      const { data, error } = await supabase
-        .from("properties")
-        .select("*")
-        .eq("id", propertyId)
-        .single();
-      
-      property = data;
-      dbError = error;
-    }
-
-    if (dbError || !property) {
-      return Response.json(
-        { error: "Property not found" },
-        { status: 404 }
-      );
+    // Resolve and verify ownership of the property/apartment
+    const { entity: property, error: resolveErr } = await resolveOwnedEntity(
+      supabase,
+      propertyId,
+      account.id
+    );
+    if (resolveErr) {
+      return Response.json({ error: resolveErr.message }, { status: resolveErr.status });
     }
 
     // Check if property has source_url
     if (!property.source_url) {
       return Response.json(
-        { 
+        {
           error: "No source URL configured for this property",
-          property
+          property,
         },
         { status: 400 }
       );
     }
 
-    // Extract property data based on mode
-    let extractedData;
-    let extractionMethod;
-    
-    if (mode === 'advanced') {
-      // Use screenshot + vision for advanced mode
-      try {
-        const result = await extractPropertyDataFromScreenshot(property.source_url, property);
-        if (!result.success) {
-          // Fallback to simple mode if screenshot fails
-          console.warn('Advanced extraction failed, falling back to simple mode:', result.error);
-          extractionMethod = 'html_fallback';
-          
-          // Fetch HTML from source URL
-          let html;
-          try {
-            const response = await fetch(property.source_url, {
-              headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-              },
-              timeout: 10000,
-            });
+    // Extract + compare via the shared pipeline
+    const sync = await generateSyncPreview(property, mode);
 
-            if (!response.ok) {
-              return Response.json(
-                { 
-                  error: `Failed to fetch from source URL: ${response.status} ${response.statusText}`,
-                  property
-                },
-                { status: 400 }
-              );
-            }
-
-            html = await response.text();
-          } catch (fetchError) {
-            return Response.json(
-              { 
-                error: `Failed to fetch source URL: ${fetchError.message}`,
-                property
-              },
-              { status: 400 }
-            );
-          }
-
-          extractedData = await extractPropertyDataFromHTML(html, property.source_url);
-        } else {
-          extractionMethod = 'screenshot';
-          extractedData = result;
-        }
-      } catch (extractError) {
-        return Response.json(
-          { 
-            error: `Failed to extract property data (advanced mode): ${extractError.message}`,
-            property
-          },
-          { status: 400 }
-        );
-      }
-    } else {
-      // Use simple HTML extraction
-      extractionMethod = 'html';
-      try {
-        const response = await fetch(property.source_url, {
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-          },
-          timeout: 10000,
-        });
-
-        if (!response.ok) {
-          return Response.json(
-            { 
-              error: `Failed to fetch from source URL: ${response.status} ${response.statusText}`,
-              property
-            },
-            { status: 400 }
-          );
-        }
-
-        const html = await response.text();
-        extractedData = await extractPropertyDataFromHTML(html, property.source_url);
-      } catch (fetchError) {
-        return Response.json(
-          { 
-            error: `Failed to fetch source URL: ${fetchError.message}`,
-            property
-          },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Handle extraction result object
-    if (!extractedData.success) {
-      console.error('Extraction failed:', extractedData.error, 'Mode:', mode);
+    if (!sync.ok) {
       return Response.json(
-        { 
-          error: `Failed to extract property data: ${extractedData.error || 'Unknown error'}`,
-          property
-        },
+        { error: sync.error, property: sync.property },
         { status: 400 }
       );
     }
 
-    const extractedDataObj = extractedData.data || extractedData;
-
-    // Compare extracted data with current property
-    const comparison = comparePropertyData(extractedDataObj, property, {
-      priceChangeThreshold: 0.2,
-    });
+    const { comparison, extractedData, extractionMethod } = sync;
 
     return Response.json({
       comparison,
       property,
-      extractedData: extractedDataObj,
+      extractedData,
       sourceUrl: property.source_url,
       mode,
       extractionMethod,
@@ -228,6 +161,13 @@ export async function POST(req) {
  */
 export async function PATCH(req) {
   try {
+    const { account, error: accountErr } = await requireAccount();
+    if (accountErr) {
+      return Response.json({ error: accountErr.message }, { status: accountErr.status });
+    }
+
+    const supabase = getSupabaseAdmin();
+
     const { propertyId, changeset, mode = 'simple', extractionMethod = 'html' } = await req.json();
 
     if (!propertyId || !changeset) {
@@ -237,8 +177,16 @@ export async function PATCH(req) {
       );
     }
 
-    // Check if this is an apartment
-    const isApartment = propertyId.startsWith("apt_");
+    // Verify the property/apartment belongs to this account
+    const { entity: owned, error: resolveErr } = await resolveOwnedEntity(
+      supabase,
+      propertyId,
+      account.id
+    );
+    if (resolveErr) {
+      return Response.json({ error: resolveErr.message }, { status: resolveErr.status });
+    }
+    const isApartment = owned._type === "apartment";
     const actualId = isApartment ? propertyId.replace("apt_", "") : propertyId;
 
     // Build update object from changeset
@@ -282,6 +230,7 @@ export async function PATCH(req) {
         .from("apartments")
         .update(apartmentFields)
         .eq("id", actualId)
+        .eq("account_id", account.id)
         .select();
 
       if (updateError) {
@@ -323,6 +272,7 @@ export async function PATCH(req) {
         .from("properties")
         .update(updateData)
         .eq("id", actualId)
+        .eq("account_id", account.id)
         .select()
         .single();
 

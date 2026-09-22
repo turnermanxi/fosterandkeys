@@ -19,9 +19,12 @@ import { verifyLeadOwnership } from "@/lib/api-auth";
 export async function POST(request, { params }) {
   try {
     const { id } = await params;
-    const authCheck = await verifyLeadOwnership(id);
+    const body = await request.json();
+    const { decision, approvedUnits, deniedUnits, newSelections, token = null } = body;
+
+    // Authorize via the agent's account OR the client's results_token
+    const authCheck = await verifyLeadOwnership(id, token);
     if (authCheck.error) return authCheck.response;
-    const { decision, approvedUnits, deniedUnits, newSelections } = await request.json();
 
     if (!decision || !["approved", "denied", "mixed"].includes(decision)) {
       return NextResponse.json(

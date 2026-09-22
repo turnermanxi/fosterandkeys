@@ -89,6 +89,7 @@ export default function ApplicationDecisionPage() {
         decision: approvedUnits.length > 0 && deniedUnits.length === 0 ? "approved" : deniedUnits.length > 0 ? "denied" : "mixed",
         approvedUnits: approvedUnits.length > 0 ? approvedUnits : undefined,
         deniedUnits: deniedUnits.length > 0 ? deniedUnits : undefined,
+        token,
       };
 
       // Add reapplication selections if denied some

@@ -64,6 +64,7 @@ export default function TourConfirmationPage() {
         body: JSON.stringify({
           toured_properties: touredList,
           property_feedback: propertyFeedback, // Per-property interest/notes
+          token,
         }),
       });
 

@@ -17,7 +17,7 @@ import { getSupabaseUser, getUserAccount, getSupabaseAdmin } from "./supabase";
  * @param {string} leadId - The lead ID to verify ownership of
  * @returns { error?: boolean, response?: NextResponse, lead?: object, account?: object }
  */
-export async function verifyLeadOwnership(leadId) {
+export async function verifyLeadOwnership(leadId, providedToken = null) {
   try {
     // 1. Check if user is authenticated
     const user = await getSupabaseUser();
@@ -44,7 +44,7 @@ export async function verifyLeadOwnership(leadId) {
     const supabase = getSupabaseAdmin();
     const { data: lead, error } = await supabase
       .from("leads")
-      .select("id, account_id")
+      .select("*")
       .eq("id", leadId)
       .single();
 
@@ -55,8 +55,12 @@ export async function verifyLeadOwnership(leadId) {
       };
     }
 
-    // 4. Check ownership
-    if (lead.account_id !== account.id) {
+    // 4. Check ownership either via the agent's account OR the client's
+    //    results_token capability URL.
+    const tokenMatches =
+      providedToken && lead.results_token === providedToken;
+
+    if (lead.account_id !== account.id && !tokenMatches) {
       return {
         error: true,
         response: NextResponse.json(

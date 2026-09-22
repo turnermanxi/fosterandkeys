@@ -52,6 +52,7 @@ export async function POST(request, { params }) {
         .from("properties")
         .select("id")
         .eq("id", property_id)
+        .eq("account_id", accountId)
         .single();
 
       console.log(`[add-property] Property lookup for ${property_id}:`, {
@@ -72,7 +73,8 @@ export async function POST(request, { params }) {
         .from("lead_property_selections")
         .select("id")
         .eq("lead_id", leadId)
-        .eq("property_id", property_id.toString());
+        .eq("property_id", property_id.toString())
+        .eq("account_id", accountId);
 
       console.log(`[add-property] Duplicate check for ${property_id}:`, {
         alreadyExists: !!existing,
@@ -121,6 +123,7 @@ export async function POST(request, { params }) {
         .from("apartments")
         .select("id")
         .eq("id", apartment_id)
+        .eq("account_id", accountId)
         .single();
 
       console.log(`[add-property] Apartment lookup for apt_${apartment_id}:`, {
@@ -144,7 +147,8 @@ export async function POST(request, { params }) {
         .from("lead_property_selections")
         .select("id")
         .eq("lead_id", leadId)
-        .eq("property_id", apartmentSelectionId);
+        .eq("property_id", apartmentSelectionId)
+        .eq("account_id", accountId);
 
       console.log(`[add-property] Duplicate check for ${apartmentSelectionId}:`, {
         alreadyExists: !!existing,

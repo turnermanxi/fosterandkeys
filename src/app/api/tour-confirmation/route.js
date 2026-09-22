@@ -45,7 +45,8 @@ export async function GET(request) {
     const { data: manualSelections } = await supabase
       .from("lead_property_selections")
       .select("property_id")
-      .eq("lead_id", lead.id);
+      .eq("lead_id", lead.id)
+      .eq("account_id", lead.account_id);
 
     // Extract apartment IDs from manually added properties
     const manualApartmentIds = (manualSelections || [])
@@ -59,7 +60,8 @@ export async function GET(request) {
       const { data: apts } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", manualApartmentIds);
+        .in("id", manualApartmentIds)
+        .eq("account_id", lead.account_id);
       manualApartments = apts || [];
     }
 

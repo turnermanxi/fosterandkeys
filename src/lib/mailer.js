@@ -664,3 +664,115 @@ Foster & Keys Real Estate`;
     html,
   });
 }
+
+export const LEAD_NOTIFICATION_SUBJECT_PREFIX = "[Lead Notification]";
+
+export async function sendLeadNotificationEmail({
+  to,
+  lead,
+  resultsUrl,
+  dashboardUrl,
+  agentName = "Lorenzo Foster",
+}) {
+  const transport = getTransport();
+
+  const budgetRange =
+    lead.budget_min && lead.budget_max
+      ? `$${Number(lead.budget_min).toLocaleString()} – $${Number(lead.budget_max).toLocaleString()}/mo`
+      : lead.budget_min
+      ? `$${Number(lead.budget_min).toLocaleString()}+/mo`
+      : "Not provided";
+
+  const row = (label, value) =>
+    `<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e5ea;color:#6b7280;font-size:13px;white-space:nowrap;">${label}</td><td style="padding:8px 12px;border-bottom:1px solid #e2e5ea;font-size:14px;color:#1e1e1e;">${
+      value === null || value === undefined || value === "" ? "—" : escapeHtml(String(value))
+    }</td></tr>`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#1e1e1e;line-height:1.6;max-width:600px;margin:0 auto;padding:20px;">
+
+  <div style="text-align:center;padding:24px 0 16px;">
+    <h1 style="color:#1a3c5e;font-size:22px;margin:0;">Foster &amp; Keys</h1>
+    <p style="color:#6b7280;font-size:14px;margin:4px 0 0;">New Lead Submitted</p>
+  </div>
+
+  <hr style="border:none;border-top:1px solid #e2e5ea;margin:0 0 24px;">
+
+  <table style="width:100%;border-collapse:collapse;border:1px solid #e2e5ea;border-radius:8px;overflow:hidden;margin:0 0 20px;">
+    ${row("Name", escapeHtml(lead.full_name))}
+    ${row("Email", escapeHtml(lead.email))}
+    ${row("Phone", escapeHtml(lead.phone))}
+    ${row("Budget", budgetRange)}
+    ${row("Bedrooms", lead.bedrooms)}
+    ${row("Bathrooms", lead.bathrooms)}
+    ${row("Desired Location", lead.desired_location)}
+    ${row("Move-in Timeline", lead.move_in_timeline)}
+  </table>
+
+  ${
+    lead.notes
+      ? `<div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:16px 20px;border-radius:6px;margin:0 0 20px;">
+          <p style="margin:0 0 8px;font-weight:600;color:#92400e;font-size:14px;">Notes</p>
+          <p style="margin:0;font-size:14px;white-space:pre-wrap;">${escapeHtml(lead.notes)}</p>
+        </div>`
+      : ""
+  }
+
+  <div style="text-align:center;margin:28px 0;">
+    ${
+      dashboardUrl
+        ? `<a href="${dashboardUrl}" style="display:inline-block;background:#1a3c5e;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;margin:0 6px;">View on Dashboard</a>`
+        : ""
+    }
+    ${
+      resultsUrl
+        ? `<a href="${resultsUrl}" style="display:inline-block;background:#ffffff;color:#1a3c5e;border:1px solid #1a3c5e;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;margin:0 6px;">Client Results Page</a>`
+        : ""
+    }
+  </div>
+
+  <hr style="border:none;border-top:1px solid #e2e5ea;margin:24px 0;">
+
+  <p style="font-size:13px;color:#6b7280;text-align:center;margin:0;">
+    This is an automated copy of a lead submitted through the Foster &amp; Keys intake form.
+  </p>
+
+</body>
+</html>`;
+
+  const text = `New Lead Submitted
+
+Name: ${lead.full_name || "-"}
+Email: ${lead.email || "-"}
+Phone: ${lead.phone || "-"}
+Budget: ${budgetRange}
+Bedrooms: ${lead.bedrooms ?? "-"}
+Bathrooms: ${lead.bathrooms ?? "-"}
+Desired Location: ${lead.desired_location || "-"}
+Move-in Timeline: ${lead.move_in_timeline || "-"}
+
+${lead.notes ? `Notes:\n${lead.notes}\n\n` : ""}${dashboardUrl ? `Dashboard: ${dashboardUrl}\n` : ""}${
+    resultsUrl ? `Client results: ${resultsUrl}\n` : ""
+  }
+This is an automated copy of a lead submitted through the Foster & Keys intake form.`;
+
+  await transport.sendMail({
+    from: `"${agentName} — Foster & Keys" <${process.env.GMAIL_USER}>`,
+    to,
+    subject: `${LEAD_NOTIFICATION_SUBJECT_PREFIX} New Lead: ${lead.full_name || "Unknown"}`,
+    text,
+    html,
+  });
+}
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}

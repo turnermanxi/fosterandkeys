@@ -35,17 +35,25 @@ export async function POST(request, { params }) {
       .filter((r) => r.cx_response === "interested")
       .map((r) => r.unit_id);
 
+    const { data: accountApartments } = await supabase
+      .from("apartments")
+      .select("id")
+      .eq("account_id", authCheck.account.id);
+    const accountApartmentIds = (accountApartments || []).map((a) => a.id);
+
     const { data: selectedUnits } = await supabase
       .from("units")
       .select("id, apartment_id")
-      .in("id", selectedUnitIds);
+      .in("id", selectedUnitIds)
+      .in("apartment_id", accountApartmentIds);
 
     // Get apartment details for selected units
     const aptIds = (selectedUnits || []).map((u) => u.apartment_id);
     const { data: apartments } = await supabase
       .from("apartments")
       .select("id, name")
-      .in("id", aptIds);
+      .in("id", aptIds)
+      .eq("account_id", authCheck.account.id);
 
     const aptMap = {};
     (apartments || []).forEach((a) => (aptMap[a.id] = a));

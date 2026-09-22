@@ -63,10 +63,17 @@ export async function GET(request) {
       });
     }
 
+    const { data: accountApartments } = await supabase
+      .from("apartments")
+      .select("id")
+      .eq("account_id", lead.account_id);
+    const accountApartmentIds = (accountApartments || []).map((a) => a.id);
+
     const { data: unit, error: unitError } = await supabase
       .from("units")
       .select("*")
       .eq("id", firstUnitId)
+      .in("apartment_id", accountApartmentIds)
       .single();
 
     console.log("DEBUG: Unit lookup:", { unit, unitError });
@@ -75,6 +82,7 @@ export async function GET(request) {
       .from("apartments")
       .select("*")
       .eq("id", unit?.apartment_id)
+      .eq("account_id", lead.account_id)
       .single();
 
     console.log("DEBUG: Apartment lookup:", { apartment, aptError });

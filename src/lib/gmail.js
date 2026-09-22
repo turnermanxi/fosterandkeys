@@ -14,18 +14,25 @@ import { simpleParser } from "mailparser";
  * @param {object}  opts
  * @param {string}  [opts.folder]   – IMAP folder to check (default: "INBOX")
  * @param {string}  [opts.filter]   – optional subject filter string
+ * @param {string}  [opts.user]     – Gmail address (defaults to GMAIL_USER env)
+ * @param {string}  [opts.pass]     – Gmail app password (defaults to GMAIL_APP_PASSWORD env)
  * @returns {Promise<Array<{uid: number, from: string, subject: string, textBody: string, htmlBody: string, date: Date}>>}
  */
 export async function fetchUnreadEmails(opts = {}) {
-  const { folder = "INBOX", filter } = opts;
+  const {
+    folder = "INBOX",
+    filter,
+    user = process.env.GMAIL_USER,
+    pass = process.env.GMAIL_APP_PASSWORD,
+  } = opts;
 
   const client = new ImapFlow({
     host: process.env.GMAIL_IMAP_HOST || "imap.gmail.com",
     port: Number(process.env.GMAIL_IMAP_PORT) || 993,
     secure: true,
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
+      user,
+      pass,
     },
     logger: false, // suppress noisy IMAP logs
   });

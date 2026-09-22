@@ -24,7 +24,12 @@ const handler = async (event) => {
       try {
         const syncRes = await fetch(
           process.env.NEXT_PUBLIC_APP_URL +
-            `/api/properties/auto-sync?accountId=${account.id}`
+            `/api/properties/auto-sync?accountId=${account.id}`,
+          {
+            headers: process.env.WEBHOOK_SECRET
+              ? { "x-webhook-secret": process.env.WEBHOOK_SECRET }
+              : {},
+          }
         );
         const syncData = await syncRes.json();
 

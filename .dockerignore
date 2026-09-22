@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+!AGENTS.md
+.env.local.example
+deno.lock
+netlify/
+supabase/

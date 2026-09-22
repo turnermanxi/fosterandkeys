@@ -56,7 +56,8 @@ export async function GET(request, { params }) {
       const { data: aptsData } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", apartmentIds);
+        .in("id", apartmentIds)
+        .eq("account_id", authCheck.account.id);
       apartments = aptsData || [];
     }
 

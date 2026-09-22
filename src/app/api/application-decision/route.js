@@ -42,7 +42,8 @@ export async function GET(request) {
     const { data: leadSelections } = await supabase
       .from("lead_property_selections")
       .select("property_id, created_at")
-      .eq("lead_id", lead.id);
+      .eq("lead_id", lead.id)
+      .eq("account_id", lead.account_id);
 
     console.log("Lead property selections:", leadSelections?.length);
 
@@ -66,13 +67,21 @@ export async function GET(request) {
       });
     }
 
+    // Get the account's apartment IDs so units can be scoped to this tenant
+    const { data: accountApartments } = await supabase
+      .from("apartments")
+      .select("id")
+      .eq("account_id", lead.account_id);
+    const accountApartmentIds = (accountApartments || []).map((a) => a.id);
+
     // Fetch units for both recommended units AND manually added apartments
     let units = [];
     if (recommendedUnitIds.length > 0) {
       const { data: unitData } = await supabase
         .from("units")
         .select("id, bedrooms, bathrooms, rent_min, rent_max, apartment_id")
-        .in("id", recommendedUnitIds);
+        .in("id", recommendedUnitIds)
+        .in("apartment_id", accountApartmentIds);
       units = unitData || [];
     }
 
@@ -105,7 +114,8 @@ export async function GET(request) {
     const { data: apartments } = await supabase
       .from("apartments")
       .select("id, name")
-      .in("id", allAptIds);
+      .in("id", allAptIds)
+      .eq("account_id", lead.account_id);
 
     console.log("Apartments found:", apartments?.length);
 

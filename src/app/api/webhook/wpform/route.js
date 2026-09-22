@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { scoreLeadAgainstAll, validateUnitMatch } from "@/lib/scoring";
-import { generateMatchSummary } from "@/lib/openai";
+import { processNewLead } from "@/lib/lead-processing";
+import { sendLeadNotificationEmail } from "@/lib/mailer";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -10,19 +10,70 @@ import { v4 as uuidv4 } from "uuid";
  * Direct JSON webhook — accepts structured lead data.
  * Also used for manual/test submissions.
  * For email-based intake use the Gmail IMAP poller (/api/cron/check-email).
+ *
+ * Account resolution (SaaS): pass `x-account-slug` (or `x-account-id`).
+ * Auth for external callers:
+ *   - If the account's intake form has a webhook_secret, it must be sent as
+ *     `x-webhook-secret`.
+ *   - If a global WEBHOOK_SECRET is configured and no per-account secret is
+ *     set, the global secret is accepted (backwards compatibility).
  */
 export async function POST(request) {
   try {
-    // --- Optional: verify shared secret ---
-    const secret = request.headers.get("x-webhook-secret");
-    if (
-      process.env.WEBHOOK_SECRET &&
-      secret !== process.env.WEBHOOK_SECRET
-    ) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const body = await request.json().catch(() => null);
+    if (!body) {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const body = await request.json();
+    const supabase = getSupabaseAdmin();
+
+    // --- Resolve target account from headers/slugs ---
+    const accountSlug = request.headers.get("x-account-slug");
+    const accountIdHeader = request.headers.get("x-account-id");
+    const secret = request.headers.get("x-webhook-secret");
+
+    let account = null;
+    if (accountSlug || accountIdHeader) {
+      let query = supabase.from("accounts").select("*");
+      if (accountSlug) query = query.eq("slug", accountSlug).single();
+      else query = query.eq("id", accountIdHeader).single();
+
+      const { data, error } = await query;
+      if (error || !data) {
+        return NextResponse.json({ error: "Account not found" }, { status: 404 });
+      }
+      if (data.status !== "active") {
+        return NextResponse.json(
+          { error: "Account is not active" },
+          { status: 403 }
+        );
+      }
+      account = data;
+    }
+
+    // --- Auth check ---
+    if (process.env.WEBHOOK_SECRET || account) {
+      let expectedSecret = process.env.WEBHOOK_SECRET || "";
+
+      // Prefer the account's form webhook_secret when it exists
+      if (account) {
+        const { data: form } = await supabase
+          .from("lead_forms")
+          .select("webhook_secret")
+          .eq("account_id", account.id)
+          .eq("is_active", true)
+          .order("created_at", { ascending: true })
+          .limit(1)
+          .single();
+        if (form?.webhook_secret) {
+          expectedSecret = form.webhook_secret;
+        }
+      }
+
+      if (expectedSecret && secret !== expectedSecret) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    }
 
     const lead = {
       full_name:        body.full_name        ?? body.name      ?? "",
@@ -37,113 +88,43 @@ export async function POST(request) {
       notes:            body.notes             ?? body.additional_notes ?? "",
       results_token:    uuidv4(),
       current_status:   "created",
-      account_id:       process.env.DEFAULT_ACCOUNT_ID || null,
-      timeline: [{
-        stage: "created",
-        timestamp: new Date().toISOString(),
-        notes: "Lead created from form submission",
-        visibility: "both",
-      }],
+      account_id:       account?.id || process.env.DEFAULT_ACCOUNT_ID || null,
+      timeline: [
+        {
+          stage: "created",
+          timestamp: new Date().toISOString(),
+          notes: "Lead created from form submission",
+          visibility: "both",
+        },
+      ],
     };
 
-    const supabase = getSupabaseAdmin();
+    const result = await processNewLead(lead, {
+      accountId: lead.account_id,
+    });
 
-    // 1. Insert the lead
-    const { data: newLead, error: leadErr } = await supabase
-      .from("leads")
-      .insert(lead)
-      .select()
-      .single();
-
-    if (leadErr) throw leadErr;
-
-    // 2. Fetch all apartments
-    const { data: apartments, error: aptErr } = await supabase
-      .from("apartments")
-      .select("*");
-    if (aptErr) throw aptErr;
-
-    const apartmentMap = {};
-    (apartments ?? []).forEach((a) => (apartmentMap[a.id] = a));
-
-    // 3. Fetch all units
-    const { data: units, error: unitErr } = await supabase
-      .from("units")
-      .select("*");
-    if (unitErr) throw unitErr;
-
-    // 4. Score
-    const scored = scoreLeadAgainstAll(newLead, units ?? [], apartmentMap);
-
-    // 5. Validate and filter matches
-    const validationIssues = {};
-    const filteredScored = scored
-      .map((s) => {
-        const validation = validateUnitMatch(newLead, s.unit, s.apartment);
-        if (!validation.isValid) {
-          if (!validationIssues[s.unit.id]) {
-            validationIssues[s.unit.id] = validation;
-          }
-        }
-        return { ...s, validation };
-      })
-      .filter((s) => {
-        // Keep matches with score > 30, or if no location was specified keep all
-        if (!newLead.desired_location) return s.score > 30;
-        // If location was specified, exclude matches with major location mismatches
-        const hasLocationMismatch = s.validation.issues.some(i => i.includes("Location"));
-        return !hasLocationMismatch && s.score > 25;
-      });
-
-    // Log validation issues for debugging
-    if (Object.keys(validationIssues).length > 0) {
-      console.log(`Lead ${newLead.id} - Validation issues:`, validationIssues);
-    }
-
-    // 6. Persist matches (limit to top 5-7)
-    const topScored = filteredScored.slice(0, 7); // Take top 7 valid matches
-    const matches = topScored.map((s) => ({
-      lead_id: newLead.id,
-      unit_id: s.unit.id,
-      apartment_id: s.unit.apartment_id,
-      score: s.score,
-    }));
-
-    if (matches.length) {
-      // First delete any existing matches for these units
-      const unitIds = matches.map(m => m.unit_id);
-      await supabase
-        .from("lead_matches")
-        .delete()
-        .eq("lead_id", newLead.id)
-        .in("unit_id", unitIds);
-
-      // Then insert the new matches
-      const { error: matchErr } = await supabase
-        .from("lead_matches")
-        .insert(matches);
-      if (matchErr) throw matchErr;
-    }
-
-    // 7. Generate AI summary
-    let aiSummary = "";
-    try {
-      const topMatches = filteredScored.slice(0, 5);
-      aiSummary = await generateMatchSummary(newLead, topMatches);
-      await supabase
-        .from("leads")
-        .update({ ai_summary: aiSummary })
-        .eq("id", newLead.id);
-    } catch (aiErr) {
-      console.error("AI summary generation failed (non-fatal):", aiErr);
+    const notifyTo = process.env.LEAD_NOTIFICATION_EMAIL;
+    if (notifyTo) {
+      try {
+        await sendLeadNotificationEmail({
+          to: notifyTo,
+          lead: result.lead,
+          resultsUrl: result.resultsUrl,
+          dashboardUrl: process.env.NEXT_PUBLIC_BASE_URL
+            ? `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`
+            : null,
+        });
+      } catch (notifyErr) {
+        console.error("Lead notification email failed (non-fatal):", notifyErr);
+      }
     }
 
     return NextResponse.json({
       success: true,
-      lead_id: newLead.id,
-      results_url: `${process.env.NEXT_PUBLIC_BASE_URL}/results/${newLead.results_token}`,
-      matches: scored.length,
-      ai_summary: aiSummary,
+      lead_id: result.lead.id,
+      results_url: result.resultsUrl,
+      matches: result.matchCount,
+      ai_summary: result.aiSummary,
     });
   } catch (err) {
     console.error("Webhook error:", err);

@@ -20,6 +20,21 @@ export async function PATCH(request, { params }) {
       const apartmentId = id.replace("apt_", "");
       console.log("Updating apartment:", apartmentId);
 
+      // Verify the apartment belongs to this account
+      const { data: aptCheck, error: aptVerifyErr } = await supabase
+        .from("apartments")
+        .select("id")
+        .eq("id", apartmentId)
+        .eq("account_id", accountId)
+        .single();
+
+      if (aptVerifyErr || !aptCheck) {
+        return NextResponse.json(
+          { error: "Apartment not found or unauthorized" },
+          { status: 404 }
+        );
+      }
+
       // Update the apartments table with acceptance criteria and fees
       const { data: apartment, error: aptUpdateErr } = await supabase
         .from("apartments")
@@ -180,6 +195,21 @@ export async function DELETE(request, { params }) {
     if (id.startsWith("apt_")) {
       const apartmentId = id.replace("apt_", "");
       console.log("Deleting apartment:", apartmentId);
+
+      // Verify the apartment belongs to this account
+      const { data: aptCheck, error: aptVerifyErr } = await supabase
+        .from("apartments")
+        .select("id")
+        .eq("id", apartmentId)
+        .eq("account_id", accountId)
+        .single();
+
+      if (aptVerifyErr || !aptCheck) {
+        return NextResponse.json(
+          { error: "Apartment not found or unauthorized" },
+          { status: 404 }
+        );
+      }
 
       if (hardDelete) {
         // Permanent deletion

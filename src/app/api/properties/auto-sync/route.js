@@ -1,28 +1,69 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+import { createSupabaseServer } from "@/lib/supabase-server";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import { generateSyncPreview } from "@/lib/single-sync";
 
 /**
  * GET /api/properties/auto-sync?accountId=xxx
- * 
+ *
  * Automatically syncs all properties for an account
  * - Fetches real data from source URLs
  * - Compares with current data
  * - Logs changes
  * - Creates review queue entries for manual approval
- * 
+ *
+ * Requires an authenticated agent session. The supplied accountId must
+ * belong to the current user (prevents cross-tenant triggers).
+ *
  * Returns: { processed: number, updated: number, reviewed: number, errors: [] }
  */
 export async function GET(req) {
   try {
+    // --- Auth: accept either an authenticated session OR the admin webhook secret (for cron) ---
+    const headerSecret = req.headers.get("x-webhook-secret");
+    const isAdminCall =
+      process.env.WEBHOOK_SECRET && headerSecret === process.env.WEBHOOK_SECRET;
+
+    let account = null;
+
+    if (!isAdminCall) {
+      const supabaseServer = await createSupabaseServer();
+      const {
+        data: { user },
+      } = await supabaseServer.auth.getUser();
+
+      if (!user) {
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const supabase = getSupabaseAdmin();
+
+      // --- Resolve the caller's own account ---
+      const { data: acc } = await supabase
+        .from("accounts")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+      if (!acc) {
+        return Response.json({ error: "Account not found" }, { status: 404 });
+      }
+      account = acc;
+    }
+
+    const supabase = getSupabaseAdmin();
+
     const { searchParams } = new URL(req.url);
     const accountId = searchParams.get("accountId");
 
     if (!accountId) {
       return Response.json({ error: "accountId required" }, { status: 400 });
+    }
+
+    // --- Non-admin callers may only sync their own account ---
+    if (!isAdminCall && account.id !== accountId) {
+      return Response.json(
+        { error: "Forbidden: accountId does not belong to your account" },
+        { status: 403 }
+      );
     }
 
     // Get all properties with source URLs for this account
@@ -36,10 +77,11 @@ export async function GET(req) {
       return Response.json({ error: fetchError.message }, { status: 400 });
     }
 
-    // Get all apartments with source URLs (url field)
+    // Get all apartments with source URLs (url field) — account-scoped
     const { data: apartments, error: aptFetchError } = await supabase
       .from("apartments")
       .select("*")
+      .eq("account_id", accountId)
       .not("source_url", "is", null);
 
     if (aptFetchError) {
@@ -71,27 +113,18 @@ export async function GET(req) {
 
     for (const property of allProperties) {
       try {
-        // Fetch sync preview
-        const syncRes = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL || 'https://fosterandkeys.netlify.app'}/api/properties/sync-preview`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ propertyId: property.id }),
-          }
-        );
+        // Generate the sync preview inline (shared pipeline with sync-preview route)
+        const sync = await generateSyncPreview(property);
 
-        const syncData = await syncRes.json();
-
-        if (!syncRes.ok) {
+        if (!sync.ok) {
           results.errors.push({
             propertyId: property.id,
-            error: syncData.error || "Failed to sync",
+            error: sync.error || "Failed to sync",
           });
           continue;
         }
 
-        const { comparison, extractedData } = syncData;
+        const { comparison, extractedData } = sync;
 
         // Log the sync
         await supabase.from("property_sync_logs").insert({
@@ -140,7 +173,8 @@ export async function GET(req) {
           await supabase
             .from(table)
             .update(updateData)
-            .eq("id", actualId);
+            .eq("id", actualId)
+            .eq("account_id", accountId);
 
           results.updated++;
         }

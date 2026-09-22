@@ -40,7 +40,7 @@ export async function GET(request, { params }) {
 
     if (propsErr) throw propsErr;
 
-    // Get all apartments (legacy data)
+    // Get all apartments (account-scoped)
     const { data: allApartments, error: aptsErr } = await supabase
       .from("apartments")
       .select(
@@ -58,6 +58,7 @@ export async function GET(request, { params }) {
         url
       `
       )
+      .eq("account_id", accountId)
       .neq("is_archived", true)
       .order("name", { ascending: true });
 
@@ -135,6 +136,7 @@ export async function POST(request, { params }) {
       .from("leads")
       .select("id")
       .eq("id", id)
+      .eq("account_id", accountId)
       .single();
 
     if (leadErr || !lead) {
@@ -168,18 +170,19 @@ export async function POST(request, { params }) {
       }
     }
 
-    // Validate apartments in apartments table
+    // Validate apartments in apartments table (account-scoped)
     if (apartmentIds.length > 0) {
       const { data: apts, error: aptsErr } = await supabase
         .from("apartments")
         .select("id")
-        .in("id", apartmentIds);
+        .in("id", apartmentIds)
+        .eq("account_id", accountId);
 
       if (aptsErr) throw aptsErr;
 
       if (apts.length !== apartmentIds.length) {
         return NextResponse.json(
-          { error: "Some apartments not found" },
+          { error: "Some apartments not found or unauthorized" },
           { status: 400 }
         );
       }

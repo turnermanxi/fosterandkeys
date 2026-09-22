@@ -3,14 +3,18 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 
 /**
  * POST /api/leads/[id]/confirm-tour
- * 
+ *
  * CX confirms which properties they toured
  * Updates lead_matches with toured_status
+ *
+ * Auth: client-facing. Accepts `token` (results_token) in the body as a
+ * capability credential OR an authenticated agent session with ownership.
  */
 export async function POST(request, { params }) {
   try {
     const { id } = await params;
-    const { toured_properties, property_feedback = {} } = await request.json();
+    const body = await request.json();
+    const { toured_properties, property_feedback = {}, token = null } = body;
     const supabase = getSupabaseAdmin();
 
     // Get the lead
@@ -24,6 +28,14 @@ export async function POST(request, { params }) {
       return NextResponse.json(
         { error: "Lead not found" },
         { status: 404 }
+      );
+    }
+
+    // Authorize via the client's results_token
+    if (!token || lead.results_token !== token) {
+      return NextResponse.json(
+        { error: "Forbidden: invalid tour confirmation link" },
+        { status: 403 }
       );
     }
 

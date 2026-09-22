@@ -29,10 +29,11 @@ export async function POST(request, { params }) {
 
     if (isApartment) {
       // For apartments, verify it exists
-      const { data: existing } = await supabase
+const { data: existing } = await supabase
         .from("apartments")
         .select("id, notes")
         .eq("id", actualId)
+        .eq("account_id", accountId)
         .single();
 
       if (!existing) {
@@ -137,10 +138,11 @@ export async function GET(request, { params }) {
 
     if (isApartment) {
       // For apartments, verify it exists
-      const { data: existing } = await supabase
+const { data: existing } = await supabase
         .from("apartments")
         .select("id, notes")
         .eq("id", actualId)
+        .eq("account_id", accountId)
         .single();
 
       if (!existing) {

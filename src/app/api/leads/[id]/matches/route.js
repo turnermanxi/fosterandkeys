@@ -56,7 +56,8 @@ export async function GET(request, { params }) {
     const { data: selectedProps, error: selectedErr } = await supabase
       .from("lead_property_selections")
       .select("property_id")
-      .eq("lead_id", id);
+      .eq("lead_id", id)
+      .eq("account_id", authCheck.account.id);
 
     console.log(`[matches] Selected properties for lead ${id}:`, {
       count: selectedProps?.length || 0,
@@ -102,7 +103,8 @@ export async function GET(request, { params }) {
       const { data: propDetails, error: propErr } = await supabase
         .from("properties")
         .select("*")
-        .in("id", propertyIds);
+        .in("id", propertyIds)
+        .eq("account_id", authCheck.account.id);
 
       console.log(`[matches] Property query result:`, {
         requestedCount: propertyIds.length,
@@ -143,7 +145,8 @@ export async function GET(request, { params }) {
       const { data: aptDetails, error: aptErr } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", apartmentIds);
+        .in("id", apartmentIds)
+        .eq("account_id", authCheck.account.id);
 
       console.log(`[matches] Apartment query result:`, {
         requestedCount: apartmentIds.length,

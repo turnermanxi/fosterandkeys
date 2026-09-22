@@ -124,8 +124,7 @@ export async function GET(request) {
 
     if (propsError) throw propsError;
 
-    // Fetch apartments from apartments table (legacy data)
-    // Don't filter apartments - they're shown alongside properties
+    // Fetch apartments from apartments table (legacy data shown alongside properties)
     let apartmentsQuery = supabase
       .from("apartments")
       .select(
@@ -161,7 +160,8 @@ export async function GET(request) {
         units(id, bedrooms, bathrooms, rent_min, rent_max, sqft_min, sqft_max)
       `,
         { count: "exact" }
-      );
+      )
+      .eq("account_id", accountId);
 
     if (search) {
       const searchTerm = `%${search}%`;

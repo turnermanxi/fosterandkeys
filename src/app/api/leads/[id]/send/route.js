@@ -72,7 +72,8 @@ export async function POST(request, { params }) {
     const { data: selectedPropertyIds } = await supabase
       .from("lead_property_selections")
       .select("property_id")
-      .eq("lead_id", id);
+      .eq("lead_id", id)
+      .eq("account_id", accountId);
 
     console.log(`Found ${selectedPropertyIds?.length || 0} selected properties for lead ${id}`);
     if (selectedPropertyIds?.length > 0) {
@@ -101,7 +102,8 @@ export async function POST(request, { params }) {
       const { data: props } = await supabase
         .from("properties")
         .select("*")
-        .in("id", propertyIds);
+        .in("id", propertyIds)
+        .eq("account_id", accountId);
       selectedPropertiesData.push(...(props || []));
     }
 
@@ -110,7 +112,8 @@ export async function POST(request, { params }) {
       const { data: apts } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", apartmentIds);
+        .in("id", apartmentIds)
+        .eq("account_id", accountId);
       
       // Convert apartments to properties format for email
       const convertedApts = (apts || []).map((apt) => ({

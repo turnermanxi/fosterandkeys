@@ -59,7 +59,8 @@ export async function POST(request, { params }) {
     const { data: manualSelections } = await supabase
       .from("lead_property_selections")
       .select("property_id")
-      .eq("lead_id", id);
+      .eq("lead_id", id)
+      .eq("account_id", authCheck.account.id);
 
     // Extract apartment IDs from manually added properties (format: apt_X)
     const manualApartmentIds = (manualSelections || [])
@@ -92,7 +93,8 @@ export async function POST(request, { params }) {
       const { data: apts } = await supabase
         .from("apartments")
         .select("*")
-        .in("id", allApartmentIds);
+        .in("id", allApartmentIds)
+        .eq("account_id", authCheck.account.id);
       selectedApartments = apts || [];
       console.log(`Fetched ${selectedApartments.length} apartments for scheduling`);
     }
