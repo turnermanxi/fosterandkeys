@@ -159,7 +159,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           </button>
         </div>
 
-        <p style={{ color: "#666", marginBottom: "20px" }}>
+        <p style={{ color: "var(--text-muted)", marginBottom: "20px" }}>
           This tool syncs properties from their configured source URLs and extracts real data.
           <br />
           <strong>Note:</strong> Properties must have a source URL configured before they can be synced.
@@ -167,12 +167,12 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
         {error && (
           <div style={{
-            backgroundColor: "#fee",
-            border: "1px solid #fcc",
+            backgroundColor: "var(--danger-bg)",
+            border: "1px solid var(--danger-border)",
             borderRadius: "6px",
             padding: "12px",
             marginBottom: "16px",
-            color: "#c33",
+            color: "var(--danger-text)",
             fontSize: "0.9rem"
           }}>
             ⚠️ {error}
@@ -183,7 +183,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           <div style={{ marginBottom: "20px" }}>
             {!selectedMode ? (
               <>
-                <p style={{ color: "#666", marginBottom: "16px" }}>
+                <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
                   Choose how you'd like to sync all properties:
                 </p>
 
@@ -192,36 +192,36 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
                     onClick={() => setSelectedMode('simple')}
                     style={{
                       padding: "16px",
-                      border: "2px solid #ddd",
+                      border: "2px solid var(--border)",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      backgroundColor: selectedMode === 'simple' ? "#e3f2fd" : "white",
-                      borderColor: selectedMode === 'simple' ? "#0066cc" : "#ddd",
+                      backgroundColor: selectedMode === 'simple' ? "var(--info-bg)" : "var(--surface)",
+                      borderColor: selectedMode === 'simple' ? "var(--info)" : "var(--border)",
                       transition: "all 0.2s"
                     }}
                   >
                     <div style={{ fontWeight: 600, marginBottom: "4px" }}>📄 Simple Sync</div>
-                    <div style={{ fontSize: "0.8rem", color: "#666" }}>Fast, HTML-based<br/>extraction</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Fast, HTML-based<br/>extraction</div>
                   </button>
 
                   <button
                     onClick={() => setSelectedMode('advanced')}
                     style={{
                       padding: "16px",
-                      border: "2px solid #ddd",
+                      border: "2px solid var(--border)",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      backgroundColor: selectedMode === 'advanced' ? "#fff8f0" : "white",
-                      borderColor: selectedMode === 'advanced' ? "#ffa500" : "#ddd",
+                      backgroundColor: selectedMode === 'advanced' ? "var(--warning-bg)" : "var(--surface)",
+                      borderColor: selectedMode === 'advanced' ? "var(--warning)" : "var(--border)",
                       transition: "all 0.2s"
                     }}
                   >
                     <div style={{ fontWeight: 600, marginBottom: "4px" }}>🤖 Advanced Sync</div>
-                    <div style={{ fontSize: "0.8rem", color: "#666" }}>AI vision for<br/>graphic prices</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>AI vision for<br/>graphic prices</div>
                   </button>
                 </div>
 
-                <p style={{ fontSize: "0.85rem", color: "#666", marginBottom: "16px" }}>
+                <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "16px" }}>
                   Properties available: <strong>{properties.length}</strong>
                   <br/>
                   (Only properties with source URLs will be synced)
@@ -229,7 +229,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
               </>
             ) : (
               <>
-                <p style={{ color: "#666", marginBottom: "16px" }}>
+                <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
                   ✓ Using <strong>{selectedMode === 'simple' ? 'Simple' : 'Advanced'}</strong> sync mode
                 </p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
@@ -252,14 +252,14 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           </div>
         ) : (
           <div>
-            <div style={{ backgroundColor: "#f9f9f9", padding: "12px", borderRadius: "6px", marginBottom: "15px" }}>
+            <div style={{ backgroundColor: "var(--surface-2)", padding: "12px", borderRadius: "6px", marginBottom: "15px" }}>
               <h3 style={{ margin: "0 0 8px 0" }}>Sync Results Summary</h3>
               <p style={{ margin: "4px 0", fontSize: "0.9rem" }}>
-                <span style={{ color: "#28a745", marginRight: "15px" }}>✅ Would Update: {results.filter(r => r.wouldUpdate).length}</span>
-                <span style={{ color: "#ff9800", marginRight: "15px" }}>⚠️ Needs Review: {results.filter(r => r.wouldReview).length}</span>
-                <span style={{ color: "#999" }}>⏭️ Ignored: {results.filter(r => !r.wouldUpdate && !r.wouldReview).length}</span>
+                <span style={{ color: "var(--success)", marginRight: "15px" }}>✅ Would Update: {results.filter(r => r.wouldUpdate).length}</span>
+                <span style={{ color: "var(--warning)", marginRight: "15px" }}>⚠️ Needs Review: {results.filter(r => r.wouldReview).length}</span>
+                <span style={{ color: "var(--text-muted)" }}>⏭️ Ignored: {results.filter(r => !r.wouldUpdate && !r.wouldReview).length}</span>
               </p>
-              <p style={{ margin: "8px 0 0 0", fontSize: "0.85rem", color: "#666" }}>
+              <p style={{ margin: "8px 0 0 0", fontSize: "0.85rem", color: "var(--text-muted)" }}>
                 Mode: <strong>{selectedMode === 'simple' ? '📄 Simple' : '🤖 Advanced'}</strong> | 
                 Showing page {currentPage + 1} of {Math.ceil(results.length / resultsPerPage)} ({results.length} total with changes)
               </p>
@@ -270,11 +270,11 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
               <div
                 key={result.propertyId}
                 style={{
-                  border: "1px solid #ddd",
+                  border: "1px solid var(--border)",
                   padding: "15px",
                   marginBottom: "10px",
                   borderRadius: "8px",
-                  backgroundColor: result.wouldUpdate ? "#f0f8f0" : result.wouldReview ? "#fff8f0" : "#f5f5f5",
+                  backgroundColor: result.wouldUpdate ? "var(--success-bg)" : result.wouldReview ? "var(--warning-bg)" : "var(--surface-2)",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
@@ -292,10 +292,10 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
                     {result.comparison.reasons.length > 0 && (
                       <details style={{ marginTop: "10px" }}>
-                        <summary style={{ cursor: "pointer", color: "#666" }}>Reasons ({result.comparison.reasons.length})</summary>
+                        <summary style={{ cursor: "pointer", color: "var(--text-muted)" }}>Reasons ({result.comparison.reasons.length})</summary>
                         <ul style={{ marginTop: "8px", paddingLeft: "20px" }}>
                           {result.comparison.reasons.map((reason, i) => (
-                            <li key={i} style={{ fontSize: "0.85rem", color: "#666" }}>
+                            <li key={i} style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
                               {reason}
                             </li>
                           ))}
@@ -305,15 +305,15 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
                     {result.comparison.diff.length > 0 && (
                       <details style={{ marginTop: "10px" }}>
-                        <summary style={{ cursor: "pointer", color: "#666" }}>Changes ({result.comparison.diff.length})</summary>
+                        <summary style={{ cursor: "pointer", color: "var(--text-muted)" }}>Changes ({result.comparison.diff.length})</summary>
                         <table style={{ marginTop: "8px", fontSize: "0.85rem", width: "100%" }}>
                           <tbody>
                             {result.comparison.diff.map((change, i) => (
-                              <tr key={i} style={{ borderBottom: "1px solid #eee" }}>
-                                <td style={{ padding: "4px", color: "#666" }}>{change.field}</td>
-                                <td style={{ padding: "4px", color: "#999" }}>{JSON.stringify(change.old_value)}</td>
+                              <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
+                                <td style={{ padding: "4px", color: "var(--text-muted)" }}>{change.field}</td>
+                                <td style={{ padding: "4px", color: "var(--text-muted)" }}>{JSON.stringify(change.old_value)}</td>
                                 <td style={{ padding: "4px" }}>→</td>
-                                <td style={{ padding: "4px", color: "#333" }}>
+                                <td style={{ padding: "4px", color: "var(--text)" }}>
                                   <strong>{JSON.stringify(change.new_value)}</strong>
                                 </td>
                               </tr>
@@ -333,7 +333,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
               alignItems: "center",
               marginTop: "20px",
               paddingTop: "15px",
-              borderTop: "1px solid #eee"
+              borderTop: "1px solid var(--border)"
             }}>
               <button
                 className="btn btn-default"
@@ -343,7 +343,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
                 ← Previous
               </button>
 
-              <span style={{ fontSize: "0.9rem", color: "#666" }}>
+              <span style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>
                 Page {currentPage + 1} of {Math.ceil(results.length / resultsPerPage)}
               </span>
 
@@ -365,7 +365,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
                   className="btn btn-primary"
                   onClick={applyAllChanges}
                   disabled={applying}
-                  style={{ backgroundColor: "#28a745", borderColor: "#28a745" }}
+                  style={{ backgroundColor: "var(--success)", borderColor: "var(--success)" }}
                 >
                   {applying ? "Applying..." : `Make Changes (${results.filter(r => r.comparison.diff.length > 0).length})`}
                 </button>
@@ -374,8 +374,8 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           </div>
         )}
 
-        <div style={{ marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #eee" }}>
-          <p style={{ fontSize: "0.85rem", color: "#999" }}>
+        <div style={{ marginTop: "20px", paddingTop: "20px", borderTop: "1px solid var(--border)" }}>
+          <p style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
             💡 <strong>How it works:</strong> This syncs properties by fetching real data from their source URLs, extracting key fields, and comparing them with current data. You can review changes before applying.
           </p>
         </div>
@@ -394,7 +394,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
+          background-color: var(--overlay);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -408,7 +408,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
           max-width: 500px;
           max-height: 85vh;
           overflow-y: auto;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 4px 16px rgba(15,23,42,.16);
         }
 
         .btn {
@@ -422,22 +422,22 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
         .btn-text {
           background: none;
-          color: #666;
+          color: var(--text-muted);
           padding: 0;
           font-size: 1.2rem;
         }
 
         .btn-text:hover {
-          color: #000;
+          color: var(--text-strong);
         }
 
         .btn-primary {
-          background-color: #0066cc;
+          background-color: var(--info);
           color: white;
         }
 
         .btn-primary:hover:not(:disabled) {
-          background-color: #0052a3;
+          background-color: var(--info-text);
         }
 
         .btn-primary:disabled {
@@ -447,14 +447,14 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
         .btn-default,
         .btn-secondary {
-          background-color: #f0f0f0;
-          color: #333;
-          border: 1px solid #ddd;
+          background-color: var(--surface-2);
+          color: var(--text);
+          border: 1px solid var(--border);
         }
 
         .btn-default:hover,
         .btn-secondary:hover {
-          background-color: #e0e0e0;
+          background-color: var(--surface-3);
         }
       `}</style>
     </div>

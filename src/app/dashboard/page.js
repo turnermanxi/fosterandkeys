@@ -101,7 +101,7 @@ export default function DashboardPage() {
             <>
               <button
                 className="btn btn-sm"
-                style={{ background: "#059669", color: "#fff" }}
+                style={{ background: "var(--success)", color: "var(--on-solid)" }}
                 onClick={handleCheckEmail}
                 disabled={checking}
               >
@@ -114,7 +114,7 @@ export default function DashboardPage() {
           )}
           <button
             className="btn btn-sm"
-            style={{ background: "#ef4444", color: "#fff" }}
+            style={{ background: "var(--danger)", color: "var(--on-solid)" }}
             onClick={handleLogout}
           >
             Sign Out
@@ -128,7 +128,7 @@ export default function DashboardPage() {
           display: "flex",
           gap: 16,
           marginBottom: 24,
-          borderBottom: "2px solid #e5e7eb",
+          borderBottom: "2px solid var(--border)",
         }}
       >
         <button
@@ -137,8 +137,8 @@ export default function DashboardPage() {
             padding: "12px 16px",
             background: "none",
             border: "none",
-            borderBottom: activeTab === "leads" ? "3px solid #3b82f6" : "none",
-            color: activeTab === "leads" ? "#3b82f6" : "#6b7280",
+            borderBottom: activeTab === "leads" ? "3px solid var(--info)" : "none",
+            color: activeTab === "leads" ? "var(--info)" : "var(--text-muted)",
             cursor: "pointer",
             fontSize: "0.95rem",
             fontWeight: activeTab === "leads" ? 600 : 400,
@@ -152,8 +152,8 @@ export default function DashboardPage() {
             padding: "12px 16px",
             background: "none",
             border: "none",
-            borderBottom: activeTab === "properties" ? "3px solid #3b82f6" : "none",
-            color: activeTab === "properties" ? "#3b82f6" : "#6b7280",
+            borderBottom: activeTab === "properties" ? "3px solid var(--info)" : "none",
+            color: activeTab === "properties" ? "var(--info)" : "var(--text-muted)",
             cursor: "pointer",
             fontSize: "0.95rem",
             fontWeight: activeTab === "properties" ? 600 : 400,
@@ -173,8 +173,8 @@ export default function DashboardPage() {
                 marginBottom: 12,
                 borderRadius: 8,
                 fontSize: "0.9rem",
-                background: checkResult.type === "success" ? "#d1fae5" : "#fee2e2",
-                color: checkResult.type === "success" ? "#065f46" : "#991b1b",
+                background: checkResult.type === "success" ? "var(--success-bg)" : "var(--danger-bg)",
+                color: checkResult.type === "success" ? "var(--success-text)" : "var(--danger-text)",
               }}
             >
               {checkResult.message}

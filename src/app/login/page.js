@@ -131,8 +131,8 @@ export default function LoginPage() {
                 padding: "10px 14px",
                 marginBottom: 16,
                 borderRadius: "var(--radius)",
-                background: "#fee2e2",
-                color: "#991b1b",
+                background: "var(--danger-bg)",
+                color: "var(--danger-text)",
                 fontSize: ".88rem",
                 textAlign: "left",
               }}

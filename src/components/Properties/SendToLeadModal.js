@@ -67,7 +67,7 @@ export default function SendToLeadModal({ property, onClose, onSuccess }) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.5)",
+        background: "var(--overlay)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -77,16 +77,16 @@ export default function SendToLeadModal({ property, onClose, onSuccess }) {
     >
       <div
         style={{
-          background: "#fff",
+          background: "var(--surface)",
           borderRadius: 8,
           padding: 32,
           maxWidth: 500,
-          boxShadow: "0 20px 25px rgba(0,0,0,0.15)",
+          boxShadow: "0 20px 25px rgba(15,23,42,.16)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         <h2 style={{ margin: "0 0 8px", fontSize: "1.3rem" }}>Add to Lead</h2>
-        <p style={{ margin: "0 0 24px", color: "#6b7280", fontSize: "0.9rem" }}>
+        <p style={{ margin: "0 0 24px", color: "var(--text-muted)", fontSize: "0.9rem" }}>
           Select a lead to add this property to their match list
         </p>
 
@@ -108,7 +108,7 @@ export default function SendToLeadModal({ property, onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             >
@@ -128,7 +128,7 @@ export default function SendToLeadModal({ property, onClose, onSuccess }) {
               style={{
                 flex: 1,
                 padding: "10px 16px",
-                background: "#e5e7eb",
+                background: "var(--border)",
                 border: "none",
                 borderRadius: 4,
                 cursor: "pointer",
@@ -143,8 +143,8 @@ export default function SendToLeadModal({ property, onClose, onSuccess }) {
               style={{
                 flex: 1,
                 padding: "10px 16px",
-                background: selectedLeadId && !loading && !adding ? "#10b981" : "#d1d5db",
-                color: "#fff",
+                background: selectedLeadId && !loading && !adding ? "var(--success)" : "var(--border-strong)",
+                color: "var(--on-solid)",
                 border: "none",
                 borderRadius: 4,
                 cursor: selectedLeadId && !loading && !adding ? "pointer" : "default",

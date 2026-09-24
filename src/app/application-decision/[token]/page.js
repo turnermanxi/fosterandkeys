@@ -137,7 +137,7 @@ export default function ApplicationDecisionPage() {
   if (error && !lead) {
     return (
       <div className="page-wrapper" style={{ textAlign: "center", paddingTop: 80 }}>
-        <h1 style={{ color: "#dc2626", marginBottom: 8 }}>Error</h1>
+        <h1 style={{ color: "var(--danger)", marginBottom: 8 }}>Error</h1>
         <p>{error}</p>
       </div>
     );
@@ -147,15 +147,15 @@ export default function ApplicationDecisionPage() {
     return (
       <div className="page-wrapper" style={{ textAlign: "center", paddingTop: 80 }}>
         <div className="card" style={{
-          background: "linear-gradient(135deg, #d1fae5, #ecfdf5)",
-          border: "1px solid #6ee7b7",
+          background: "linear-gradient(135deg, var(--success-bg), var(--success-bg))",
+          border: "1px solid var(--success-border)",
           padding: 40,
         }}>
-          <h1 style={{ color: "#065f46", marginBottom: 12 }}>✓ Thank You!</h1>
-          <p style={{ color: "#047857", marginBottom: 16, fontSize: "1.05rem" }}>
+          <h1 style={{ color: "var(--success-text)", marginBottom: 12 }}>✓ Thank You!</h1>
+          <p style={{ color: "var(--success-text)", marginBottom: 16, fontSize: "1.05rem" }}>
             We've received your application status!
           </p>
-          <p style={{ color: "#0d9488" }}>
+          <p style={{ color: "var(--success)" }}>
             Lorenzo will be in touch shortly with next steps!
           </p>
         </div>
@@ -174,18 +174,18 @@ export default function ApplicationDecisionPage() {
   return (
     <div className="page-wrapper" style={{ paddingTop: 40, paddingBottom: 60 }}>
       <div className="card" style={{ maxWidth: 700, margin: "0 auto" }}>
-        <h1 style={{ marginBottom: 8, color: "#1a3c5e", fontSize: "1.8rem" }}>
+        <h1 style={{ marginBottom: 8, color: "var(--primary)", fontSize: "1.8rem" }}>
           Application Decision
         </h1>
-        <p style={{ color: "#6b7280", marginBottom: 24, fontSize: "1rem" }}>
+        <p style={{ color: "var(--text-muted)", marginBottom: 24, fontSize: "1rem" }}>
           Hi {lead.full_name?.split(" ")[0]}, let us know how your application went!
         </p>
 
         {error && (
           <div style={{
-            background: "#fee2e2",
-            border: "1px solid #fecaca",
-            color: "#991b1b",
+            background: "var(--danger-bg)",
+            border: "1px solid var(--danger-border)",
+            color: "var(--danger-text)",
             padding: 12,
             borderRadius: 6,
             marginBottom: 24,
@@ -198,20 +198,20 @@ export default function ApplicationDecisionPage() {
         {/* Property Decisions */}
         {step === "property_decisions" && (
           <div>
-            <h2 style={{ marginBottom: 20, color: "#1f2937", fontSize: "1.2rem" }}>
+            <h2 style={{ marginBottom: 20, color: "var(--text-strong)", fontSize: "1.2rem" }}>
               Let us know your application status for each property:
             </h2>
 
             {selectedProperties.length === 0 ? (
               <div style={{
                 padding: 20,
-                background: "#fef3c7",
-                border: "1px solid #fcd34d",
+                background: "var(--warning-bg)",
+                border: "1px solid var(--warning-border)",
                 borderRadius: 8,
                 marginBottom: 24,
                 textAlign: "center",
               }}>
-                <p style={{ margin: 0, color: "#92400e", fontSize: "0.95rem" }}>
+                <p style={{ margin: 0, color: "var(--warning-text)", fontSize: "0.95rem" }}>
                   No properties found to review. Please contact Lorenzo for assistance.
                 </p>
               </div>
@@ -221,22 +221,22 @@ export default function ApplicationDecisionPage() {
                   {selectedProperties.map((prop, index) => (
                     <div key={prop.unit_id || `property-${index}`} style={{
                       padding: 16,
-                      border: "1px solid #e5e7eb",
+                      border: "1px solid var(--border)",
                       borderRadius: 8,
-                      background: "#f9fafb",
+                      background: "var(--surface-2)",
                     }}>
                       <div style={{ marginBottom: 12 }}>
-                        <p style={{ margin: "0 0 6px", fontWeight: 600, color: "#1f2937", fontSize: "1rem" }}>
+                        <p style={{ margin: "0 0 6px", fontWeight: 600, color: "var(--text-strong)", fontSize: "1rem" }}>
                           {prop.name}
                         </p>
-                        <p style={{ margin: "0 0 4px", fontSize: "0.9rem", color: "#6b7280" }}>
+                        <p style={{ margin: "0 0 4px", fontSize: "0.9rem", color: "var(--text-muted)" }}>
                           {prop.bedrooms} bed / {prop.bathrooms} bath • {prop.rent_range} | {generateSqftRange({
                             sqft_min: prop.sqft_min,
                             sqft_max: prop.sqft_max || prop.sqft,
                           })}
                         </p>
                         {prop.scheduled_tour_datetime && (
-                          <p style={{ margin: 0, fontSize: "0.85rem", color: "#059669" }}>
+                          <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--success)" }}>
                             📅 Tour Scheduled: {new Date(prop.scheduled_tour_datetime).toLocaleString()}
                           </p>
                         )}
@@ -248,7 +248,7 @@ export default function ApplicationDecisionPage() {
                           display: "block",
                           fontSize: "0.9rem",
                           fontWeight: 500,
-                          color: "#374151",
+                          color: "var(--text)",
                           marginBottom: 6,
                         }}>
                           My Application Status:
@@ -263,11 +263,11 @@ export default function ApplicationDecisionPage() {
                           style={{
                             width: "100%",
                             padding: "10px 12px",
-                            border: "1px solid #d1d5db",
+                            border: "1px solid var(--border-strong)",
                             borderRadius: 6,
                             fontSize: "0.95rem",
                             fontFamily: "inherit",
-                            background: "#fff",
+                            background: "var(--surface)",
                             cursor: "pointer",
                           }}
                         >
@@ -284,7 +284,7 @@ export default function ApplicationDecisionPage() {
                             display: "block",
                             fontSize: "0.9rem",
                             fontWeight: 500,
-                            color: "#374151",
+                            color: "var(--text)",
                             marginBottom: 6,
                           }}>
                             Why were you denied? (optional)
@@ -300,7 +300,7 @@ export default function ApplicationDecisionPage() {
                             style={{
                               width: "100%",
                               padding: "10px 12px",
-                              border: "1px solid #d1d5db",
+                              border: "1px solid var(--border-strong)",
                               borderRadius: 6,
                               fontFamily: "inherit",
                               fontSize: "0.85rem",
@@ -318,15 +318,15 @@ export default function ApplicationDecisionPage() {
                 {Object.values(propertyDecisions).includes("denied") && otherProperties.length > 0 && (
                   <div style={{
                     padding: 16,
-                    background: "#fef3c7",
-                    border: "1px solid #fcd34d",
+                    background: "var(--warning-bg)",
+                    border: "1px solid var(--warning-border)",
                     borderRadius: 8,
                     marginBottom: 24,
                   }}>
-                    <h3 style={{ marginTop: 0, marginBottom: 12, color: "#92400e", fontSize: "1rem" }}>
+                    <h3 style={{ marginTop: 0, marginBottom: 12, color: "var(--warning-text)", fontSize: "1rem" }}>
                       📋 Want to Try Other Properties?
                     </h3>
-                    <p style={{ margin: "0 0 12px", color: "#b45309", fontSize: "0.9rem" }}>
+                    <p style={{ margin: "0 0 12px", color: "var(--warning-text)", fontSize: "0.9rem" }}>
                       Select other properties you'd like to apply to:
                     </p>
                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -335,14 +335,14 @@ export default function ApplicationDecisionPage() {
                           display: "flex",
                           alignItems: "center",
                           padding: 12,
-                          background: "#fffbeb",
-                          border: "1px solid #fde68a",
+                          background: "var(--warning-bg)",
+                          border: "1px solid var(--warning-border)",
                           borderRadius: 6,
                           cursor: "pointer",
                           transition: "background 0.2s",
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = "#fef3c7"}
-                        onMouseLeave={(e) => e.currentTarget.style.background = "#fffbeb"}>
+                        onMouseEnter={(e) => e.currentTarget.style.background = "var(--warning-bg)"}
+                        onMouseLeave={(e) => e.currentTarget.style.background = "var(--warning-bg)"}>
                           <input
                             type="checkbox"
                             checked={newSelections.has(prop.unit_id)}
@@ -350,10 +350,10 @@ export default function ApplicationDecisionPage() {
                             style={{ marginRight: 12, cursor: "pointer", width: 18, height: 18 }}
                           />
                           <div style={{ flex: 1 }}>
-                            <p style={{ margin: 0, fontWeight: 600, color: "#1f2937" }}>
+                            <p style={{ margin: 0, fontWeight: 600, color: "var(--text-strong)" }}>
                               {prop.name}
                             </p>
-                            <p style={{ margin: "4px 0 0", fontSize: "0.9rem", color: "#6b7280" }}>
+                            <p style={{ margin: "4px 0 0", fontSize: "0.9rem", color: "var(--text-muted)" }}>
                               {prop.bedrooms} bed / {prop.bathrooms} bath • {prop.rent_range} | {generateSqftRange({
                                 sqft_min: prop.sqft_min,
                                 sqft_max: prop.sqft_max || prop.sqft,
@@ -364,7 +364,7 @@ export default function ApplicationDecisionPage() {
                       ))}
                     </div>
                     {newSelections.size > 0 && (
-                      <p style={{ marginTop: 12, marginBottom: 0, fontSize: "0.85rem", color: "#b45309", fontWeight: 500 }}>
+                      <p style={{ marginTop: 12, marginBottom: 0, fontSize: "0.85rem", color: "var(--warning-text)", fontWeight: 500 }}>
                         ✓ {newSelections.size} propert{newSelections.size === 1 ? "y" : "ies"} selected for reapplication
                       </p>
                     )}
@@ -377,8 +377,8 @@ export default function ApplicationDecisionPage() {
                   style={{
                     width: "100%",
                     padding: "14px 20px",
-                    background: "#1f2937",
-                    color: "#fff",
+                    background: "var(--text-strong)",
+                    color: "var(--on-solid)",
                     border: "none",
                     borderRadius: 6,
                     fontWeight: 600,
@@ -387,8 +387,8 @@ export default function ApplicationDecisionPage() {
                     opacity: submitting ? 0.6 : 1,
                     transition: "background 0.2s",
                   }}
-                  onMouseEnter={(e) => !submitting && (e.target.style.background = "#111827")}
-                  onMouseLeave={(e) => !submitting && (e.target.style.background = "#1f2937")}
+                  onMouseEnter={(e) => !submitting && (e.target.style.background = "var(--primary-light)")}
+                  onMouseLeave={(e) => !submitting && (e.target.style.background = "var(--text-strong)")}
                 >
                   {submitting ? "Submitting..." : "Submit Application Status"}
                 </button>

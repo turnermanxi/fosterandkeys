@@ -77,7 +77,7 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
 
   if (loading) {
     return (
-      <div style={{ padding: "16px", textAlign: "center", color: "#666" }}>
+      <div style={{ padding: "16px", textAlign: "center", color: "var(--text-muted)" }}>
         Loading properties...
       </div>
     );
@@ -89,10 +89,10 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
         <div
           style={{
             padding: "16px",
-            backgroundColor: "#fef3c7",
-            border: "1px solid #fcd34d",
+            backgroundColor: "var(--warning-bg)",
+            border: "1px solid var(--warning-border)",
             borderRadius: "6px",
-            color: "#92400e",
+            color: "var(--warning-text)",
             fontSize: "0.9rem",
           }}
         >
@@ -110,7 +110,7 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: "4px",
                 fontSize: "0.9rem",
               }}
@@ -122,13 +122,13 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
             style={{
               maxHeight: "300px",
               overflowY: "auto",
-              border: "1px solid #d1d5db",
+              border: "1px solid var(--border-strong)",
               borderRadius: "6px",
-              backgroundColor: "#f9fafb",
+              backgroundColor: "var(--surface-2)",
             }}
           >
             {filteredProperties.length === 0 ? (
-              <div style={{ padding: "12px", color: "#666", textAlign: "center" }}>
+              <div style={{ padding: "12px", color: "var(--text-muted)", textAlign: "center" }}>
                 No properties match your search
               </div>
             ) : (
@@ -139,21 +139,21 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
                     display: "flex",
                     alignItems: "center",
                     padding: "12px",
-                    borderBottom: "1px solid #e5e7eb",
+                    borderBottom: "1px solid var(--border)",
                     cursor: "pointer",
                     backgroundColor: selectedIds.has(prop.id)
-                      ? "#eff6ff"
-                      : "#fff",
+                      ? "var(--info-bg)"
+                      : "var(--surface)",
                     transition: "background-color 0.2s",
                   }}
                   onMouseEnter={(e) => {
                     if (!selectedIds.has(prop.id)) {
-                      e.currentTarget.style.backgroundColor = "#f3f4f6";
+                      e.currentTarget.style.backgroundColor = "var(--surface-2)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!selectedIds.has(prop.id)) {
-                      e.currentTarget.style.backgroundColor = "#fff";
+                      e.currentTarget.style.backgroundColor = "var(--surface)";
                     }
                   }}
                 >
@@ -164,7 +164,7 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
                     style={{
                       marginRight: "12px",
                       cursor: "pointer",
-                      accentColor: "#2563eb",
+                      accentColor: "var(--link)",
                     }}
                   />
                   <div style={{ flex: 1 }}>
@@ -174,7 +174,7 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
                     <div
                       style={{
                         fontSize: "0.85rem",
-                        color: "#666",
+                        color: "var(--text-muted)",
                         marginTop: "2px",
                       }}
                     >
@@ -183,7 +183,7 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
                     <div
                       style={{
                         fontSize: "0.85rem",
-                        color: "#666",
+                        color: "var(--text-muted)",
                         marginTop: "4px",
                       }}
                     >
@@ -221,12 +221,12 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
               justifyContent: "space-between",
               alignItems: "center",
               padding: "12px",
-              backgroundColor: "#f0f9ff",
-              border: "1px solid #bfdbfe",
+              backgroundColor: "var(--info-bg)",
+              border: "1px solid var(--info-border)",
               borderRadius: "4px",
             }}
           >
-            <div style={{ fontSize: "0.9rem", color: "#1e40af" }}>
+            <div style={{ fontSize: "0.9rem", color: "var(--info-text)" }}>
               <strong>{selectedIds.size}</strong> of{" "}
               <strong>{properties.length}</strong> properties selected
             </div>
@@ -235,8 +235,8 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
               disabled={saving}
               style={{
                 padding: "6px 16px",
-                backgroundColor: "#2563eb",
-                color: "white",
+                backgroundColor: "var(--link)",
+                color: "var(--on-solid)",
                 border: "none",
                 borderRadius: "4px",
                 cursor: saving ? "not-allowed" : "pointer",
@@ -254,8 +254,8 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
               style={{
                 marginTop: "8px",
                 padding: "8px 12px",
-                backgroundColor: "#fee2e2",
-                color: "#991b1b",
+                backgroundColor: "var(--danger-bg)",
+                color: "var(--danger-text)",
                 borderRadius: "4px",
                 fontSize: "0.85rem",
               }}

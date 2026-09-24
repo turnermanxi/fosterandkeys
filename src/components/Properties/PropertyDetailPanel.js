@@ -88,9 +88,9 @@ export default function PropertyDetailPanel({
         top: 0,
         bottom: 0,
         width: 400,
-        background: "#fff",
-        borderLeft: "1px solid #e5e7eb",
-        boxShadow: "-4px 0 6px rgba(0,0,0,0.1)",
+        background: "var(--surface)",
+        borderLeft: "1px solid var(--border)",
+        boxShadow: "-4px 0 6px rgba(15,23,42,.12)",
         overflowY: "auto",
         zIndex: 100,
       }}
@@ -99,7 +99,7 @@ export default function PropertyDetailPanel({
       <div
         style={{
           padding: "20px 16px",
-          borderBottom: "1px solid #e5e7eb",
+          borderBottom: "1px solid var(--border)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
@@ -113,12 +113,12 @@ export default function PropertyDetailPanel({
             style={{
               margin: 0,
               fontSize: "0.9rem",
-              color: "#6b7280",
+              color: "var(--text-muted)",
             }}
           >
             {property.address}
           </p>
-          <p style={{ margin: "2px 0 0", fontSize: "0.9rem", color: "#6b7280" }}>
+          <p style={{ margin: "2px 0 0", fontSize: "0.9rem", color: "var(--text-muted)" }}>
             {property.city}, {property.state} {property.zip}
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function PropertyDetailPanel({
             style={{
               fontSize: "1.4rem",
               fontWeight: 600,
-              color: "#065f46",
+              color: "var(--success-text)",
               margin: "0 0 8px",
             }}
           >
@@ -155,7 +155,7 @@ export default function PropertyDetailPanel({
             <strong>{property.bathrooms || "–"} BA</strong> | {generateSqftRange(property)}
           </p>
           {property.property_type && (
-            <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "#6b7280" }}>
+            <p style={{ margin: "4px 0", fontSize: "0.9rem", color: "var(--text-muted)" }}>
               Type: {property.property_type}
             </p>
           )}
@@ -175,32 +175,32 @@ export default function PropertyDetailPanel({
               <tbody>
                 {property.studio_price_min && (
                   <tr>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb" }}>Studio</td>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb", textAlign: "right", fontWeight: 500 }}>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)" }}>Studio</td>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)", textAlign: "right", fontWeight: 500 }}>
                       {formatPrice(property.studio_price_min, property.studio_price_max)}
                     </td>
                   </tr>
                 )}
                 {property.bedroom_1_price_min && (
                   <tr>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb" }}>1 Bedroom</td>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb", textAlign: "right", fontWeight: 500 }}>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)" }}>1 Bedroom</td>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)", textAlign: "right", fontWeight: 500 }}>
                       {formatPrice(property.bedroom_1_price_min, property.bedroom_1_price_max)}
                     </td>
                   </tr>
                 )}
                 {property.bedroom_2_price_min && (
                   <tr>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb" }}>2 Bedrooms</td>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb", textAlign: "right", fontWeight: 500 }}>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)" }}>2 Bedrooms</td>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)", textAlign: "right", fontWeight: 500 }}>
                       {formatPrice(property.bedroom_2_price_min, property.bedroom_2_price_max)}
                     </td>
                   </tr>
                 )}
                 {property.bedroom_3_price_min && (
                   <tr>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb" }}>3 Bedrooms</td>
-                    <td style={{ padding: "6px", borderBottom: "1px solid #e5e7eb", textAlign: "right", fontWeight: 500 }}>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)" }}>3 Bedrooms</td>
+                    <td style={{ padding: "6px", borderBottom: "1px solid var(--border)", textAlign: "right", fontWeight: 500 }}>
                       {formatPrice(property.bedroom_3_price_min, property.bedroom_3_price_max)}
                     </td>
                   </tr>
@@ -223,7 +223,7 @@ export default function PropertyDetailPanel({
             onClick={toggleFavorite}
             style={{
               padding: "8px 12px",
-              background: isFavorite ? "#fbbf24" : "#e5e7eb",
+              background: isFavorite ? "var(--warning)" : "var(--border)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -238,8 +238,8 @@ export default function PropertyDetailPanel({
             onClick={() => setShowSendModal(true)}
             style={{
               padding: "8px 12px",
-              background: "#10b981",
-              color: "#fff",
+              background: "var(--success)",
+              color: "var(--on-solid)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -253,8 +253,8 @@ export default function PropertyDetailPanel({
             onClick={() => setShowEditModal(true)}
             style={{
               padding: "8px 12px",
-              background: "#0284c7",
-              color: "#fff",
+              background: "var(--info)",
+              color: "var(--on-solid)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -268,8 +268,8 @@ export default function PropertyDetailPanel({
             onClick={() => setShowSyncModal(true)}
             style={{
               padding: "8px 12px",
-              background: "#7c3aed",
-              color: "#fff",
+              background: "var(--purple)",
+              color: "var(--on-solid)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -283,8 +283,8 @@ export default function PropertyDetailPanel({
             onClick={() => onDelete(property.id)}
             style={{
               padding: "8px 12px",
-              background: "#ef4444",
-              color: "#fff",
+              background: "var(--danger)",
+              color: "var(--on-solid)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -378,7 +378,7 @@ export default function PropertyDetailPanel({
               <p style={{ margin: "4px 0", fontSize: "0.85rem" }}>
                 <a
                   href={`mailto:${property.contact_email}`}
-                  style={{ color: "#0284c7", textDecoration: "none" }}
+                  style={{ color: "var(--info)", textDecoration: "none" }}
                 >
                   {property.contact_email}
                 </a>
@@ -394,7 +394,7 @@ export default function PropertyDetailPanel({
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: "#0284c7",
+                color: "var(--info)",
                 textDecoration: "none",
                 fontSize: "0.9rem",
               }}
@@ -406,11 +406,11 @@ export default function PropertyDetailPanel({
 
         {/* Specials (for apartments) */}
         {property.specials && (
-          <div style={{ marginBottom: 24, padding: "12px", background: "#f0f9ff", borderRadius: 6, border: "1px solid #bfdbfe" }}>
-            <h4 style={{ margin: "0 0 8px", fontSize: "0.95rem", fontWeight: 600, color: "#0369a1" }}>
+          <div style={{ marginBottom: 24, padding: "12px", background: "var(--info-bg)", borderRadius: 6, border: "1px solid var(--info-border)" }}>
+            <h4 style={{ margin: "0 0 8px", fontSize: "0.95rem", fontWeight: 600, color: "var(--info-text)" }}>
               🎉 Current Specials
             </h4>
-            <p style={{ margin: 0, fontSize: "0.9rem", color: "#1e40af", whiteSpace: "pre-wrap" }}>
+            <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--info-text)", whiteSpace: "pre-wrap" }}>
               {property.specials}
             </p>
           </div>

@@ -367,16 +367,16 @@ export default function LeadDetail({ lead, onClose, onSend }) {
 
         {/* Brokerage Information */}
         <div style={{
-          background: "#f3f4f6",
-          border: "1px solid #e5e7eb",
+          background: "var(--surface-2)",
+          border: "1px solid var(--border)",
           borderRadius: "8px",
           padding: "12px",
           marginBottom: "16px",
           fontSize: "0.85rem",
           lineHeight: "1.4",
-          color: "#4b5563"
+          color: "var(--text-muted)"
         }}>
-          <p style={{ margin: "0 0 6px 0", fontWeight: 600, color: "#1f2937" }}>
+          <p style={{ margin: "0 0 6px 0", fontWeight: 600, color: "var(--text-strong)" }}>
             Brokerage Information
           </p>
           <p style={{ margin: "0 0 4px 0" }}>
@@ -389,11 +389,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             8005 FALLMEADOW CIR. PLANO, TX 75024
           </p>
           <p style={{ margin: "0", fontSize: "0.8rem" }}>
-            <a href="#" style={{ color: "#2563eb", textDecoration: "none" }}>
+            <a href="#" style={{ color: "var(--link)", textDecoration: "none" }}>
               Texas Real Estate Commission Consumer Protection Notice
             </a>
             {" • "}
-            <a href="#" style={{ color: "#2563eb", textDecoration: "none" }}>
+            <a href="#" style={{ color: "var(--link)", textDecoration: "none" }}>
               File a Complaint
             </a>
           </p>
@@ -437,9 +437,9 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           <div style={{
             marginBottom: 20,
             padding: "16px 20px",
-            background: "linear-gradient(135deg, #eef2ff, #f0fdf4)",
+            background: "linear-gradient(135deg, var(--info-bg), var(--success-bg))",
             borderRadius: 8,
-            border: "1px solid #c7d2fe",
+            border: "1px solid var(--info-border)",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
               <strong style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -447,7 +447,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
               </strong>
               <button
                 className="btn btn-sm"
-                style={{ background: isEditingSummary ? "#059669" : "#e5e7eb", color: isEditingSummary ? "#fff" : "#374151", fontSize: ".8rem", padding: "4px 12px" }}
+                style={{ background: isEditingSummary ? "var(--success)" : "var(--border)", color: isEditingSummary ? "var(--surface)" : "var(--text)", fontSize: ".8rem", padding: "4px 12px" }}
                 onClick={() => setIsEditingSummary(!isEditingSummary)}
               >
                 {isEditingSummary ? "Done Editing" : "✏️ Edit"}
@@ -463,11 +463,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   fontSize: ".92rem",
                   lineHeight: 1.7,
                   padding: 12,
-                  border: "1px solid #c7d2fe",
+                  border: "1px solid var(--info-border)",
                   borderRadius: 6,
                   resize: "vertical",
                   fontFamily: "inherit",
-                  background: "#fff",
+                  background: "var(--surface)",
                 }}
               />
             ) : (
@@ -482,14 +482,14 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           <div style={{ marginBottom: 16 }}>
             <button
               className="btn btn-sm"
-              style={{ background: "#e5e7eb", color: "#374151", marginBottom: 8 }}
+              style={{ background: "var(--border)", color: "var(--text)", marginBottom: 8 }}
               onClick={() => setShowRawEmail(!showRawEmail)}
             >
               {showRawEmail ? "Hide" : "Show"} Original Email
             </button>
             {showRawEmail && (
               <pre style={{
-                background: "#f9fafb",
+                background: "var(--surface-2)",
                 border: "1px solid var(--color-border)",
                 borderRadius: 6,
                 padding: 16,
@@ -506,7 +506,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
         )}
 
         {/* Tabs for matches and timeline */}
-        <div style={{ display: "flex", gap: 16, borderBottom: "2px solid #e5e7eb", marginBottom: 20, alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 16, borderBottom: "2px solid var(--border)", marginBottom: 20, alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 16 }}>
             <button
               onClick={() => setActiveTab("matches")}
@@ -517,8 +517,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 cursor: "pointer",
                 fontSize: ".95rem",
                 fontWeight: activeTab === "matches" ? 600 : 400,
-                color: activeTab === "matches" ? "#1f2937" : "#6b7280",
-                borderBottom: activeTab === "matches" ? "3px solid #3b82f6" : "none",
+                color: activeTab === "matches" ? "var(--text-strong)" : "var(--text-muted)",
+                borderBottom: activeTab === "matches" ? "3px solid var(--info)" : "none",
                 marginBottom: "-2px",
               }}
             >
@@ -534,8 +534,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   cursor: "pointer",
                   fontSize: ".95rem",
                   fontWeight: activeTab === "cx_response" ? 600 : 400,
-                  color: activeTab === "cx_response" ? "#1f2937" : "#6b7280",
-                  borderBottom: activeTab === "cx_response" ? "3px solid #3b82f6" : "none",
+                  color: activeTab === "cx_response" ? "var(--text-strong)" : "var(--text-muted)",
+                  borderBottom: activeTab === "cx_response" ? "3px solid var(--info)" : "none",
                   marginBottom: "-2px",
                 }}
               >
@@ -551,8 +551,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 cursor: "pointer",
                 fontSize: ".95rem",
                 fontWeight: activeTab === "timeline" ? 600 : 400,
-                color: activeTab === "timeline" ? "#1f2937" : "#6b7280",
-                borderBottom: activeTab === "timeline" ? "3px solid #3b82f6" : "none",
+                color: activeTab === "timeline" ? "var(--text-strong)" : "var(--text-muted)",
+                borderBottom: activeTab === "timeline" ? "3px solid var(--info)" : "none",
                 marginBottom: "-2px",
               }}
             >
@@ -567,8 +567,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 cursor: "pointer",
                 fontSize: ".95rem",
                 fontWeight: activeTab === "properties" ? 600 : 400,
-                color: activeTab === "properties" ? "#1f2937" : "#6b7280",
-                borderBottom: activeTab === "properties" ? "3px solid #3b82f6" : "none",
+                color: activeTab === "properties" ? "var(--text-strong)" : "var(--text-muted)",
+                borderBottom: activeTab === "properties" ? "3px solid var(--info)" : "none",
                 marginBottom: "-2px",
               }}
             >
@@ -580,9 +580,9 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             disabled={refreshing}
             style={{
               padding: "6px 10px",
-              background: refreshing ? "#d1d5db" : "#e5e7eb",
-              color: "#374151",
-              border: "1px solid #d1d5db",
+              background: refreshing ? "var(--border-strong)" : "var(--border)",
+              color: "var(--text)",
+              border: "1px solid var(--border-strong)",
               borderRadius: 4,
               cursor: refreshing ? "wait" : "pointer",
               fontSize: ".85rem",
@@ -642,7 +642,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         <tr key={m.id}>
                           <td style={{ fontWeight: 600 }}>
                             {aptLink ? (
-                              <a href={aptLink} target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
+                              <a href={aptLink} target="_blank" rel="noopener noreferrer" style={{ color: "var(--link)", textDecoration: "none", fontWeight: 600 }}>
                                 {apt?.name ?? "Unknown"} ↗
                               </a>
                             ) : (
@@ -675,7 +675,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         <tr key={m.id}>
                           <td style={{ fontWeight: 600 }}>
                             {aptLink ? (
-                              <a href={aptLink} target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
+                              <a href={aptLink} target="_blank" rel="noopener noreferrer" style={{ color: "var(--link)", textDecoration: "none", fontWeight: 600 }}>
                                 {apt?.name ?? "Unknown"} ↗
                               </a>
                             ) : (
@@ -704,7 +704,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         <tr key={m.id}>
                           <td style={{ fontWeight: 600 }}>
                             {propLink ? (
-                              <a href={propLink} target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
+                              <a href={propLink} target="_blank" rel="noopener noreferrer" style={{ color: "var(--link)", textDecoration: "none", fontWeight: 600 }}>
                                 {prop?.property_name ?? "Property"} ↗
                               </a>
                             ) : (
@@ -735,7 +735,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           <div>
             {lead.cx_feedback && (
               <div style={{
-                background: "#f3f4f6",
+                background: "var(--surface-2)",
                 padding: 12,
                 borderRadius: 6,
                 marginBottom: 16,
@@ -754,11 +754,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
 
                 const touredDate = m.toured_at ? new Date(m.toured_at).toLocaleDateString() : null;
                 const isUnit = m.type === "unit";
-                const borderColor = m.toured_status === "toured" ? "#10b981" : (isUnit ? "#3b82f6" : "#f59e0b");
-                const bgColor = m.toured_status === "toured" ? "#f0fdf4" : (isUnit ? "#eff6ff" : "#fffbeb");
-                const priceColor = isUnit ? "#3b82f6" : "#f59e0b";
+                const borderColor = m.toured_status === "toured" ? "var(--success)" : (isUnit ? "var(--info)" : "var(--warning)");
+                const bgColor = m.toured_status === "toured" ? "var(--success-bg)" : (isUnit ? "var(--info-bg)" : "var(--warning-bg)");
+                const priceColor = isUnit ? "var(--info)" : "var(--warning)";
                 const badgeText = isUnit ? "✓ Selected" : "⭐ Manual";
-                const badgeBg = isUnit ? "#10b981" : "#f59e0b";
+                const badgeBg = isUnit ? "var(--success)" : "var(--warning)";
 
                 return (
                   <div
@@ -775,7 +775,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         <strong style={{ display: "block", marginBottom: 4 }}>
                           {isUnit ? m.apartment?.name : m.property?.property_name}
                         </strong>
-                        <p style={{ margin: 0, fontSize: ".85rem", color: "#6b7280" }}>
+                        <p style={{ margin: 0, fontSize: ".85rem", color: "var(--text-muted)" }}>
                           {isUnit ? (
                             <>
                               {m.unit?.bedrooms ?? "?"} bed / {m.unit?.bathrooms ?? "?"} bath
@@ -793,7 +793,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         <span style={{
                           padding: "4px 12px",
                           background: badgeBg,
-                          color: "#fff",
+                          color: "var(--on-solid)",
                           borderRadius: 4,
                           fontSize: ".8rem",
                           fontWeight: 600,
@@ -803,8 +803,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         {m.toured_status === "toured" && (
                           <span style={{
                             padding: "4px 12px",
-                            background: "#059669",
-                            color: "#fff",
+                            background: "var(--success)",
+                            color: "var(--on-solid)",
                             borderRadius: 4,
                             fontSize: ".8rem",
                             fontWeight: 600,
@@ -836,13 +836,13 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           <div>
             <div
               style={{
-                backgroundColor: "#f0f9ff",
-                border: "1px solid #bfdbfe",
+                backgroundColor: "var(--info-bg)",
+                border: "1px solid var(--info-border)",
                 borderRadius: "6px",
                 padding: "12px",
                 marginBottom: "16px",
                 fontSize: "0.9rem",
-                color: "#1e40af",
+                color: "var(--info-text)",
               }}
             >
               <strong>Select properties to share with this customer.</strong> These will be included in the email sent to the lead.
@@ -859,9 +859,9 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           style={{
             marginTop: 24,
             padding: "16px 20px",
-            background: "#f3f4f6",
+            background: "var(--surface-2)",
             borderRadius: 8,
-            borderLeft: "4px solid #3b82f6",
+            borderLeft: "4px solid var(--info)",
           }}
         >
           <strong style={{ fontSize: ".95rem", display: "block", marginBottom: 12 }}>
@@ -871,13 +871,13 @@ export default function LeadDetail({ lead, onClose, onSend }) {
           {/* Follow-up reminder if needed */}
           {lead.follow_up_needed && (
             <div style={{
-              background: "#fef3c7",
-              border: "1px solid #fbbf24",
+              background: "var(--warning-bg)",
+              border: "1px solid var(--warning)",
               padding: 10,
               borderRadius: 6,
               marginBottom: 12,
               fontSize: ".85rem",
-              color: "#92400e",
+              color: "var(--warning-text)",
             }}>
               ⏰ Follow-up needed! Client hasn't responded in 3+ days.
             </div>
@@ -898,12 +898,12 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {/* Waiting for CX Response */}
             {lead.current_status === "recommended_sent" && (
               <>
-                <div style={{ fontSize: ".85rem", color: "#6b7280", padding: "6px 0", width: "100%" }}>
+                <div style={{ fontSize: ".85rem", color: "var(--text-muted)", padding: "6px 0", width: "100%" }}>
                   Waiting for client to select properties...
                 </div>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#f59e0b", color: "#fff" }}
+                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -917,7 +917,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
               <>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#10b981", color: "#fff" }}
+                  style={{ background: "var(--success)", color: "var(--on-solid)" }}
                   onClick={() => setShowTourModal(true)}
                   disabled={updatingStatus}
                 >
@@ -925,7 +925,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 </button>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#f59e0b", color: "#fff" }}
+                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -936,7 +936,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
 
             {/* Tour Scheduled State */}
             {lead.current_status === "tour_scheduled" && (
-              <div style={{ fontSize: ".85rem", color: "#6b7280", padding: "6px 0", width: "100%" }}>
+              <div style={{ fontSize: ".85rem", color: "var(--text-muted)", padding: "6px 0", width: "100%" }}>
                 ✓ Tour confirmed with client. Awaiting feedback...
               </div>
             )}
@@ -946,7 +946,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
               <>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#8b5cf6", color: "#fff" }}
+                  style={{ background: "var(--purple)", color: "var(--on-solid)" }}
                   onClick={() => sendApplicationReminder()}
                   disabled={updatingStatus}
                 >
@@ -954,7 +954,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 </button>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#f59e0b", color: "#fff" }}
+                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
                   onClick={() => setShowRescheduleModal(true)}
                   disabled={processingReschedule}
                 >
@@ -962,7 +962,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 </button>
                 <button
                   className="btn btn-sm"
-                  style={{ background: "#8b5cf6", color: "#fff" }}
+                  style={{ background: "var(--purple)", color: "var(--on-solid)" }}
                   onClick={() => setShowSendAgentModal(true)}
                   disabled={processingAgentForward}
                 >
@@ -975,11 +975,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "reschedule_requested" && (
               <div style={{
                 fontSize: ".85rem",
-                color: "#6b7280",
+                color: "var(--text-muted)",
                 padding: "8px 12px",
                 width: "100%",
-                background: "#dbeafe",
-                border: "1px solid #0ea5e9",
+                background: "var(--info-bg)",
+                border: "1px solid var(--info)",
                 borderRadius: "6px",
               }}>
                 🔄 Lead moved to Round {lead.current_round || 2}. Ready to send new recommendations.
@@ -990,11 +990,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "forwarded_to_agent" && (
               <div style={{
                 fontSize: ".85rem",
-                color: "#6b7280",
+                color: "var(--text-muted)",
                 padding: "8px 12px",
                 width: "100%",
-                background: "#f3e8ff",
-                border: "1px solid #c084fc",
+                background: "var(--purple-bg)",
+                border: "1px solid var(--purple-border)",
                 borderRadius: "6px",
               }}>
                 📤 Forwarded to: {lead.assigned_agent_email || "Agent"}
@@ -1003,11 +1003,11 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "application_pending" && (
               <div style={{
                 fontSize: ".85rem",
-                color: "#6b7280",
+                color: "var(--text-muted)",
                 padding: "8px 12px",
                 width: "100%",
-                background: "#fef3c7",
-                border: "1px solid #fcd34d",
+                background: "var(--warning-bg)",
+                border: "1px solid var(--warning-border)",
                 borderRadius: "6px",
               }}>
                 ⏳ Waiting for application decision from client...
@@ -1023,23 +1023,23 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {(lead.current_status === "approved" || (lead.application_status?.approved_units && lead.application_status.approved_units.length > 0)) && (
               <div style={{
                 padding: "12px",
-                background: "#ecfdf5",
-                border: "1px solid #a7f3d0",
+                background: "var(--success-bg)",
+                border: "1px solid var(--success-border)",
                 borderRadius: "6px",
                 marginBottom: "12px",
               }}>
-                <p style={{ margin: "0 0 8px", fontWeight: 600, color: "#065f46", fontSize: ".95rem" }}>
+                <p style={{ margin: "0 0 8px", fontWeight: 600, color: "var(--success-text)", fontSize: ".95rem" }}>
                   ✓ Application Approved!
                 </p>
-                <p style={{ margin: 0, fontSize: ".85rem", color: "#047857" }}>
+                <p style={{ margin: 0, fontSize: ".85rem", color: "var(--success-text)" }}>
                   Client has been approved for the application. Ready to confirm commission.
                 </p>
                 {lead.application_status?.approved_units && lead.application_status.approved_units.length > 0 && (
-                  <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #6ee7b7" }}>
-                    <p style={{ margin: "0 0 6px", fontSize: ".8rem", fontWeight: 500, color: "#065f46" }}>
+                  <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid var(--success-border)" }}>
+                    <p style={{ margin: "0 0 6px", fontSize: ".8rem", fontWeight: 500, color: "var(--success-text)" }}>
                       Approved Properties:
                     </p>
-                    <ul style={{ margin: 0, paddingLeft: "20px", fontSize: ".8rem", color: "#047857" }}>
+                    <ul style={{ margin: 0, paddingLeft: "20px", fontSize: ".8rem", color: "var(--success-text)" }}>
                       {lead.application_status.approved_units.map((unit, idx) => (
                         <li key={idx}>
                           {unit.apartment_name} ({unit.bedrooms}bd/{unit.bathrooms}ba) - {unit.rent_range}
@@ -1055,30 +1055,30 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {(lead.current_status === "denied" || (lead.application_status?.denied_units && lead.application_status.denied_units.length > 0)) && (
               <div style={{
                 padding: "12px",
-                background: "#fef2f2",
-                border: "1px solid #fecaca",
+                background: "var(--danger-bg)",
+                border: "1px solid var(--danger-border)",
                 borderRadius: "6px",
                 marginBottom: "12px",
               }}>
-                <p style={{ margin: "0 0 8px", fontWeight: 600, color: "#991b1b", fontSize: ".95rem" }}>
+                <p style={{ margin: "0 0 8px", fontWeight: 600, color: "var(--danger-text)", fontSize: ".95rem" }}>
                   ✗ Application Denied
                 </p>
                 {lead.application_status?.denial_reason && (
-                  <p style={{ margin: "0 0 8px", fontSize: ".85rem", color: "#7f1d1d" }}>
+                  <p style={{ margin: "0 0 8px", fontSize: ".85rem", color: "var(--danger-text)" }}>
                     Reason: {lead.application_status.denial_reason}
                   </p>
                 )}
                 {lead.application_status?.denied_units && lead.application_status.denied_units.length > 0 && (
-                  <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #fecaca" }}>
-                    <p style={{ margin: "0 0 6px", fontSize: ".8rem", fontWeight: 500, color: "#991b1b" }}>
+                  <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid var(--danger-border)" }}>
+                    <p style={{ margin: "0 0 6px", fontSize: ".8rem", fontWeight: 500, color: "var(--danger-text)" }}>
                       Denied Properties:
                     </p>
-                    <ul style={{ margin: 0, paddingLeft: "20px", fontSize: ".8rem", color: "#7f1d1d" }}>
+                    <ul style={{ margin: 0, paddingLeft: "20px", fontSize: ".8rem", color: "var(--danger-text)" }}>
                       {lead.application_status.denied_units.map((unit, idx) => (
                         <li key={idx}>
                           <div>{unit.apartment_name} ({unit.bedrooms}bd/{unit.bathrooms}ba) - {unit.rent_range}</div>
                           {unit.denial_reason && (
-                            <div style={{ fontSize: ".75rem", color: "#991b1b", marginTop: "2px", fontStyle: "italic" }}>
+                            <div style={{ fontSize: ".75rem", color: "var(--danger-text)", marginTop: "2px", fontStyle: "italic" }}>
                               Reason: {unit.denial_reason}
                             </div>
                           )}
@@ -1088,7 +1088,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   </div>
                 )}
                 {matches.some((m) => m.cx_response === "interested" && m.unit_id !== lead.application_status?.applied_unit_id) && (
-                  <p style={{ margin: "8px 0 0", fontSize: ".85rem", color: "#7f1d1d" }}>
+                  <p style={{ margin: "8px 0 0", fontSize: ".85rem", color: "var(--danger-text)" }}>
                     Client selected other properties to reapply to.
                   </p>
                 )}
@@ -1099,7 +1099,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {(lead.current_status === "denied" || (lead.application_status?.denied_units && lead.application_status.denied_units.length > 0)) && matches.some((m) => m.cx_response === "interested") && (
               <button
                 className="btn btn-sm"
-                style={{ background: "#8b5cf6", color: "#fff" }}
+                style={{ background: "var(--purple)", color: "var(--on-solid)" }}
                 onClick={() => sendApplicationReminder()}
                 disabled={updatingStatus}
               >
@@ -1112,7 +1112,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "cx_responded" && matches.some((m) => m.cx_response === "denied") && (
               <div style={{
                 fontSize: ".85rem",
-                color: "#059669",
+                color: "var(--success)",
                 padding: "6px 0",
                 width: "100%",
                 fontWeight: 500,
@@ -1125,7 +1125,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {(lead.current_status === "approved" || (lead.application_status?.approved_units && lead.application_status.approved_units.length > 0)) && lead.current_status !== "commission_confirmed" && (
               <button
                 className="btn btn-sm"
-                style={{ background: "#7c3aed", color: "#fff" }}
+                style={{ background: "var(--purple)", color: "var(--on-solid)" }}
                 onClick={() => updateLeadStatus("commission_confirmed", "Commission confirmed with complex")}
                 disabled={updatingStatus}
               >
@@ -1134,7 +1134,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             )}
 
             {lead.current_status === "commission_confirmed" && (
-              <div style={{ fontSize: ".85rem", color: "#059669", padding: "6px 0", width: "100%", fontWeight: 600 }}>
+              <div style={{ fontSize: ".85rem", color: "var(--success)", padding: "6px 0", width: "100%", fontWeight: 600 }}>
                 ✓ Commission confirmed - Lead complete!
               </div>
             )}
@@ -1149,14 +1149,14 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(0,0,0,0.5)",
+            background: "var(--overlay)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
           }}>
             <div style={{
-              background: "#fff",
+              background: "var(--surface)",
               borderRadius: 12,
               padding: 24,
               maxWidth: 600,
@@ -1166,17 +1166,17 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             }}>
               <h3 style={{ marginBottom: 16 }}>Schedule Tour Dates & Times</h3>
               <div style={{
-                background: "#fef3c7",
-                border: "1px solid #fcd34d",
+                background: "var(--warning-bg)",
+                border: "1px solid var(--warning-border)",
                 borderRadius: 6,
                 padding: 10,
                 marginBottom: 16,
                 fontSize: ".85rem",
-                color: "#92400e",
+                color: "var(--warning-text)",
               }}>
                 <strong>📋 Reminder:</strong> Remember to send guest cards to these apartments so you get credited for the tour!
               </div>
-              <p style={{ margin: "0 0 20px 0", fontSize: ".9rem", color: "#6b7280" }}>
+              <p style={{ margin: "0 0 20px 0", fontSize: ".9rem", color: "var(--text-muted)" }}>
                 Set a date and time for each property the client wants to tour.
               </p>
               <form onSubmit={handleScheduleTour}>
@@ -1225,14 +1225,14 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                         const name = isUnit ? m.apartment?.name : (isApartment ? m.apartment?.name : (m.property?.property_name || m.property?.address || "Property"));
                         
                         // Color coding
-                        let borderColor = "#fbbf24";
-                        let bgColor = "#fffbeb";
-                        let textColor = "#92400e";
+                        let borderColor = "var(--warning)";
+                        let bgColor = "var(--warning-bg)";
+                        let textColor = "var(--warning-text)";
                         
                         if (isUnit) {
-                          borderColor = "#3b82f6";
-                          bgColor = "#eff6ff";
-                          textColor = "#1e40af";
+                          borderColor = "var(--info)";
+                          bgColor = "var(--info-bg)";
+                          textColor = "var(--info-text)";
                         }
 
                         return (
@@ -1247,7 +1247,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                             </p>
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                               <div>
-                                <label style={{ display: "block", marginBottom: 6, fontWeight: 500, fontSize: ".85rem", color: "#374151" }}>
+                                <label style={{ display: "block", marginBottom: 6, fontWeight: 500, fontSize: ".85rem", color: "var(--text)" }}>
                                   Date
                                 </label>
                                 <input
@@ -1261,7 +1261,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                                   style={{
                                     width: "100%",
                                     padding: 10,
-                                    border: "1px solid #d1d5db",
+                                    border: "1px solid var(--border-strong)",
                                     borderRadius: 6,
                                     fontSize: ".9rem",
                                     boxSizing: "border-box",
@@ -1269,7 +1269,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                                 />
                               </div>
                               <div>
-                                <label style={{ display: "block", marginBottom: 6, fontWeight: 500, fontSize: ".85rem", color: "#374151" }}>
+                                <label style={{ display: "block", marginBottom: 6, fontWeight: 500, fontSize: ".85rem", color: "var(--text)" }}>
                                   Time
                                 </label>
                                 <input
@@ -1283,7 +1283,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                                   style={{
                                     width: "100%",
                                     padding: 10,
-                                    border: "1px solid #d1d5db",
+                                    border: "1px solid var(--border-strong)",
                                     borderRadius: 6,
                                     fontSize: ".9rem",
                                     boxSizing: "border-box",
@@ -1307,14 +1307,14 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                       setTourTimes({});
                     }}
                     className="btn btn-sm"
-                    style={{ background: "#e5e7eb", color: "#374151", flex: 1 }}
+                    style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     className="btn btn-sm"
-                    style={{ background: "#10b981", color: "#fff", flex: 1 }}
+                    style={{ background: "var(--success)", color: "var(--on-solid)", flex: 1 }}
                     disabled={schedulingTour}
                   >
                     {schedulingTour ? "Scheduling…" : "Confirm Tour/Send Guest Cards"}
@@ -1333,26 +1333,26 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(0,0,0,0.5)",
+            background: "var(--overlay)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
           }}>
             <div style={{
-              background: "#fff",
+              background: "var(--surface)",
               borderRadius: 12,
               padding: 24,
               maxWidth: 500,
               width: "90%",
             }}>
               <h3 style={{ marginBottom: 4 }}>Request New Recommendations</h3>
-              <p style={{ margin: "0 0 20px", fontSize: ".9rem", color: "#6b7280" }}>
+              <p style={{ margin: "0 0 20px", fontSize: ".9rem", color: "var(--text-muted)" }}>
                 Move the lead to Round {(lead.current_round || 1) + 1} and prepare for new recommendations.
               </p>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "#374151" }}>
+                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "var(--text)" }}>
                   Reason for Reschedule
                 </label>
                 <select
@@ -1361,7 +1361,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   style={{
                     width: "100%",
                     padding: 10,
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 6,
                     fontSize: ".9rem",
                     fontFamily: "inherit",
@@ -1376,7 +1376,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
               </div>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "#374151" }}>
+                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "var(--text)" }}>
                   Additional Notes (Optional)
                 </label>
                 <textarea
@@ -1387,7 +1387,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                     width: "100%",
                     minHeight: 80,
                     padding: 10,
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 6,
                     fontSize: ".9rem",
                     fontFamily: "inherit",
@@ -1406,7 +1406,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                     setRescheduleNotes("");
                   }}
                   className="btn btn-sm"
-                  style={{ background: "#e5e7eb", color: "#374151", flex: 1 }}
+                  style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
                 >
                   Cancel
                 </button>
@@ -1414,7 +1414,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   type="button"
                   onClick={handleRequestReschedule}
                   className="btn btn-sm"
-                  style={{ background: "#f59e0b", color: "#fff", flex: 1 }}
+                  style={{ background: "var(--warning)", color: "var(--on-solid)", flex: 1 }}
                   disabled={processingReschedule}
                 >
                   {processingReschedule ? "Processing…" : "Request Reschedule"}
@@ -1432,26 +1432,26 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(0,0,0,0.5)",
+            background: "var(--overlay)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
           }}>
             <div style={{
-              background: "#fff",
+              background: "var(--surface)",
               borderRadius: 12,
               padding: 24,
               maxWidth: 500,
               width: "90%",
             }}>
               <h3 style={{ marginBottom: 4 }}>Forward Lead to Another Agent</h3>
-              <p style={{ margin: "0 0 20px", fontSize: ".9rem", color: "#6b7280" }}>
+              <p style={{ margin: "0 0 20px", fontSize: ".9rem", color: "var(--text-muted)" }}>
                 Send this lead to another agent via email. Enter their email address.
               </p>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "#374151" }}>
+                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "var(--text)" }}>
                   Agent Email
                 </label>
                 <input
@@ -1462,7 +1462,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   style={{
                     width: "100%",
                     padding: 10,
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 6,
                     fontSize: ".9rem",
                     fontFamily: "inherit",
@@ -1472,7 +1472,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
               </div>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "#374151" }}>
+                <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: ".9rem", color: "var(--text)" }}>
                   Agent Name
                 </label>
                 <input
@@ -1483,7 +1483,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   style={{
                     width: "100%",
                     padding: 10,
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 6,
                     fontSize: ".9rem",
                     fontFamily: "inherit",
@@ -1501,7 +1501,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                     setSelectedAgentName("");
                   }}
                   className="btn btn-sm"
-                  style={{ background: "#e5e7eb", color: "#374151", flex: 1 }}
+                  style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
                 >
                   Cancel
                 </button>
@@ -1509,7 +1509,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   type="button"
                   onClick={handleSendToAgent}
                   className="btn btn-sm"
-                  style={{ background: "#8b5cf6", color: "#fff", flex: 1 }}
+                  style={{ background: "var(--purple)", color: "var(--on-solid)", flex: 1 }}
                   disabled={processingAgentForward}
                 >
                   {processingAgentForward ? "Sending…" : "Forward Lead"}

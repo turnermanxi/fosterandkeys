@@ -48,8 +48,8 @@ export default function AutoSyncSettings({ accountId }) {
   return (
     <div
       style={{
-        backgroundColor: "#fff",
-        border: "1px solid #ddd",
+        backgroundColor: "var(--surface)",
+        border: "1px solid var(--border)",
         borderRadius: "8px",
         padding: "20px",
         marginBottom: "20px",
@@ -68,7 +68,7 @@ export default function AutoSyncSettings({ accountId }) {
           onChange={(e) => setSyncFrequency(e.target.value)}
           style={{
             padding: "8px",
-            border: "1px solid #ddd",
+            border: "1px solid var(--border)",
             borderRadius: "4px",
             fontSize: "0.9rem",
           }}
@@ -77,7 +77,7 @@ export default function AutoSyncSettings({ accountId }) {
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
         </select>
-        <p style={{ fontSize: "0.8rem", color: "#666", margin: "4px 0 0 0" }}>
+        <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: "4px 0 0 0" }}>
           💡 Properties will automatically sync from their source URLs at this frequency
         </p>
       </div>
@@ -88,9 +88,9 @@ export default function AutoSyncSettings({ accountId }) {
             padding: "12px",
             borderRadius: "4px",
             marginBottom: "16px",
-            backgroundColor: message.type === "error" ? "#fee" : "#efe",
-            border: `1px solid ${message.type === "error" ? "#fcc" : "#cfc"}`,
-            color: message.type === "error" ? "#c33" : "#363",
+            backgroundColor: message.type === "error" ? "var(--danger-bg)" : "var(--success-bg)",
+            border: `1px solid ${message.type === "error" ? "var(--danger-border)" : "var(--success-border)"}`,
+            color: message.type === "error" ? "var(--danger-text)" : "var(--success-text)",
             fontSize: "0.9rem",
           }}
         >
@@ -99,7 +99,7 @@ export default function AutoSyncSettings({ accountId }) {
       )}
 
       {lastSync && (
-        <p style={{ fontSize: "0.85rem", color: "#666", margin: "0 0 16px 0" }}>
+        <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", margin: "0 0 16px 0" }}>
           Last synced: {lastSync}
         </p>
       )}
@@ -109,8 +109,8 @@ export default function AutoSyncSettings({ accountId }) {
         disabled={syncing}
         style={{
           padding: "10px 16px",
-          backgroundColor: "#10b981",
-          color: "white",
+          backgroundColor: "var(--success)",
+          color: "var(--on-solid)",
           border: "none",
           borderRadius: "4px",
           cursor: "pointer",
@@ -122,7 +122,7 @@ export default function AutoSyncSettings({ accountId }) {
         {syncing ? "Syncing..." : "🚀 Sync Now"}
       </button>
 
-      <p style={{ fontSize: "0.8rem", color: "#999", margin: "12px 0 0 0" }}>
+      <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: "12px 0 0 0" }}>
         ⚡ Runs in background and automatically applies safe changes. Changes that need
         review are added to the review queue.
       </p>

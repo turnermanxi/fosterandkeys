@@ -109,7 +109,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
           </button>
         </div>
 
-        <p style={{ color: "#666", marginBottom: "16px", fontSize: "0.95rem" }}>
+        <p style={{ color: "var(--text-muted)", marginBottom: "16px", fontSize: "0.95rem" }}>
           <strong>{property.property_name || "Unnamed Property"}</strong>
           <br />
           {property.address}, {property.city}, {property.state} {property.zip}
@@ -117,12 +117,12 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
 
         {error && (
           <div style={{
-            backgroundColor: "#fee",
-            border: "1px solid #fcc",
+            backgroundColor: "var(--danger-bg)",
+            border: "1px solid var(--danger-border)",
             borderRadius: "6px",
             padding: "12px",
             marginBottom: "16px",
-            color: "#c33",
+            color: "var(--danger-text)",
             fontSize: "0.9rem"
           }}>
             ⚠️ {error}
@@ -133,7 +133,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
           <div style={{ marginBottom: "20px" }}>
             {!selectedMode ? (
               <>
-                <p style={{ color: "#666", marginBottom: "16px" }}>
+                <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
                   Choose how you'd like to sync this property:
                 </p>
 
@@ -143,16 +143,16 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
                     onClick={() => setSelectedMode('simple')}
                     style={{
                       padding: "16px",
-                      border: "2px solid #ddd",
+                      border: "2px solid var(--border)",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      backgroundColor: selectedMode === 'simple' ? "#e3f2fd" : "white",
-                      borderColor: selectedMode === 'simple' ? "#0066cc" : "#ddd",
+                      backgroundColor: selectedMode === 'simple' ? "var(--info-bg)" : "var(--surface)",
+                      borderColor: selectedMode === 'simple' ? "var(--info)" : "var(--border)",
                       transition: "all 0.2s"
                     }}
                   >
                     <div style={{ fontWeight: 600, marginBottom: "4px" }}>📄 Simple Sync</div>
-                    <div style={{ fontSize: "0.8rem", color: "#666" }}>Fast, HTML-based<br/>extraction</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Fast, HTML-based<br/>extraction</div>
                   </button>
 
                   <button
@@ -160,28 +160,28 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
                     onClick={() => setSelectedMode('advanced')}
                     style={{
                       padding: "16px",
-                      border: "2px solid #ddd",
+                      border: "2px solid var(--border)",
                       borderRadius: "6px",
                       cursor: "pointer",
-                      backgroundColor: selectedMode === 'advanced' ? "#fff8f0" : "white",
-                      borderColor: selectedMode === 'advanced' ? "#ffa500" : "#ddd",
+                      backgroundColor: selectedMode === 'advanced' ? "var(--warning-bg)" : "var(--surface)",
+                      borderColor: selectedMode === 'advanced' ? "var(--warning)" : "var(--border)",
                       transition: "all 0.2s"
                     }}
                   >
                     <div style={{ fontWeight: 600, marginBottom: "4px" }}>🤖 Advanced Sync</div>
-                    <div style={{ fontSize: "0.8rem", color: "#666" }}>AI vision for<br/>graphic prices</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>AI vision for<br/>graphic prices</div>
                   </button>
                 </div>
 
                 {!property.source_url && (
                   <div style={{
-                    backgroundColor: "#fef3cd",
-                    border: "1px solid #ffc107",
+                    backgroundColor: "var(--warning-bg)",
+                    border: "1px solid var(--warning-border)",
                     borderRadius: "6px",
                     padding: "12px",
                     marginBottom: "16px",
                     fontSize: "0.9rem",
-                    color: "#856404"
+                    color: "var(--warning-text)"
                   }}>
                     ⚠️ No source URL configured. Please add a source URL to the property first.
                   </div>
@@ -198,7 +198,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
               </>
             ) : (
               <>
-                <p style={{ color: "#666", marginBottom: "16px" }}>
+                <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>
                   ✓ Mode selected: <strong>{selectedMode === 'simple' ? '📄 Simple' : '🤖 Advanced'}</strong>
                 </p>
                 <button
@@ -222,23 +222,23 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
         ) : (
           <div>
             <div style={{
-              backgroundColor: result.wouldUpdate ? "#f0f8f0" : result.wouldReview ? "#fff8f0" : "#f5f5f5",
+              backgroundColor: result.wouldUpdate ? "var(--success-bg)" : result.wouldReview ? "var(--warning-bg)" : "var(--surface-2)",
               padding: "12px",
               borderRadius: "6px",
               marginBottom: "16px",
-              border: `1px solid ${result.wouldUpdate ? "#c6f6d5" : result.wouldReview ? "#fed7aa" : "#e5e7eb"}`
+              border: `1px solid ${result.wouldUpdate ? "var(--success-border)" : result.wouldReview ? "var(--warning-border)" : "var(--border)"}`
             }}>
               <p style={{ margin: "0 0 8px 0", fontSize: "0.95rem", fontWeight: 600 }}>
                 {result.wouldUpdate && "✅ Would Auto-Update"}
                 {result.wouldReview && "⚠️ Needs Manual Review"}
                 {!result.wouldUpdate && !result.wouldReview && "⏭️ No Changes Needed"}
               </p>
-              <p style={{ margin: "0 0 4px 0", fontSize: "0.85rem", color: "#666" }}>
+              <p style={{ margin: "0 0 4px 0", fontSize: "0.85rem", color: "var(--text-muted)" }}>
                 {result.comparison.changedFields.length === 0
                   ? "No fields would change"
                   : `${result.comparison.changedFields.length} field(s) would change`}
               </p>
-              <p style={{ margin: 0, fontSize: "0.75rem", color: "#999" }}>
+              <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>
                 Mode: <strong>{result.mode === 'simple' ? '📄 Simple' : '🤖 Advanced'}</strong> | 
                 Method: <strong>{result.extractionMethod === 'screenshot' ? '📸 Screenshot' : 'HTML'}</strong>
               </p>
@@ -250,13 +250,13 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
                 <table style={{ width: "100%", fontSize: "0.85rem", marginBottom: "16px" }}>
                   <tbody>
                     {result.comparison.diff.map((change, i) => (
-                      <tr key={i} style={{ borderBottom: "1px solid #eee" }}>
-                        <td style={{ padding: "8px", color: "#666", fontWeight: 500 }}>{change.field}</td>
-                        <td style={{ padding: "8px", color: "#999", textAlign: "right" }}>
+                      <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
+                        <td style={{ padding: "8px", color: "var(--text-muted)", fontWeight: 500 }}>{change.field}</td>
+                        <td style={{ padding: "8px", color: "var(--text-muted)", textAlign: "right" }}>
                           {JSON.stringify(change.old_value)}
                         </td>
-                        <td style={{ padding: "8px", textAlign: "center", color: "#999" }}>→</td>
-                        <td style={{ padding: "8px", color: "#333", fontWeight: 600, textAlign: "right" }}>
+                        <td style={{ padding: "8px", textAlign: "center", color: "var(--text-muted)" }}>→</td>
+                        <td style={{ padding: "8px", color: "var(--text)", fontWeight: 600, textAlign: "right" }}>
                           {JSON.stringify(change.new_value)}
                         </td>
                       </tr>
@@ -271,7 +271,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
                 <h4 style={{ margin: "0 0 8px 0", fontSize: "0.95rem" }}>Review Reasons</h4>
                 <ul style={{ margin: "0 0 16px 0", paddingLeft: "20px", fontSize: "0.85rem" }}>
                   {result.comparison.reasons.map((reason, i) => (
-                    <li key={i} style={{ color: "#666", marginBottom: "4px" }}>
+                    <li key={i} style={{ color: "var(--text-muted)", marginBottom: "4px" }}>
                       {reason}
                     </li>
                   ))}
@@ -292,7 +292,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
                   className="btn btn-primary"
                   onClick={applyChanges}
                   disabled={applying}
-                  style={{ width: "100%", backgroundColor: "#28a745", borderColor: "#28a745" }}
+                  style={{ width: "100%", backgroundColor: "var(--success)", borderColor: "var(--success)" }}
                 >
                   {applying ? "Applying..." : `Make Changes (${result.comparison.diff.length})`}
                 </button>
@@ -301,8 +301,8 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
           </div>
         )}
 
-        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid #eee" }}>
-          <p style={{ fontSize: "0.8rem", color: "#999", margin: 0 }}>
+        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid var(--border)" }}>
+          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: 0 }}>
             💡 This fetches real data from the source URL and shows what would change. You can apply changes or check again.
           </p>
         </div>
@@ -319,7 +319,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
+          background-color: var(--overlay);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -333,7 +333,7 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
           max-width: 500px;
           max-height: 85vh;
           overflow-y: auto;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 4px 16px rgba(15,23,42,.16);
         }
 
         .btn {
@@ -347,22 +347,22 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
 
         .btn-text {
           background: none;
-          color: #666;
+          color: var(--text-muted);
           padding: 0;
           font-size: 1.2rem;
         }
 
         .btn-text:hover {
-          color: #000;
+          color: var(--text-strong);
         }
 
         .btn-primary {
-          background-color: #0066cc;
+          background-color: var(--info);
           color: white;
         }
 
         .btn-primary:hover:not(:disabled) {
-          background-color: #0052a3;
+          background-color: var(--info-text);
         }
 
         .btn-primary:disabled {
@@ -372,14 +372,14 @@ export default function SinglePropertySyncModal({ isOpen, onClose, property }) {
 
         .btn-default,
         .btn-secondary {
-          background-color: #f0f0f0;
-          color: #333;
-          border: 1px solid #ddd;
+          background-color: var(--surface-2);
+          color: var(--text);
+          border: 1px solid var(--border);
         }
 
         .btn-default:hover,
         .btn-secondary:hover {
-          background-color: #e0e0e0;
+          background-color: var(--surface-3);
         }
       `}</style>
     </div>

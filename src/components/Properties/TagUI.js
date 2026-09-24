@@ -47,7 +47,7 @@ export default function TagUI({ propertyId, initialTags, onTagsChange }) {
   }
 
   return (
-    <div style={{ marginBottom: 24, paddingTop: 16, borderTop: "1px solid #e5e7eb" }}>
+    <div style={{ marginBottom: 24, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
       <h4 style={{ margin: "0 0 12px", fontSize: "0.95rem", fontWeight: 600 }}>
         Tags
       </h4>
@@ -58,8 +58,8 @@ export default function TagUI({ propertyId, initialTags, onTagsChange }) {
             <span
               key={tag}
               style={{
-                background: "#dbeafe",
-                color: "#1e40af",
+                background: "var(--info-bg)",
+                color: "var(--info-text)",
                 padding: "4px 10px",
                 borderRadius: 12,
                 fontSize: "0.85rem",
@@ -74,7 +74,7 @@ export default function TagUI({ propertyId, initialTags, onTagsChange }) {
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#1e40af",
+                  color: "var(--info-text)",
                   cursor: "pointer",
                   fontSize: "1rem",
                   padding: 0,
@@ -97,7 +97,7 @@ export default function TagUI({ propertyId, initialTags, onTagsChange }) {
           style={{
             flex: 1,
             padding: "6px 10px",
-            border: "1px solid #d1d5db",
+            border: "1px solid var(--border-strong)",
             borderRadius: 4,
             fontSize: "0.85rem",
           }}
@@ -107,8 +107,8 @@ export default function TagUI({ propertyId, initialTags, onTagsChange }) {
           disabled={!newTag.trim()}
           style={{
             padding: "6px 12px",
-            background: newTag.trim() ? "#3b82f6" : "#d1d5db",
-            color: "#fff",
+            background: newTag.trim() ? "var(--info)" : "var(--border-strong)",
+            color: "var(--on-solid)",
             border: "none",
             borderRadius: 4,
             cursor: newTag.trim() ? "pointer" : "default",

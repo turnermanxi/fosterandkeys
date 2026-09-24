@@ -92,7 +92,7 @@ export default function TourConfirmationPage() {
   if (error && !lead) {
     return (
       <div className="page-wrapper" style={{ textAlign: "center", paddingTop: 80 }}>
-        <h1 style={{ color: "#dc2626", marginBottom: 8 }}>Error</h1>
+        <h1 style={{ color: "var(--danger)", marginBottom: 8 }}>Error</h1>
         <p>{error}</p>
       </div>
     );
@@ -102,15 +102,15 @@ export default function TourConfirmationPage() {
     return (
       <div className="page-wrapper" style={{ textAlign: "center", paddingTop: 80 }}>
         <div className="card" style={{
-          background: "linear-gradient(135deg, #d1fae5, #ecfdf5)",
-          border: "1px solid #6ee7b7",
+          background: "linear-gradient(135deg, var(--success-bg), var(--success-bg))",
+          border: "1px solid var(--success-border)",
           padding: 40,
         }}>
-          <h1 style={{ color: "#065f46", marginBottom: 12 }}>✓ Thank You!</h1>
-          <p style={{ color: "#047857", marginBottom: 16, fontSize: "1.05rem" }}>
+          <h1 style={{ color: "var(--success-text)", marginBottom: 12 }}>✓ Thank You!</h1>
+          <p style={{ color: "var(--success-text)", marginBottom: 16, fontSize: "1.05rem" }}>
             We've received your tour update.
           </p>
-          <p style={{ color: "#0d9488" }}>
+          <p style={{ color: "var(--success)" }}>
             Lorenzo will be in touch shortly with next steps!
           </p>
         </div>
@@ -171,9 +171,9 @@ export default function TourConfirmationPage() {
                 style={{
                   padding: "16px",
                   marginBottom: "12px",
-                  border: isChecked ? "2px solid #2563eb" : "1px solid #e5e7eb",
+                  border: isChecked ? "2px solid var(--link)" : "1px solid var(--border)",
                   borderRadius: 8,
-                  background: isChecked ? "#eff6ff" : "#fafafa",
+                  background: isChecked ? "var(--info-bg)" : "var(--surface-2)",
                   transition: "all 0.2s",
                 }}
               >
@@ -198,7 +198,7 @@ export default function TourConfirmationPage() {
                     <div
                       style={{
                         fontWeight: 700,
-                        color: "#1f2937",
+                        color: "var(--text-strong)",
                         marginBottom: 4,
                         fontSize: "1.05rem",
                       }}
@@ -209,7 +209,7 @@ export default function TourConfirmationPage() {
                       <div
                         style={{
                           fontSize: "0.9rem",
-                          color: "#6b7280",
+                          color: "var(--text-muted)",
                           marginBottom: 4,
                         }}
                       >
@@ -219,7 +219,7 @@ export default function TourConfirmationPage() {
                     <div
                       style={{
                         fontSize: "0.9rem",
-                        color: "#6b7280",
+                        color: "var(--text-muted)",
                         marginBottom: 4,
                       }}
                     >
@@ -231,7 +231,7 @@ export default function TourConfirmationPage() {
                     <div
                       style={{
                         fontSize: "0.95rem",
-                        color: "#0284c7",
+                        color: "var(--info)",
                         fontWeight: 500,
                       }}
                     >
@@ -244,7 +244,7 @@ export default function TourConfirmationPage() {
                 {isChecked && (
                   <div
                     style={{
-                      background: "#f9fafb",
+                      background: "var(--surface-2)",
                       padding: "12px",
                       borderRadius: 6,
                       marginLeft: "28px",
@@ -255,7 +255,7 @@ export default function TourConfirmationPage() {
                         display: "block",
                         fontSize: "0.9rem",
                         fontWeight: 600,
-                        color: "#374151",
+                        color: "var(--text)",
                         marginBottom: 8,
                       }}
                     >
@@ -272,7 +272,7 @@ export default function TourConfirmationPage() {
                       style={{
                         width: "100%",
                         padding: "8px 12px",
-                        border: "1px solid #d1d5db",
+                        border: "1px solid var(--border-strong)",
                         borderRadius: 6,
                         fontSize: ".9rem",
                         fontFamily: "inherit",
@@ -305,8 +305,8 @@ export default function TourConfirmationPage() {
           {error && (
             <div
               style={{
-                background: "#fee2e2",
-                color: "#991b1b",
+                background: "var(--danger-bg)",
+                color: "var(--danger-text)",
                 padding: 12,
                 borderRadius: 6,
                 marginTop: 16,
@@ -321,11 +321,11 @@ export default function TourConfirmationPage() {
 
       {touredProperties.size === 0 && (
         <div className="card" style={{
-          background: "#f3f4f6",
-          border: "1px solid #d1d5db",
+          background: "var(--surface-2)",
+          border: "1px solid var(--border-strong)",
           textAlign: "center",
           padding: 24,
-          color: "#6b7280",
+          color: "var(--text-muted)",
         }}>
           <p>Select at least one property to confirm</p>
         </div>

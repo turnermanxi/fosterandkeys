@@ -6,7 +6,7 @@ export default function DuplicateWarning({ duplicates, onDismiss, onProceed }) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.5)",
+        background: "var(--overlay)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -15,26 +15,26 @@ export default function DuplicateWarning({ duplicates, onDismiss, onProceed }) {
     >
       <div
         style={{
-          background: "#fff",
+          background: "var(--surface)",
           borderRadius: 8,
           padding: 32,
           maxWidth: 500,
-          boxShadow: "0 20px 25px rgba(0,0,0,0.15)",
+          boxShadow: "0 20px 25px rgba(15,23,42,.16)",
         }}
       >
-        <h3 style={{ margin: "0 0 16px", fontSize: "1.1rem", color: "#d97706" }}>
+        <h3 style={{ margin: "0 0 16px", fontSize: "1.1rem", color: "var(--warning)" }}>
           ⚠️ Similar Properties Found
         </h3>
 
-        <p style={{ margin: "0 0 16px", color: "#666" }}>
+        <p style={{ margin: "0 0 16px", color: "var(--text-muted)" }}>
           We found {duplicates.length} similar propert{duplicates.length === 1 ? "y" : "ies"}. 
           Please review to make sure you're not adding a duplicate:
         </p>
 
         <div
           style={{
-            background: "#fef3c7",
-            border: "1px solid #fcd34d",
+            background: "var(--warning-bg)",
+            border: "1px solid var(--warning-border)",
             borderRadius: 4,
             padding: 16,
             marginBottom: 20,
@@ -47,20 +47,20 @@ export default function DuplicateWarning({ duplicates, onDismiss, onProceed }) {
               key={idx}
               style={{
                 padding: 12,
-                borderBottom: idx < duplicates.length - 1 ? "1px solid #fcd34d" : "none",
+                borderBottom: idx < duplicates.length - 1 ? "1px solid var(--warning-border)" : "none",
               }}
             >
               <p style={{ margin: "0 0 4px", fontWeight: 600, fontSize: "0.9rem" }}>
                 {dup.property_name || dup.address}
               </p>
-              <p style={{ margin: "0 0 4px", fontSize: "0.85rem", color: "#92400e" }}>
+              <p style={{ margin: "0 0 4px", fontSize: "0.85rem", color: "var(--warning-text)" }}>
                 {dup.address}, {dup.city}
               </p>
-              <p style={{ margin: "0 0 4px", fontSize: "0.8rem", color: "#92400e" }}>
+              <p style={{ margin: "0 0 4px", fontSize: "0.8rem", color: "var(--warning-text)" }}>
                 Confidence: {dup.confidence}% • Reason: {dup.reason.replace(/_/g, " ")}
               </p>
               {dup.price_min && dup.price_max && (
-                <p style={{ margin: 0, fontSize: "0.8rem", color: "#92400e" }}>
+                <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--warning-text)" }}>
                   Price: ${Number(dup.price_min).toLocaleString()} – ${Number(dup.price_max).toLocaleString()}
                 </p>
               )}
@@ -74,7 +74,7 @@ export default function DuplicateWarning({ duplicates, onDismiss, onProceed }) {
             style={{
               flex: 1,
               padding: "10px 16px",
-              background: "#e5e7eb",
+              background: "var(--border)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",
@@ -89,8 +89,8 @@ export default function DuplicateWarning({ duplicates, onDismiss, onProceed }) {
             style={{
               flex: 1,
               padding: "10px 16px",
-              background: "#f59e0b",
-              color: "#fff",
+              background: "var(--warning)",
+              color: "var(--on-solid)",
               border: "none",
               borderRadius: 4,
               cursor: "pointer",

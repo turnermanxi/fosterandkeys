@@ -10,19 +10,19 @@ function scoreBadge(score) {
 
 function statusBadge(status) {
   const statusConfig = {
-    created: { bg: "#dbeafe", color: "#1e40af", label: "New" },
-    recommended_sent: { bg: "#e9d5ff", color: "#6b21a8", label: "Sent" },
-    cx_responded: { bg: "#fbcfe8", color: "#831843", label: "CX Response" },
-    tour_scheduled: { bg: "#fef3c7", color: "#92400e", label: "Tour Scheduled" },
-    tour_confirmation_sent: { bg: "#fef3c7", color: "#92400e", label: "Waiting Confirmation" },
-    tour_completed: { bg: "#d1fae5", color: "#065f46", label: "Tour Done" },
-    application_pending: { bg: "#e0e7ff", color: "#312e81", label: "App Pending" },
-    application_submitted: { bg: "#e0e7ff", color: "#312e81", label: "App Submitted" },
-    approved: { bg: "#dcfce7", color: "#166534", label: "✓ Approved" },
-    denied: { bg: "#fee2e2", color: "#991b1b", label: "✗ Denied" },
-    commission_confirmed: { bg: "#ede9fe", color: "#5b21b6", label: "Commission Done" },
+    created: { bg: "var(--info-bg)", color: "var(--info-text)", label: "New" },
+    recommended_sent: { bg: "var(--purple-border)", color: "var(--purple-text)", label: "Sent" },
+    cx_responded: { bg: "var(--purple-bg)", color: "var(--purple-text)", label: "CX Response" },
+    tour_scheduled: { bg: "var(--warning-bg)", color: "var(--warning-text)", label: "Tour Scheduled" },
+    tour_confirmation_sent: { bg: "var(--warning-bg)", color: "var(--warning-text)", label: "Waiting Confirmation" },
+    tour_completed: { bg: "var(--success-bg)", color: "var(--success-text)", label: "Tour Done" },
+    application_pending: { bg: "var(--info-bg)", color: "var(--info-text)", label: "App Pending" },
+    application_submitted: { bg: "var(--info-bg)", color: "var(--info-text)", label: "App Submitted" },
+    approved: { bg: "var(--success-bg)", color: "var(--success-text)", label: "✓ Approved" },
+    denied: { bg: "var(--danger-bg)", color: "var(--danger-text)", label: "✗ Denied" },
+    commission_confirmed: { bg: "var(--purple-bg)", color: "var(--purple-text)", label: "Commission Done" },
   };
-  const config = statusConfig[status] || { bg: "#f3f4f6", color: "#374151", label: status };
+  const config = statusConfig[status] || { bg: "var(--surface-2)", color: "var(--text)", label: status };
   return (
     <span style={{ background: config.bg, color: config.color, padding: "4px 12px", borderRadius: 4, fontSize: ".85rem", fontWeight: 500 }}>
       {config.label}

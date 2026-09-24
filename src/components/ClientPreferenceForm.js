@@ -79,16 +79,16 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
   if (submitted) {
     return (
       <div className="card" style={{
-        background: "linear-gradient(135deg, #d1fae5, #ecfdf5)",
-        border: "1px solid #6ee7b7",
+        background: "linear-gradient(135deg, var(--success-bg), var(--success-bg))",
+        border: "1px solid var(--success-border)",
         textAlign: "center",
         padding: 40,
       }}>
-        <h2 style={{ color: "#065f46", marginBottom: 8 }}>✓ Thank You!</h2>
-        <p style={{ color: "#047857", marginBottom: 12 }}>
+        <h2 style={{ color: "var(--success-text)", marginBottom: 8 }}>✓ Thank You!</h2>
+        <p style={{ color: "var(--success-text)", marginBottom: 12 }}>
           We've received your preferences. Lorenzo will reach out soon to schedule tours at your selected properties.
         </p>
-        <p style={{ color: "#0d9488", fontSize: ".9rem" }}>
+        <p style={{ color: "var(--success)", fontSize: ".9rem" }}>
           Check your email for updates on tour availability.
         </p>
       </div>
@@ -97,11 +97,11 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
 
   return (
     <div className="card" style={{
-      background: "#f9fafb",
-      border: "2px solid #e5e7eb",
+      background: "var(--surface-2)",
+      border: "2px solid var(--border)",
       marginTop: 32,
     }}>
-      <div style={{ paddingBottom: 20, borderBottom: "1px solid #e5e7eb", marginBottom: 20 }}>
+      <div style={{ paddingBottom: 20, borderBottom: "1px solid var(--border)", marginBottom: 20 }}>
         <h3 style={{ marginBottom: 8 }}> Which properties interest you?</h3>
         <p className="text-muted" style={{ marginBottom: 0 }}>
           Select the units you'd like to tour, and we'll get them scheduled for you.
@@ -171,23 +171,23 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
               };
 
               // Determine colors based on type
-              let bgColor = "#fff";
-              let borderColor = "#e5e7eb";
-              let priceColor = "#6b7280";
+              let bgColor = "var(--surface)";
+              let borderColor = "var(--border)";
+              let priceColor = "var(--text-muted)";
               
               if (isSelected) {
                 if (isUnit) {
-                  bgColor = "#eef2ff";
-                  borderColor = "#818cf8";
-                  priceColor = "#3b82f6";
+                  bgColor = "var(--info-bg)";
+                  borderColor = "var(--purple-border)";
+                  priceColor = "var(--info)";
                 } else if (isApartment) {
-                  bgColor = "#fef3c7";
-                  borderColor = "#fbbf24";
-                  priceColor = "#f59e0b";
+                  bgColor = "var(--warning-bg)";
+                  borderColor = "var(--warning)";
+                  priceColor = "var(--warning)";
                 } else {
-                  bgColor = "#fffbeb";
-                  borderColor = "#fbbf24";
-                  priceColor = "#f59e0b";
+                  bgColor = "var(--warning-bg)";
+                  borderColor = "var(--warning)";
+                  priceColor = "var(--warning)";
                 }
               }
 
@@ -200,7 +200,7 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
                     gap: 12,
                     padding: 16,
                     background: bgColor,
-                    border: `2px solid ${isSelected ? borderColor : "#e5e7eb"}`,
+                    border: `2px solid ${isSelected ? borderColor : "var(--border)"}`,
                     borderRadius: 8,
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -224,7 +224,7 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
                     </strong>
                     <p style={{
                       fontSize: ".85rem",
-                      color: "#6b7280",
+                      color: "var(--text-muted)",
                       margin: "0 0 8px 0",
                       lineHeight: 1.4,
                     }}>
@@ -250,7 +250,7 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
                     <p style={{
                       fontSize: ".9rem",
                       fontWeight: 600,
-                      color: isSelected ? priceColor : "#6b7280",
+                      color: isSelected ? priceColor : "var(--text-muted)",
                       margin: 0,
                     }}>
                       {isUnit ? `$${formatUnitRent()}/mo` : isApartment ? formatApartmentPrice() : `$${formatPropertyPrice()}/mo`}
@@ -258,8 +258,8 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
                   </div>
                   <div style={{
                     padding: "4px 12px",
-                    background: isSelected ? (isUnit ? "#4f46e5" : "#f59e0b") : "#d1d5db",
-                    color: "#fff",
+                    background: isSelected ? (isUnit ? "var(--purple)" : "var(--warning)") : "var(--border-strong)",
+                    color: "var(--on-solid)",
                     borderRadius: 4,
                     fontSize: ".8rem",
                     fontWeight: 600,
@@ -289,7 +289,7 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
               width: "100%",
               minHeight: 100,
               padding: 12,
-              border: "1px solid #d1d5db",
+              border: "1px solid var(--border-strong)",
               borderRadius: 6,
               fontSize: ".9rem",
               fontFamily: "inherit",
@@ -301,8 +301,8 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
         {/* Error message */}
         {error && (
           <div style={{
-            background: "#fee2e2",
-            color: "#991b1b",
+            background: "var(--danger-bg)",
+            color: "var(--danger-text)",
             padding: 12,
             borderRadius: 6,
             fontSize: ".9rem",
@@ -319,8 +319,8 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
           style={{
             width: "100%",
             padding: "14px 24px",
-            background: selected.size === 0 ? "#9ca3af" : "#3b82f6",
-            color: "#fff",
+            background: selected.size === 0 ? "var(--border-strong)" : "var(--info)",
+            color: "var(--on-solid)",
             border: "none",
             borderRadius: 8,
             fontSize: ".95rem",
@@ -334,7 +334,7 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
 
         <p style={{
           fontSize: ".8rem",
-          color: "#6b7280",
+          color: "var(--text-muted)",
           textAlign: "center",
           marginTop: 12,
           margin: "12px 0 0 0",

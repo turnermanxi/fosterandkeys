@@ -43,7 +43,7 @@ export default function SourceURLManager({ property, onSave }) {
   }
 
   return (
-    <div style={{ marginBottom: "20px", padding: "12px", backgroundColor: "#f9f9f9", borderRadius: "6px" }}>
+    <div style={{ marginBottom: "20px", padding: "12px", backgroundColor: "var(--surface-2)", borderRadius: "6px" }}>
       <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, marginBottom: "8px" }}>
         Source URL (for syncing)
       </label>
@@ -55,14 +55,14 @@ export default function SourceURLManager({ property, onSave }) {
         style={{
           width: "100%",
           padding: "8px",
-          border: "1px solid #ddd",
+          border: "1px solid var(--border)",
           borderRadius: "4px",
           fontSize: "0.9rem",
           marginBottom: "8px",
           boxSizing: "border-box",
         }}
       />
-      <p style={{ fontSize: "0.8rem", color: "#666", margin: "0 0 8px 0" }}>
+      <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: "0 0 8px 0" }}>
         💡 This URL will be used to automatically fetch and sync property data
       </p>
 
@@ -70,7 +70,7 @@ export default function SourceURLManager({ property, onSave }) {
         <p
           style={{
             fontSize: "0.85rem",
-            color: message.type === "error" ? "#c33" : "#363",
+            color: message.type === "error" ? "var(--danger-text)" : "var(--success-text)",
             margin: "8px 0",
           }}
         >
@@ -83,8 +83,8 @@ export default function SourceURLManager({ property, onSave }) {
         disabled={saving}
         style={{
           padding: "6px 12px",
-          backgroundColor: "#0284c7",
-          color: "white",
+          backgroundColor: "var(--info)",
+          color: "var(--on-solid)",
           border: "none",
           borderRadius: "4px",
           cursor: "pointer",

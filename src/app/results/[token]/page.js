@@ -142,9 +142,9 @@ export default async function ResultsPage({ params }) {
         <div style={{
           marginBottom: 24,
           padding: "20px 24px",
-          background: "linear-gradient(135deg, #eef2ff, #f0fdf4)",
+          background: "linear-gradient(135deg, var(--info-bg), var(--success-bg))",
           borderRadius: 10,
-          border: "1px solid #c7d2fe",
+          border: "1px solid var(--info-border)",
           fontSize: ".95rem",
           lineHeight: 1.8,
         }}>
@@ -174,8 +174,8 @@ export default async function ResultsPage({ params }) {
                 const apt = m.apartment;
                 return (
                   <div key={`apartment-${apt.id}`} style={{
-                    background: "#fff",
-                    border: "1px solid #e5e7eb",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
                     borderRadius: 10,
                     padding: 16,
                     marginBottom: 12,
@@ -184,30 +184,30 @@ export default async function ResultsPage({ params }) {
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 8 }}>
                       <div>
-                        <h3 style={{ margin: "0 0 4px 0", color: "#1f2937", fontSize: "1rem" }}>
+                        <h3 style={{ margin: "0 0 4px 0", color: "var(--text-strong)", fontSize: "1rem" }}>
                           {apt.name || "Apartment"}
                         </h3>
-                        <p style={{ margin: "0 0 8px 0", color: "#6b7280", fontSize: ".9rem" }}>
+                        <p style={{ margin: "0 0 8px 0", color: "var(--text-muted)", fontSize: ".9rem" }}>
                           {apt.address || "Address not available"}
                         </p>
                       </div>
                       {(apt.website || apt.url) && (
                         <a href={apt.website || apt.url} target="_blank" rel="noopener noreferrer" 
-                           style={{ color: "#2563eb", textDecoration: "none", whiteSpace: "nowrap", marginLeft: 8 }}>
+                           style={{ color: "var(--link)", textDecoration: "none", whiteSpace: "nowrap", marginLeft: 8 }}>
                           Visit →
                         </a>
                       )}
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginBottom: 12 }}>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>Deposit:</span> ${apt.deposit_min || "—"}
+                        <span style={{ color: "var(--text-muted)" }}>Deposit:</span> ${apt.deposit_min || "—"}
                       </div>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>App Fee:</span> ${apt.app_fee || "—"}
+                        <span style={{ color: "var(--text-muted)" }}>App Fee:</span> ${apt.app_fee || "—"}
                       </div>
                     </div>
                     {apt.specials && (
-                      <div style={{ fontSize: ".9rem", padding: 8, background: "#fef3c7", borderRadius: 6, color: "#92400e" }}>
+                      <div style={{ fontSize: ".9rem", padding: 8, background: "var(--warning-bg)", borderRadius: 6, color: "var(--warning-text)" }}>
                         <strong>Special Offer:</strong> {apt.specials}
                       </div>
                     )}
@@ -218,8 +218,8 @@ export default async function ResultsPage({ params }) {
               if (m.type === "property") {
                 return (
                   <div key={`property-${m.property.id}`} style={{
-                    background: "#fff",
-                    border: "1px solid #e5e7eb",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
                     borderRadius: 10,
                     padding: 16,
                     marginBottom: 12,
@@ -228,32 +228,32 @@ export default async function ResultsPage({ params }) {
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 8 }}>
                       <div>
-                        <h3 style={{ margin: "0 0 4px 0", color: "#1f2937", fontSize: "1rem" }}>
+                        <h3 style={{ margin: "0 0 4px 0", color: "var(--text-strong)", fontSize: "1rem" }}>
                           {m.property.property_name || "Property"}
                         </h3>
-                        <p style={{ margin: "0 0 8px 0", color: "#6b7280", fontSize: ".9rem" }}>
+                        <p style={{ margin: "0 0 8px 0", color: "var(--text-muted)", fontSize: ".9rem" }}>
                           {m.property.address}
                         </p>
                       </div>
                       {m.property.website && (
                         <a href={m.property.website} target="_blank" rel="noopener noreferrer" 
-                           style={{ color: "#2563eb", textDecoration: "none", whiteSpace: "nowrap", marginLeft: 8 }}>
+                           style={{ color: "var(--link)", textDecoration: "none", whiteSpace: "nowrap", marginLeft: 8 }}>
                           View →
                         </a>
                       )}
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginBottom: 12 }}>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>Bedrooms:</span> {generateBedroomRangeDisplay(m.property)}
+                        <span style={{ color: "var(--text-muted)" }}>Bedrooms:</span> {generateBedroomRangeDisplay(m.property)}
                       </div>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>Bathrooms:</span> {m.property.bathrooms || "—"}
+                        <span style={{ color: "var(--text-muted)" }}>Bathrooms:</span> {m.property.bathrooms || "—"}
                       </div>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>Price:</span> ${m.property.price_min || "—"} {m.property.price_max && `– $${m.property.price_max}`}/mo
+                        <span style={{ color: "var(--text-muted)" }}>Price:</span> ${m.property.price_min || "—"} {m.property.price_max && `– $${m.property.price_max}`}/mo
                       </div>
                       <div style={{ fontSize: ".9rem" }}>
-                        <span style={{ color: "#6b7280" }}>Sqft:</span> {generateSqftRange(m.property)}
+                        <span style={{ color: "var(--text-muted)" }}>Sqft:</span> {generateSqftRange(m.property)}
                       </div>
                     </div>
                   </div>

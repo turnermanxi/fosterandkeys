@@ -168,7 +168,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,0.5)",
+        background: "var(--overlay)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -178,13 +178,13 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
     >
       <div
         style={{
-          background: "#fff",
+          background: "var(--surface)",
           borderRadius: 8,
           padding: 32,
           maxWidth: 600,
           maxHeight: "90vh",
           overflowY: "auto",
-          boxShadow: "0 20px 25px rgba(0,0,0,0.15)",
+          boxShadow: "0 20px 25px rgba(15,23,42,.16)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -205,7 +205,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             />
@@ -227,7 +227,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -246,7 +246,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -267,7 +267,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -285,7 +285,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -307,7 +307,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -325,7 +325,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -347,7 +347,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -365,7 +365,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -386,7 +386,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             />
@@ -407,7 +407,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -425,7 +425,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -433,11 +433,11 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
           </div>
 
           {/* Per-Bedroom Pricing */}
-          <div style={{ background: "#f0f9ff", padding: 12, borderRadius: 4 }}>
+          <div style={{ background: "var(--info-bg)", padding: 12, borderRadius: 4 }}>
             <h4 style={{ margin: "0 0 12px", fontSize: "0.95rem" }}>Price by Bedroom Type (Optional)</h4>
             
             {/* Studio */}
-            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid #e5e7eb" }}>
+            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid var(--border)" }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: 6 }}>Studio</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <input
@@ -449,7 +449,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -463,7 +463,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -472,7 +472,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
             </div>
 
             {/* 1 Bedroom */}
-            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid #e5e7eb" }}>
+            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid var(--border)" }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: 6 }}>1 Bedroom</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <input
@@ -484,7 +484,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -498,7 +498,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -507,7 +507,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
             </div>
 
             {/* 2 Bedroom */}
-            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid #e5e7eb" }}>
+            <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: "1px solid var(--border)" }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, marginBottom: 6 }}>2 Bedrooms</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <input
@@ -519,7 +519,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -533,7 +533,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -554,7 +554,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -568,7 +568,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontSize: "0.9rem",
                   }}
@@ -589,7 +589,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             >
@@ -603,7 +603,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
           </div>
 
           {/* Fees Section */}
-          <div style={{ background: "#f9f9f9", padding: 12, borderRadius: 4 }}>
+          <div style={{ background: "var(--surface-2)", padding: 12, borderRadius: 4 }}>
             <h4 style={{ margin: "0 0 12px", fontSize: "0.95rem" }}>Fees & Deposit</h4>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
@@ -619,7 +619,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                   }}
                 />
@@ -637,7 +637,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                   }}
                 />
@@ -656,7 +656,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -674,7 +674,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             />
@@ -693,7 +693,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -710,7 +710,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: 4,
                 }}
               />
@@ -731,7 +731,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
               }}
             />
@@ -751,7 +751,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid var(--border-strong)",
                 borderRadius: 4,
                 fontFamily: "inherit",
               }}
@@ -759,7 +759,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
           </div>
 
           {/* Checkboxes for acceptance criteria */}
-          <div style={{ background: "#f9f9f9", padding: 12, borderRadius: 4 }}>
+          <div style={{ background: "var(--surface-2)", padding: 12, borderRadius: 4 }}>
             <h4 style={{ margin: "0 0 12px", fontSize: "0.95rem" }}>Acceptance Criteria</h4>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
               {[
@@ -791,7 +791,7 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 flex: 1,
                 padding: "10px 16px",
-                background: "#e5e7eb",
+                background: "var(--border)",
                 border: "none",
                 borderRadius: 4,
                 cursor: "pointer",
@@ -807,8 +807,8 @@ export default function AddPropertyModal({ onClose, onSuccess }) {
               style={{
                 flex: 1,
                 padding: "10px 16px",
-                background: form.address && form.city ? "#3b82f6" : "#d1d5db",
-                color: "#fff",
+                background: form.address && form.city ? "var(--info)" : "var(--border-strong)",
+                color: "var(--on-solid)",
                 border: "none",
                 borderRadius: 4,
                 cursor: form.address && form.city ? "pointer" : "default",

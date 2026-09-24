@@ -120,7 +120,7 @@ export default function EmailTemplatesManager() {
       {loading ? (
         <p>Loading templates...</p>
       ) : templates.length === 0 ? (
-        <p style={{ color: "#6b7280" }}>No templates yet. Create one to get started.</p>
+        <p style={{ color: "var(--text-muted)" }}>No templates yet. Create one to get started.</p>
       ) : (
         <div className="card">
           {templates.map((template) => (
@@ -128,7 +128,7 @@ export default function EmailTemplatesManager() {
               key={template.id}
               style={{
                 padding: 16,
-                borderBottom: "1px solid #e5e7eb",
+                borderBottom: "1px solid var(--border)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -148,8 +148,8 @@ export default function EmailTemplatesManager() {
                       style={{
                         marginLeft: 8,
                         padding: "2px 8px",
-                        background: "#dbeafe",
-                        color: "#1e40af",
+                        background: "var(--info-bg)",
+                        color: "var(--info-text)",
                         borderRadius: 12,
                         fontSize: "0.75rem",
                       }}
@@ -158,7 +158,7 @@ export default function EmailTemplatesManager() {
                     </span>
                   )}
                 </h4>
-                <p style={{ margin: 0, fontSize: "0.85rem", color: "#6b7280" }}>
+                <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--text-muted)" }}>
                   {template.subject}
                 </p>
               </div>
@@ -167,8 +167,8 @@ export default function EmailTemplatesManager() {
                   onClick={() => handleEdit(template)}
                   style={{
                     padding: "6px 12px",
-                    background: "#3b82f6",
-                    color: "#fff",
+                    background: "var(--info)",
+                    color: "var(--on-solid)",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
@@ -181,8 +181,8 @@ export default function EmailTemplatesManager() {
                   onClick={() => handleDelete(template.id)}
                   style={{
                     padding: "6px 12px",
-                    background: "#ef4444",
-                    color: "#fff",
+                    background: "var(--danger)",
+                    color: "var(--on-solid)",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
@@ -202,7 +202,7 @@ export default function EmailTemplatesManager() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,0.5)",
+            background: "var(--overlay)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -212,13 +212,13 @@ export default function EmailTemplatesManager() {
         >
           <div
             style={{
-              background: "#fff",
+              background: "var(--surface)",
               borderRadius: 8,
               padding: 32,
               maxWidth: 700,
               maxHeight: "90vh",
               overflowY: "auto",
-              boxShadow: "0 20px 25px rgba(0,0,0,0.15)",
+              boxShadow: "0 20px 25px rgba(15,23,42,.16)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -241,7 +241,7 @@ export default function EmailTemplatesManager() {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                   }}
                 />
@@ -261,7 +261,7 @@ export default function EmailTemplatesManager() {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                   }}
                 />
@@ -271,7 +271,7 @@ export default function EmailTemplatesManager() {
                 <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 500, marginBottom: 4 }}>
                   HTML Body *
                 </label>
-                <p style={{ fontSize: "0.8rem", color: "#6b7280", margin: "0 0 8px" }}>
+                <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: "0 0 8px" }}>
                   Use {{`{{lead.full_name}}`}}, {{`{{lead.desired_location}}`}}, {{`{{agent.name}}`}}, and {{`{{properties_list}}`}} as placeholders
                 </p>
                 <textarea
@@ -284,7 +284,7 @@ export default function EmailTemplatesManager() {
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: 4,
                     fontFamily: "monospace",
                     fontSize: "0.85rem",
@@ -310,7 +310,7 @@ export default function EmailTemplatesManager() {
                   style={{
                     flex: 1,
                     padding: "10px 16px",
-                    background: "#e5e7eb",
+                    background: "var(--border)",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
@@ -324,8 +324,8 @@ export default function EmailTemplatesManager() {
                   style={{
                     flex: 1,
                     padding: "10px 16px",
-                    background: "#3b82f6",
-                    color: "#fff",
+                    background: "var(--info)",
+                    color: "var(--on-solid)",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",

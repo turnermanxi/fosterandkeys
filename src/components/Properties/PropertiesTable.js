@@ -20,7 +20,7 @@ export default function PropertiesTable({ properties, onSelect }) {
         }}
       >
         <thead>
-          <tr style={{ background: "#f3f4f6", borderBottom: "1px solid #e5e7eb" }}>
+          <tr style={{ background: "var(--surface-2)", borderBottom: "1px solid var(--border)" }}>
             <th style={{ padding: "12px 16px", textAlign: "left" }}>★</th>
             <th style={{ padding: "12px 16px", textAlign: "left" }}>Address</th>
             <th style={{ padding: "12px 16px", textAlign: "left" }}>City</th>
@@ -36,11 +36,11 @@ export default function PropertiesTable({ properties, onSelect }) {
             <tr
               key={prop.id}
               style={{
-                borderBottom: "1px solid #e5e7eb",
+                borderBottom: "1px solid var(--border)",
                 cursor: "pointer",
                 transition: "background 0.2s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#f9fafb")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--surface-2)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "")}
               onClick={() => onSelect(prop)}
             >
@@ -54,7 +54,7 @@ export default function PropertiesTable({ properties, onSelect }) {
                       href={prop.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: "#3b82f6", textDecoration: "none" }}
+                      style={{ color: "var(--info)", textDecoration: "none" }}
                       onClick={(e) => e.stopPropagation()}
                     >
                       {prop.property_name || prop.address}
@@ -63,7 +63,7 @@ export default function PropertiesTable({ properties, onSelect }) {
                     prop.property_name || prop.address
                   )}
                 </div>
-                <div style={{ fontSize: "0.8rem", color: "#6b7280" }}>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
                   {prop.address}
                 </div>
               </td>
@@ -83,8 +83,8 @@ export default function PropertiesTable({ properties, onSelect }) {
                     <span
                       key={t.tag}
                       style={{
-                        background: "#dbeafe",
-                        color: "#1e40af",
+                        background: "var(--info-bg)",
+                        color: "var(--info-text)",
                         padding: "2px 8px",
                         borderRadius: 12,
                         fontSize: "0.75rem",
@@ -96,7 +96,7 @@ export default function PropertiesTable({ properties, onSelect }) {
                   {prop.property_tags?.length > 2 && (
                     <span
                       style={{
-                        color: "#6b7280",
+                        color: "var(--text-muted)",
                         fontSize: "0.75rem",
                         padding: "2px 4px",
                       }}
@@ -115,7 +115,7 @@ export default function PropertiesTable({ properties, onSelect }) {
                   style={{
                     background: "none",
                     border: "none",
-                    color: "#3b82f6",
+                    color: "var(--info)",
                     cursor: "pointer",
                     fontSize: "1rem",
                   }}

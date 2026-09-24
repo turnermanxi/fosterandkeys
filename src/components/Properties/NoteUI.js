@@ -60,30 +60,30 @@ export default function NoteUI({ propertyId, notes, onNotesChange, loading }) {
   }
 
   return (
-    <div style={{ paddingTop: 16, borderTop: "1px solid #e5e7eb" }}>
+    <div style={{ paddingTop: 16, borderTop: "1px solid var(--border)" }}>
       <h4 style={{ margin: "0 0 12px", fontSize: "0.95rem", fontWeight: 600 }}>
         Notes
       </h4>
 
       {loading ? (
-        <p style={{ fontSize: "0.85rem", color: "#6b7280" }}>Loading notes...</p>
+        <p style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>Loading notes...</p>
       ) : notes.length > 0 ? (
         <div style={{ marginBottom: 16, maxHeight: 200, overflowY: "auto" }}>
           {notes.map((note) => (
             <div
               key={note.id}
               style={{
-                background: "#f9fafb",
+                background: "var(--surface-2)",
                 padding: "10px 12px",
                 borderRadius: 4,
                 marginBottom: 8,
                 fontSize: "0.85rem",
               }}
             >
-              <p style={{ margin: 0, marginBottom: 4, fontSize: "0.75rem", color: "#9ca3af" }}>
+              <p style={{ margin: 0, marginBottom: 4, fontSize: "0.75rem", color: "var(--border-strong)" }}>
                 {formatDate(note.created_at)}
               </p>
-              <p style={{ margin: 0, color: "#1f2937" }}>{note.note}</p>
+              <p style={{ margin: 0, color: "var(--text-strong)" }}>{note.note}</p>
             </div>
           ))}
         </div>
@@ -91,7 +91,7 @@ export default function NoteUI({ propertyId, notes, onNotesChange, loading }) {
         <p
           style={{
             fontSize: "0.85rem",
-            color: "#9ca3af",
+            color: "var(--border-strong)",
             marginBottom: 16,
           }}
         >
@@ -108,7 +108,7 @@ export default function NoteUI({ propertyId, notes, onNotesChange, loading }) {
           style={{
             flex: 1,
             padding: "8px 10px",
-            border: "1px solid #d1d5db",
+            border: "1px solid var(--border-strong)",
             borderRadius: 4,
             fontSize: "0.85rem",
             fontFamily: "inherit",
@@ -120,8 +120,8 @@ export default function NoteUI({ propertyId, notes, onNotesChange, loading }) {
           disabled={!newNote.trim() || isSubmitting}
           style={{
             padding: "8px 12px",
-            background: newNote.trim() ? "#3b82f6" : "#d1d5db",
-            color: "#fff",
+            background: newNote.trim() ? "var(--info)" : "var(--border-strong)",
+            color: "var(--on-solid)",
             border: "none",
             borderRadius: 4,
             cursor: newNote.trim() ? "pointer" : "default",

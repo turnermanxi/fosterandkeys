@@ -17,17 +17,17 @@ const STAGE_LABELS = {
 };
 
 const STAGE_COLORS = {
-  created: "#3b82f6",
-  recommended_sent: "#8b5cf6",
-  cx_responded: "#ec4899",
-  tour_scheduled: "#f59e0b",
-  tour_confirmation_sent: "#f59e0b",
-  tour_completed: "#10b981",
-  application_pending: "#6366f1",
-  application_submitted: "#6366f1",
-  approved: "#059669",
-  denied: "#dc2626",
-  commission_confirmed: "#7c3aed",
+  created: "var(--info)",
+  recommended_sent: "var(--purple)",
+  cx_responded: "var(--purple)",
+  tour_scheduled: "var(--warning)",
+  tour_confirmation_sent: "var(--warning)",
+  tour_completed: "var(--success)",
+  application_pending: "var(--purple)",
+  application_submitted: "var(--purple)",
+  approved: "var(--success)",
+  denied: "var(--danger)",
+  commission_confirmed: "var(--purple)",
 };
 
 export default function Timeline({ events = [], viewMode = "agent" }) {
@@ -43,7 +43,7 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
 
   if (!visibleEvents.length) {
     return (
-      <div style={{ textAlign: "center", color: "#6b7280", padding: "24px 16px" }}>
+      <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "24px 16px" }}>
         No timeline events yet.
       </div>
     );
@@ -60,7 +60,7 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
             top: 0,
             bottom: 0,
             width: 2,
-            background: "#e5e7eb",
+            background: "var(--border)",
           }}
         />
       )}
@@ -87,14 +87,14 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
                 width: 32,
                 height: 32,
                 borderRadius: "50%",
-                background: STAGE_COLORS[event.stage] || "#6b7280",
-                border: "3px solid #fff",
+                background: STAGE_COLORS[event.stage] || "var(--text-muted)",
+                border: "3px solid var(--surface)",
                 position: "relative",
                 zIndex: 2,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#fff",
+                color: "var(--on-solid)",
                 fontSize: "0.7rem",
                 fontWeight: 700,
               }}
@@ -112,7 +112,7 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
                   <span
                     style={{
                       fontSize: "0.75rem",
-                      color: "#6b7280",
+                      color: "var(--text-muted)",
                       cursor: "pointer",
                     }}
                   >
@@ -121,7 +121,7 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
                 ) : null}
               </div>
 
-              <div style={{ fontSize: "0.8rem", color: "#6b7280" }}>
+              <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
                 {new Date(event.timestamp).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -137,8 +137,8 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
                   style={{
                     marginTop: 12,
                     padding: "12px 12px",
-                    background: "#f9fafb",
-                    borderLeft: `3px solid ${STAGE_COLORS[event.stage] || "#6b7280"}`,
+                    background: "var(--surface-2)",
+                    borderLeft: `3px solid ${STAGE_COLORS[event.stage] || "var(--text-muted)"}`,
                     borderRadius: 4,
                   }}
                 >
@@ -151,7 +151,7 @@ export default function Timeline({ events = [], viewMode = "agent" }) {
                     <pre
                       style={{
                         fontSize: ".75rem",
-                        background: "#fff",
+                        background: "var(--surface)",
                         padding: 8,
                         borderRadius: 3,
                         overflow: "auto",

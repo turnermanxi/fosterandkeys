@@ -28,7 +28,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
         gap: 12,
         marginBottom: 16,
         padding: 16,
-        background: "#f9fafb",
+        background: "var(--surface-2)",
         borderRadius: 8,
         alignItems: "center",
         flexWrap: "wrap",
@@ -41,7 +41,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
           onChange={handleSourceChange}
           style={{
             padding: "6px 10px",
-            border: "1px solid #d1d5db",
+            border: "1px solid var(--border-strong)",
             borderRadius: 4,
             fontSize: "0.9rem",
           }}
@@ -60,7 +60,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
           onChange={handleBedroomsChange}
           style={{
             padding: "6px 10px",
-            border: "1px solid #d1d5db",
+            border: "1px solid var(--border-strong)",
             borderRadius: 4,
             fontSize: "0.9rem",
           }}
@@ -80,7 +80,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
         onChange={handleSearchChange}
         style={{
           padding: "6px 10px",
-          border: "1px solid #d1d5db",
+          border: "1px solid var(--border-strong)",
           borderRadius: 4,
           fontSize: "0.9rem",
           flex: 1,
@@ -92,7 +92,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
         onClick={handleFavoriteToggle}
         style={{
           padding: "6px 12px",
-          background: filters.favorite ? "#fbbf24" : "#e5e7eb",
+          background: filters.favorite ? "var(--warning)" : "var(--border)",
           border: "none",
           borderRadius: 4,
           cursor: "pointer",
@@ -107,7 +107,7 @@ export default function PropertiesFilter({ filters, onFilterChange }) {
         onClick={handleArchivedToggle}
         style={{
           padding: "6px 12px",
-          background: filters.archived ? "#60a5fa" : "#e5e7eb",
+          background: filters.archived ? "var(--info)" : "var(--border)",
           border: "none",
           borderRadius: 4,
           cursor: "pointer",

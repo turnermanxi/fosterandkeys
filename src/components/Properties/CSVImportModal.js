@@ -174,7 +174,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
+        backgroundColor: "var(--overlay)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -186,9 +186,9 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
     >
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--surface)",
           borderRadius: "8px",
-          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 20px 25px -5px rgba(15,23,42,.12)",
           maxWidth: "900px",
           width: "90%",
           maxHeight: "90vh",
@@ -214,7 +214,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
               border: "none",
               fontSize: "24px",
               cursor: "pointer",
-              color: "#666",
+              color: "var(--text-muted)",
             }}
           >
             ×
@@ -232,21 +232,21 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
             >
               ✓
             </div>
-            <h3 style={{ margin: 0, marginBottom: "16px", color: "#10b981" }}>
+            <h3 style={{ margin: 0, marginBottom: "16px", color: "var(--success)" }}>
               Import Complete
             </h3>
-            <p style={{ margin: 0, marginBottom: "8px", color: "#666" }}>
+            <p style={{ margin: 0, marginBottom: "8px", color: "var(--text-muted)" }}>
               <strong>{importResult.imported}</strong> properties imported
               successfully
             </p>
             {importResult.duplicateFlagged > 0 && (
-              <p style={{ margin: 0, marginBottom: "8px", color: "#f59e0b" }}>
+              <p style={{ margin: 0, marginBottom: "8px", color: "var(--warning)" }}>
                 <strong>{importResult.duplicateFlagged}</strong> duplicate(s)
                 flagged for review
               </p>
             )}
             {importResult.errors > 0 && (
-              <p style={{ margin: 0, color: "#ef4444" }}>
+              <p style={{ margin: 0, color: "var(--danger)" }}>
                 <strong>{importResult.errors}</strong> error(s) occurred
               </p>
             )}
@@ -256,13 +256,13 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
             {/* Instructions */}
             <div
               style={{
-                backgroundColor: "#f0f9ff",
-                border: "1px solid #bfdbfe",
+                backgroundColor: "var(--info-bg)",
+                border: "1px solid var(--info-border)",
                 borderRadius: "6px",
                 padding: "12px",
                 marginBottom: "20px",
                 fontSize: "14px",
-                color: "#1e40af",
+                color: "var(--info-text)",
               }}
             >
               <strong>Column names must match exactly</strong> (case-sensitive).
@@ -276,7 +276,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                   marginTop: "8px",
                   background: "none",
                   border: "none",
-                  color: "#0284c7",
+                  color: "var(--info)",
                   cursor: "pointer",
                   textDecoration: "underline",
                   padding: 0,
@@ -294,7 +294,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                   display: "block",
                   marginBottom: "8px",
                   fontWeight: "500",
-                  color: "#333",
+                  color: "var(--text)",
                 }}
               >
                 Select CSV File
@@ -308,7 +308,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                   display: "block",
                   width: "100%",
                   padding: "8px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: "4px",
                   cursor: "pointer",
                 }}
@@ -319,9 +319,9 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
             {error && (
               <div
                 style={{
-                  backgroundColor: "#fee2e2",
-                  border: "1px solid #fecaca",
-                  color: "#991b1b",
+                  backgroundColor: "var(--danger-bg)",
+                  border: "1px solid var(--danger-border)",
+                  color: "var(--danger-text)",
                   padding: "12px",
                   borderRadius: "4px",
                   marginBottom: "20px",
@@ -340,7 +340,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                     margin: "0 0 12px 0",
                     fontSize: "14px",
                     fontWeight: "600",
-                    color: "#333",
+                    color: "var(--text)",
                   }}
                 >
                   Preview ({preview.totalRows} rows)
@@ -363,14 +363,14 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                         style={{
                           display: "inline-block",
                           padding: "4px 8px",
-                          backgroundColor: isRequired ? "#dcfce7" : "#f3f4f6",
+                          backgroundColor: isRequired ? "var(--success-bg)" : "var(--surface-2)",
                           border: isRequired
-                            ? "1px solid #86efac"
-                            : "1px solid #d1d5db",
+                            ? "1px solid var(--success-border)"
+                            : "1px solid var(--border-strong)",
                           borderRadius: "4px",
                           fontSize: "12px",
                           fontWeight: "500",
-                          color: isRequired ? "#166534" : "#374151",
+                          color: isRequired ? "var(--success-text)" : "var(--text)",
                         }}
                       >
                         {header}
@@ -384,7 +384,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                 <div
                   style={{
                     overflowX: "auto",
-                    border: "1px solid #d1d5db",
+                    border: "1px solid var(--border-strong)",
                     borderRadius: "4px",
                   }}
                 >
@@ -396,7 +396,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                     }}
                   >
                     <thead>
-                      <tr style={{ backgroundColor: "#f3f4f6" }}>
+                      <tr style={{ backgroundColor: "var(--surface-2)" }}>
                         {preview.headers.map((header) => (
                           <th
                             key={header}
@@ -404,7 +404,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                               padding: "8px",
                               textAlign: "left",
                               fontWeight: "600",
-                              borderRight: "1px solid #d1d5db",
+                              borderRight: "1px solid var(--border-strong)",
                               whiteSpace: "nowrap",
                             }}
                           >
@@ -418,8 +418,8 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                         <tr
                           key={idx}
                           style={{
-                            borderTop: "1px solid #d1d5db",
-                            backgroundColor: idx % 2 === 0 ? "#fff" : "#f9fafb",
+                            borderTop: "1px solid var(--border-strong)",
+                            backgroundColor: idx % 2 === 0 ? "var(--surface)" : "var(--surface-2)",
                           }}
                         >
                           {preview.headers.map((header) => (
@@ -427,7 +427,7 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                               key={`${idx}-${header}`}
                               style={{
                                 padding: "8px",
-                                borderRight: "1px solid #d1d5db",
+                                borderRight: "1px solid var(--border-strong)",
                                 maxWidth: "150px",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
@@ -449,13 +449,13 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
             {/* Column reference */}
             <div
               style={{
-                backgroundColor: "#faf5ff",
-                border: "1px solid #e9d5ff",
+                backgroundColor: "var(--purple-bg)",
+                border: "1px solid var(--purple-border)",
                 borderRadius: "6px",
                 padding: "12px",
                 marginBottom: "20px",
                 fontSize: "12px",
-                color: "#6b21a8",
+                color: "var(--purple-text)",
               }}
             >
               <strong>Optional columns:</strong> state, zip, property_name,
@@ -479,10 +479,10 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                 disabled={loading}
                 style={{
                   padding: "8px 16px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid var(--border-strong)",
                   borderRadius: "4px",
-                  backgroundColor: "#fff",
-                  color: "#333",
+                  backgroundColor: "var(--surface)",
+                  color: "var(--text)",
                   cursor: "pointer",
                   fontWeight: "500",
                 }}
@@ -496,8 +496,8 @@ export default function CSVImportModal({ isOpen, onClose, onImportSuccess }) {
                   padding: "8px 16px",
                   border: "none",
                   borderRadius: "4px",
-                  backgroundColor: preview && !loading ? "#2563eb" : "#9ca3af",
-                  color: "white",
+                  backgroundColor: preview && !loading ? "var(--link)" : "var(--border-strong)",
+                  color: "var(--on-solid)",
                   cursor: preview && !loading ? "pointer" : "not-allowed",
                   fontWeight: "500",
                 }}

@@ -113,10 +113,10 @@ export default function UnitCard({ unit, apartment, score }) {
           <p style={{
             marginTop: 8,
             padding: "6px 12px",
-            background: "#fef3c7",
+            background: "var(--warning-bg)",
             borderRadius: 6,
             fontSize: ".88rem",
-            color: "#92400e",
+            color: "var(--warning-text)",
             fontWeight: 500,
           }}>
             ★ {apt.specials}
