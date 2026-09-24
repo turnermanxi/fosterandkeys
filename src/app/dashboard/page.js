@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import LeadTable from "@/components/LeadTable";
 import LeadDetail from "@/components/LeadDetail";
 import PropertiesTab from "@/components/Properties/PropertiesTab";
@@ -12,6 +12,7 @@ export default function DashboardPage() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [checking, setChecking] = useState(false);
   const [checkResult, setCheckResult] = useState(null);
+  const [leadSearch, setLeadSearch] = useState("");
 
   useEffect(() => {
     if (activeTab === "leads") {
@@ -90,6 +91,34 @@ export default function DashboardPage() {
     }
   }
 
+  const filteredLeads = useMemo(() => {
+    const q = leadSearch.trim().toLowerCase();
+    if (!q) return leads;
+
+    return leads.filter((lead) => {
+      const budget = [lead.budget_min, lead.budget_max]
+        .filter((v) => v != null)
+        .map((v) => `$${Number(v).toLocaleString()}`)
+        .join(" ");
+      const createdDate = lead.created_at
+        ? new Date(lead.created_at).toLocaleDateString()
+        : "";
+      return [
+        lead.full_name,
+        lead.email,
+        lead.phone,
+        lead.desired_location,
+        lead.current_status || lead.status,
+        lead.status,
+        budget,
+        lead.top_score,
+        createdDate,
+      ]
+        .filter((value) => value != null)
+        .some((value) => String(value).toLowerCase().includes(q));
+    });
+  }, [leads, leadSearch]);
+
   return (
     <div className="page-wrapper">
       <div className="flex-between mb-2">
@@ -100,8 +129,7 @@ export default function DashboardPage() {
           {activeTab === "leads" && (
             <>
               <button
-                className="btn btn-sm"
-                style={{ background: "var(--success)", color: "var(--on-solid)" }}
+                className="btn btn-success btn-sm"
                 onClick={handleCheckEmail}
                 disabled={checking}
               >
@@ -113,8 +141,7 @@ export default function DashboardPage() {
             </>
           )}
           <button
-            className="btn btn-sm"
-            style={{ background: "var(--danger)", color: "var(--on-solid)" }}
+            className="btn btn-danger btn-sm"
             onClick={handleLogout}
           >
             Sign Out
@@ -197,7 +224,64 @@ export default function DashboardPage() {
                 No leads yet. Click "Check Gmail" to pull new leads, or submit one via the WPForm webhook.
               </div>
             ) : (
-              <LeadTable leads={leads} onSelect={setSelectedLead} />
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "14px 16px",
+                    borderBottom: "1px solid var(--border)",
+                    background: "var(--surface-2)",
+                  }}
+                >
+                  <div style={{ flex: 1, position: "relative" }}>
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: 12,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--text-muted)",
+                        fontSize: ".9rem",
+                      }}
+                    >
+                      🔎
+                    </span>
+                    <input
+                      type="search"
+                      value={leadSearch}
+                      onChange={(e) => setLeadSearch(e.target.value)}
+                      placeholder="Search leads by name, email, phone, location, status, budget..."
+                      style={{
+                        width: "100%",
+                        padding: "10px 12px 10px 38px",
+                        border: "1px solid var(--border-strong)",
+                        borderRadius: 10,
+                        background: "var(--surface)",
+                        color: "var(--text)",
+                        fontSize: ".92rem",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="text-muted"
+                    style={{ fontSize: ".85rem", whiteSpace: "nowrap" }}
+                  >
+                    {filteredLeads.length} of {leads.length} leads
+                  </div>
+                </div>
+                {filteredLeads.length === 0 ? (
+                  <div style={{ padding: 48, textAlign: "center" }} className="text-muted">
+                    No leads match your search.
+                  </div>
+                ) : (
+                  <LeadTable leads={filteredLeads} onSelect={setSelectedLead} />
+                )}
+              </>
             )}
           </div>
 

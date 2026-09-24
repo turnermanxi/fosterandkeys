@@ -25,6 +25,7 @@ export async function middleware(request) {
     pathname === "/login" ||
     pathname.startsWith("/results") ||
     pathname.startsWith("/tour-confirmation") ||
+    /^\/api\/leads\/[^/]+\/(preferences|update-application-status)$/.test(pathname) ||
     pathname.startsWith("/api/webhook") ||
     pathname.startsWith("/api/tour-confirmation") ||
     pathname.startsWith("/_next") ||

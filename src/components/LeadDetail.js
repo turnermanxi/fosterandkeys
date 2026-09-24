@@ -481,8 +481,8 @@ export default function LeadDetail({ lead, onClose, onSend }) {
         {lead.raw_email && (
           <div style={{ marginBottom: 16 }}>
             <button
-              className="btn btn-sm"
-              style={{ background: "var(--border)", color: "var(--text)", marginBottom: 8 }}
+              className="btn btn-secondary btn-sm"
+              style={{ marginBottom: 8 }}
               onClick={() => setShowRawEmail(!showRawEmail)}
             >
               {showRawEmail ? "Hide" : "Show"} Original Email
@@ -902,7 +902,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   Waiting for client to select properties...
                 </div>
                 <button
-                  className="btn btn-warning btn-sm"
+                  className="btn btn-followup btn-sm"
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -922,7 +922,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   📅 Confirm Tour Times
                 </button>
                 <button
-                  className="btn btn-warning btn-sm"
+                  className="btn btn-followup btn-sm"
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -949,7 +949,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   📨 Send Application Reminder
                 </button>
                 <button
-                  className="btn btn-warning btn-sm"
+                  className="btn btn-followup btn-sm"
                   onClick={() => setShowRescheduleModal(true)}
                   disabled={processingReschedule}
                 >
@@ -1405,7 +1405,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 <button
                   type="button"
                   onClick={handleRequestReschedule}
-                  className="btn btn-warning btn-sm"
+                  className="btn btn-followup btn-sm"
                   style={{ flex: 1 }}
                   disabled={processingReschedule}
                 >

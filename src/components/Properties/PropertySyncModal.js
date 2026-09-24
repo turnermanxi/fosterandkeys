@@ -362,10 +362,9 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
               </button>
               {results.some(r => r.comparison.diff.length > 0) && (
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-success"
                   onClick={applyAllChanges}
                   disabled={applying}
-                  style={{ backgroundColor: "var(--success)", borderColor: "var(--success)" }}
                 >
                   {applying ? "Applying..." : `Make Changes (${results.filter(r => r.comparison.diff.length > 0).length})`}
                 </button>
@@ -402,7 +401,9 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
         }
 
         .modal-content {
-          background-color: white;
+          background-color: var(--surface);
+          border: 1px solid var(--border);
+          color: var(--text);
           border-radius: 8px;
           padding: 24px;
           max-width: 500px;
@@ -421,7 +422,7 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
         }
 
         .btn-text {
-          background: none;
+          background: transparent;
           color: var(--text-muted);
           padding: 0;
           font-size: 1.2rem;
@@ -432,12 +433,13 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
         }
 
         .btn-primary {
-          background-color: var(--info);
-          color: white;
+          background-color: var(--button-primary-bg);
+          color: var(--button-primary-text);
+          border: 1px solid color-mix(in srgb, var(--button-primary-bg) 80%, black 20%);
         }
 
         .btn-primary:hover:not(:disabled) {
-          background-color: var(--info-text);
+          background-color: var(--button-primary-hover);
         }
 
         .btn-primary:disabled {
@@ -447,14 +449,14 @@ export default function PropertySyncModal({ isOpen, onClose, properties = [] }) 
 
         .btn-default,
         .btn-secondary {
-          background-color: var(--surface-2);
-          color: var(--text);
-          border: 1px solid var(--border);
+          background-color: var(--button-secondary-bg);
+          color: var(--button-secondary-text);
+          border: 1px solid var(--border-strong);
         }
 
         .btn-default:hover,
         .btn-secondary:hover {
-          background-color: var(--surface-3);
+          background-color: var(--button-secondary-hover);
         }
       `}</style>
     </div>

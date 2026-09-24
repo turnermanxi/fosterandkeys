@@ -57,6 +57,9 @@
   --button-secondary-text: #172033;
   --button-disabled-bg: #dbe3ef;
   --button-disabled-text: #64748b;
+  --button-followup-bg: #9a5b00;
+  --button-followup-hover: #7a4700;
+  --button-followup-text: #ffffff;
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -122,6 +125,9 @@ html[data-theme="dark"] {
   --button-secondary-text: #e6edf7;
   --button-disabled-bg: #24364f;
   --button-disabled-text: #9fb0c8;
+  --button-followup-bg: #f6c54f;
+  --button-followup-hover: #ffd978;
+  --button-followup-text: #111827;
 }
 
 * {
@@ -357,11 +363,17 @@ a:hover {
   border: 1px solid var(--border-strong);
 }
 .btn-secondary:hover { background: var(--button-secondary-hover); }
+.btn-default { background: var(--button-secondary-bg); color: var(--button-secondary-text); border: 1px solid var(--border-strong); }
+.btn-default:hover { background: var(--button-secondary-hover); }
+.btn-text { background: transparent; color: var(--text-muted); border: 1px solid transparent; }
+.btn-text:hover { background: var(--surface-2); color: var(--text); border-color: var(--border); }
 
 .btn-success { background: var(--success); color: var(--on-solid); border: 1px solid color-mix(in srgb, var(--success) 80%, black 20%); }
 .btn-success:hover { background: color-mix(in srgb, var(--success) 86%, white 14%); }
 .btn-warning { background: var(--warning); color: #111827; border: 1px solid color-mix(in srgb, var(--warning) 80%, black 20%); }
 .btn-warning:hover { background: color-mix(in srgb, var(--warning) 86%, white 14%); }
+.btn-followup { background: var(--button-followup-bg); color: var(--button-followup-text); border: 1px solid color-mix(in srgb, var(--button-followup-bg) 78%, black 22%); }
+.btn-followup:hover { background: var(--button-followup-hover); }
 .btn-danger { background: var(--danger); color: var(--on-solid); border: 1px solid color-mix(in srgb, var(--danger) 80%, black 20%); }
 .btn-danger:hover { background: color-mix(in srgb, var(--danger) 86%, white 14%); }
 .btn-info { background: var(--info); color: var(--on-solid); border: 1px solid color-mix(in srgb, var(--info) 80%, black 20%); }

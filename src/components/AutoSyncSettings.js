@@ -107,11 +107,9 @@ export default function AutoSyncSettings({ accountId }) {
       <button
         onClick={handleManualSync}
         disabled={syncing}
+        className="btn btn-success"
         style={{
           padding: "10px 16px",
-          backgroundColor: "var(--success)",
-          color: "var(--on-solid)",
-          border: "none",
           borderRadius: "4px",
           cursor: "pointer",
           fontSize: "0.9rem",

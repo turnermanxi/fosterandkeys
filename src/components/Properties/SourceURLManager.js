@@ -81,11 +81,9 @@ export default function SourceURLManager({ property, onSave }) {
       <button
         onClick={handleSave}
         disabled={saving}
+        className="btn btn-info btn-sm"
         style={{
           padding: "6px 12px",
-          backgroundColor: "var(--info)",
-          color: "var(--on-solid)",
-          border: "none",
           borderRadius: "4px",
           cursor: "pointer",
           fontSize: "0.85rem",

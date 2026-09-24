@@ -19,7 +19,37 @@ import { getSupabaseUser, getUserAccount, getSupabaseAdmin } from "./supabase";
  */
 export async function verifyLeadOwnership(leadId, providedToken = null) {
   try {
-    // 1. Check if user is authenticated
+    const supabase = getSupabaseAdmin();
+
+    // 1. Fetch the lead first so public capability-token flows do not require
+    // an authenticated dashboard session.
+    const { data: lead, error } = await supabase
+      .from("leads")
+      .select("*")
+      .eq("id", leadId)
+      .single();
+
+    if (error || !lead) {
+      return {
+        error: true,
+        response: NextResponse.json({ error: "Lead not found" }, { status: 404 }),
+      };
+    }
+
+    // 2. Public client pages can authorize with the lead results_token.
+    const tokenMatches =
+      providedToken && lead.results_token === providedToken;
+
+    if (tokenMatches) {
+      const { data: account } = await supabase
+        .from("accounts")
+        .select("*")
+        .eq("id", lead.account_id)
+        .single();
+      return { lead, account };
+    }
+
+    // 3. Otherwise check if user is authenticated.
     const user = await getSupabaseUser();
     if (!user) {
       return {
@@ -28,7 +58,7 @@ export async function verifyLeadOwnership(leadId, providedToken = null) {
       };
     }
 
-    // 2. Get user's account
+    // 4. Get user's account
     const account = await getUserAccount();
     if (!account) {
       return {
@@ -39,26 +69,6 @@ export async function verifyLeadOwnership(leadId, providedToken = null) {
         ),
       };
     }
-
-    // 3. Verify the lead exists and belongs to this account
-    const supabase = getSupabaseAdmin();
-    const { data: lead, error } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("id", leadId)
-      .single();
-
-    if (error) {
-      return {
-        error: true,
-        response: NextResponse.json({ error: "Lead not found" }, { status: 404 }),
-      };
-    }
-
-    // 4. Check ownership either via the agent's account OR the client's
-    //    results_token capability URL.
-    const tokenMatches =
-      providedToken && lead.results_token === providedToken;
 
     if (lead.account_id !== account.id && !tokenMatches) {
       return {
