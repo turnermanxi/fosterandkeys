@@ -30,41 +30,30 @@ export async function POST(request, { params }) {
       );
     }
 
-    // Get the selected properties details (interested ones)
-    const selectedUnitIds = (lead.recommended_units || [])
-      .filter((r) => r.cx_response === "interested")
-      .map((r) => r.unit_id);
+    // Get currently selected/toured properties from lead_matches. Older code
+    // used lead.recommended_units, but the live client-selection flow writes to
+    // lead_matches.cx_response/toured_status.
+    const { data: selectedMatches, error: selectedErr } = await supabase
+      .from("lead_matches")
+      .select("unit_id, property_id, apartment_id, cx_response, toured_status, units(id), apartments(id, name), properties(id, property_name)")
+      .eq("lead_id", id)
+      .or("cx_response.eq.interested,toured_status.eq.toured");
 
-    const { data: accountApartments } = await supabase
-      .from("apartments")
-      .select("id")
-      .eq("account_id", authCheck.account.id);
-    const accountApartmentIds = (accountApartments || []).map((a) => a.id);
+    if (selectedErr) throw selectedErr;
 
-    const { data: selectedUnits } = await supabase
-      .from("units")
-      .select("id, apartment_id")
-      .in("id", selectedUnitIds)
-      .in("apartment_id", accountApartmentIds);
-
-    // Get apartment details for selected units
-    const aptIds = (selectedUnits || []).map((u) => u.apartment_id);
-    const { data: apartments } = await supabase
-      .from("apartments")
-      .select("id, name")
-      .in("id", aptIds)
-      .eq("account_id", authCheck.account.id);
-
-    const aptMap = {};
-    (apartments || []).forEach((a) => (aptMap[a.id] = a));
-
-    // Build properties array
-    const properties = (selectedUnits || []).map((u) => {
-      const apt = aptMap[u.apartment_id];
-      return {
-        name: apt?.name || "Unknown",
-      };
-    });
+    const properties = (selectedMatches || [])
+      .map((match) => ({
+        name:
+          match.apartments?.name ||
+          match.properties?.property_name ||
+          "Property",
+      }))
+      .filter((property, index, arr) =>
+        property.name &&
+        property.name !== "Property"
+          ? arr.findIndex((p) => p.name === property.name) === index
+          : true
+      );
 
     // Create timeline event
     const newEvent = {

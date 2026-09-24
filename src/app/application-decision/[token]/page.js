@@ -374,12 +374,10 @@ export default function ApplicationDecisionPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
+                  className="btn btn-primary"
                   style={{
                     width: "100%",
                     padding: "14px 20px",
-                    background: "var(--text-strong)",
-                    color: "var(--on-solid)",
-                    border: "none",
                     borderRadius: 6,
                     fontWeight: 600,
                     fontSize: "1rem",
@@ -387,8 +385,6 @@ export default function ApplicationDecisionPage() {
                     opacity: submitting ? 0.6 : 1,
                     transition: "background 0.2s",
                   }}
-                  onMouseEnter={(e) => !submitting && (e.target.style.background = "var(--primary-light)")}
-                  onMouseLeave={(e) => !submitting && (e.target.style.background = "var(--text-strong)")}
                 >
                   {submitting ? "Submitting..." : "Submit Application Status"}
                 </button>

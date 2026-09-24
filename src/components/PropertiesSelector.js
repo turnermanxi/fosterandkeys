@@ -233,11 +233,9 @@ export default function PropertiesSelector({ leadId, onSelectionChange }) {
             <button
               onClick={handleSave}
               disabled={saving}
+              className="btn btn-primary btn-sm"
               style={{
                 padding: "6px 16px",
-                backgroundColor: "var(--link)",
-                color: "var(--on-solid)",
-                border: "none",
                 borderRadius: "4px",
                 cursor: saving ? "not-allowed" : "pointer",
                 opacity: saving ? 0.7 : 1,

@@ -316,12 +316,10 @@ export default function ClientPreferenceForm({ leadId, leadToken, matches = [] }
         <button
           type="submit"
           disabled={submitting || selected.size === 0}
+          className="btn btn-primary"
           style={{
             width: "100%",
             padding: "14px 24px",
-            background: selected.size === 0 ? "var(--border-strong)" : "var(--info)",
-            color: "var(--on-solid)",
-            border: "none",
             borderRadius: 8,
             fontSize: ".95rem",
             fontWeight: 600,

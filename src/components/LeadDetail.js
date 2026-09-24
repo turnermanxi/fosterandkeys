@@ -446,7 +446,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                 <span style={{ fontSize: "1.1rem" }}>✨</span> AI Summary
               </strong>
               <button
-                className="btn btn-sm"
+                className="btn btn-primary btn-sm"
                 style={{ background: isEditingSummary ? "var(--success)" : "var(--border)", color: isEditingSummary ? "var(--surface)" : "var(--text)", fontSize: ".8rem", padding: "4px 12px" }}
                 onClick={() => setIsEditingSummary(!isEditingSummary)}
               >
@@ -887,7 +887,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {/* Send Recommendations */}
             {(!lead.current_status || lead.current_status === "created" || lead.current_status === "reschedule_requested") && (
               <button
-                className="btn btn-sm"
+                className="btn btn-primary btn-sm"
                 onClick={() => updateLeadStatus("recommended_sent", `Recommendations sent to client (Round ${lead.current_round || 1})`)}
                 disabled={updatingStatus}
               >
@@ -902,8 +902,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                   Waiting for client to select properties...
                 </div>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
+                  className="btn btn-warning btn-sm"
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -916,16 +915,14 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "cx_responded" && (
               <>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--success)", color: "var(--on-solid)" }}
+                  className="btn btn-success btn-sm"
                   onClick={() => setShowTourModal(true)}
                   disabled={updatingStatus}
                 >
                   📅 Confirm Tour Times
                 </button>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
+                  className="btn btn-warning btn-sm"
                   onClick={handleSetFollowUp}
                   disabled={updatingStatus}
                 >
@@ -945,24 +942,21 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {lead.current_status === "tour_completed" && (
               <>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--purple)", color: "var(--on-solid)" }}
+                  className="btn btn-purple btn-sm"
                   onClick={() => sendApplicationReminder()}
                   disabled={updatingStatus}
                 >
                   📨 Send Application Reminder
                 </button>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--warning)", color: "var(--on-solid)" }}
+                  className="btn btn-warning btn-sm"
                   onClick={() => setShowRescheduleModal(true)}
                   disabled={processingReschedule}
                 >
                   🔄 Request New Recommendations
                 </button>
                 <button
-                  className="btn btn-sm"
-                  style={{ background: "var(--purple)", color: "var(--on-solid)" }}
+                  className="btn btn-purple btn-sm"
                   onClick={() => setShowSendAgentModal(true)}
                   disabled={processingAgentForward}
                 >
@@ -1098,8 +1092,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {/* Denied with new properties - send application reminder instead of scheduling tours */}
             {(lead.current_status === "denied" || (lead.application_status?.denied_units && lead.application_status.denied_units.length > 0)) && matches.some((m) => m.cx_response === "interested") && (
               <button
-                className="btn btn-sm"
-                style={{ background: "var(--purple)", color: "var(--on-solid)" }}
+                className="btn btn-purple btn-sm"
                 onClick={() => sendApplicationReminder()}
                 disabled={updatingStatus}
               >
@@ -1124,8 +1117,7 @@ export default function LeadDetail({ lead, onClose, onSend }) {
             {/* Final stages - Show Confirm Commission when there are approved units */}
             {(lead.current_status === "approved" || (lead.application_status?.approved_units && lead.application_status.approved_units.length > 0)) && lead.current_status !== "commission_confirmed" && (
               <button
-                className="btn btn-sm"
-                style={{ background: "var(--purple)", color: "var(--on-solid)" }}
+                className="btn btn-purple btn-sm"
                 onClick={() => updateLeadStatus("commission_confirmed", "Commission confirmed with complex")}
                 disabled={updatingStatus}
               >
@@ -1306,15 +1298,15 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                       setTourDates({});
                       setTourTimes({});
                     }}
-                    className="btn btn-sm"
-                    style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
+                    className="btn btn-secondary btn-sm"
+                    style={{ flex: 1 }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-sm"
-                    style={{ background: "var(--success)", color: "var(--on-solid)", flex: 1 }}
+                    className="btn btn-success btn-sm"
+                    style={{ flex: 1 }}
                     disabled={schedulingTour}
                   >
                     {schedulingTour ? "Scheduling…" : "Confirm Tour/Send Guest Cards"}
@@ -1405,16 +1397,16 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                     setRescheduleReason("");
                     setRescheduleNotes("");
                   }}
-                  className="btn btn-sm"
-                  style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
+                  className="btn btn-secondary btn-sm"
+                  style={{ flex: 1 }}
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleRequestReschedule}
-                  className="btn btn-sm"
-                  style={{ background: "var(--warning)", color: "var(--on-solid)", flex: 1 }}
+                  className="btn btn-warning btn-sm"
+                  style={{ flex: 1 }}
                   disabled={processingReschedule}
                 >
                   {processingReschedule ? "Processing…" : "Request Reschedule"}
@@ -1500,16 +1492,16 @@ export default function LeadDetail({ lead, onClose, onSend }) {
                     setSelectedAgentEmail("");
                     setSelectedAgentName("");
                   }}
-                  className="btn btn-sm"
-                  style={{ background: "var(--border)", color: "var(--text)", flex: 1 }}
+                  className="btn btn-secondary btn-sm"
+                  style={{ flex: 1 }}
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleSendToAgent}
-                  className="btn btn-sm"
-                  style={{ background: "var(--purple)", color: "var(--on-solid)", flex: 1 }}
+                  className="btn btn-purple btn-sm"
+                  style={{ flex: 1 }}
                   disabled={processingAgentForward}
                 >
                   {processingAgentForward ? "Sending…" : "Forward Lead"}
